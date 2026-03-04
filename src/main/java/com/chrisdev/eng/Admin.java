@@ -1,6 +1,6 @@
 package com.chrisdev.eng;
 
-public class Admin {
+public class Admin extends PessoaSistema {
     //precisa conter usuario (login) e uma senha para admin
     //atributos da conta admin
     private String nome;
@@ -35,11 +35,21 @@ public class Admin {
     }
 
     // verificando se o login está correto
-    public boolean equals(String login, String senha) {
+    public boolean autenticar(String login, String senha) {
             boolean loginAceito = this.login.equals(login);
             boolean senhaAceita = this.senha.equals(senha);
 
         return loginAceito && senhaAceita;
+    }
+
+    @Override
+    public String acessarSistema(){
+        return "Admin: acesso completo ao almoxarifado.";
+    }
+
+    @Override
+    public String visualizarRelatorio(){
+        return "Admin: acesso a relatorios completos.";
     }
 
 }
