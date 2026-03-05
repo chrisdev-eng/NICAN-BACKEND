@@ -25,8 +25,5 @@ public class Almoxarife {
 
     //  ~ Arquivo Actions realizara as Acoes do Menu...
     Menu.main(args, almoxarife, leitor);
-
-
-    leitor.close();
   }  
 }

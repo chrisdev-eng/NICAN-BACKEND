@@ -75,7 +75,7 @@ public class Item {
   //  ~ SETTERS ~ Define novos valores
   public void mudarQualidade(  String novaQualidade  ) {  this.qualidadeItem = novaQualidade;  }
   public void diminuirQuant(  int quantParaDiminuir  ) {  this.quantidadeItem -= quantParaDiminuir;  }
-  public void aumentarQuant(  int quantParaAumentar  ) {  this.quantidadeItem -= quantParaAumentar;  }
+  public void aumentarQuant(  int quantParaAumentar  ) {  this.quantidadeItem += quantParaAumentar;  }
 
 
 

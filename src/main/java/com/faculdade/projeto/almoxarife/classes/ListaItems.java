@@ -2,6 +2,7 @@ package com.faculdade.projeto.almoxarife.classes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 
@@ -31,6 +32,33 @@ public class ListaItems {
       item.infosGeralItem();
     }
   }
-  public static void adicionarItem(  Item novoItem  ) {  lista.add(novoItem);  }
-  public static void removerItem(  Item removItem  ) {  lista.remove(  removItem.getIdItem()  );  }
+  public static void adicionarItem(  Item novoItem  ) {  
+    lista.add(novoItem);  
+    listaTamanho = lista.size(); 
+  }
+  public static void removerItem(  Item removItem  ) {  lista.remove(  removItem  );  }
+
+
+  //  ~ Um verificador para pegar certo item da lista...
+  public static Item getItemLista(  Scanner leitor  ) {
+    Item itemEscolhido = null;
+    int escolhaItemId = 0;
+    for (  Item itemLista : lista  ) {
+      itemLista.infosGeralItem();
+    }
+    
+
+    System.out.println("Digite o ID do item: ");
+    escolhaItemId = leitor.nextInt();
+
+
+    for (  Item itemLista : lista  ) {
+      if (  itemLista.getIdItem() == escolhaItemId  ) {
+        itemEscolhido = itemLista;
+      } 
+    }
+
+
+    return itemEscolhido;
+  }
 }
