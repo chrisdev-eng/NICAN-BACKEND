@@ -20,6 +20,8 @@ public class Almoxarife {
     //  ~ Declaracoes/Inicializacoes de Itens do Almoxarife (Terao um arquivo que inicializara)
     Item facaoGrupo = new Item("Facao", 4, Qualidade.N, Categoria.FC);
     Item facaoPantera = new Item("Facao", 1, "Patrulha Pantera", Qualidade.Q, Categoria.FC);
+    Item paGrupo = new Item("Pa", 2, Qualidade.Q, Categoria.FS);
+    Item barracaGrupo = new Item("Barraca de Camping", 5, Qualidade.B, Categoria.BLS);
 
 
 

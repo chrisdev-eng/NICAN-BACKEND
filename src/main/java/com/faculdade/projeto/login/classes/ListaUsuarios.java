@@ -20,6 +20,8 @@ public class ListaUsuarios {
 
 
   //  ~ Bloco estatico: cria o Admin padrao ao carregar a classe ~
+  //  ~ O metodo foi feito pra: criar uma variavel statica na classe 
+  //  ~ e adicionar a lista, em seguida.
   static {
     Usuario adminPadrao = new Usuario(
       "Administrador",
@@ -48,7 +50,7 @@ public class ListaUsuarios {
   //  ~ Busca por email (retorna null se nao encontrar) ~
   public static Usuario buscarPorEmail(String email) {
     for (Usuario u : lista) {
-      if (u.getEmail().equals(email.trim().toLowerCase())) {
+      if (  u.getEmail().equals(email.trim().toLowerCase())  ) {
         return u;
       }
     }

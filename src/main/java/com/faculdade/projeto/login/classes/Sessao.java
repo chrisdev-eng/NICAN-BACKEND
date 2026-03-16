@@ -8,6 +8,7 @@ package com.faculdade.projeto.login.classes;
  */
 public class Sessao {
 
+  //  ~ Se auto Intancia a classe
   private static Sessao instancia = new Sessao();
   private Usuario usuarioLogado = null;
 

@@ -25,7 +25,7 @@ public class Login {
    *  ~ Mostra as opcoes disponiveis dependendo se ha sessao ativa ou nao.
    *
    *
-   *  O menu abaixo e so p quando for logado em ADMIN
+   *  O menu abaixo e so p quando for logado
    */
   public static void abrirMenu(  Scanner leitor  ) {
     //  ~ Pega/Verifica se existe algum usuario logado (se a secao atual existe)
