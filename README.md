@@ -35,7 +35,7 @@ mvn clean package -DskipTests
 docker build -t projeto-mensal .
 
 # Por fim, manda o bixao rodar
-docker run -p 8080:8080 projeto-mensal
+docker run -i -p 8080:8080 projeto-mensal
 ```
 
 ## Alunos 
