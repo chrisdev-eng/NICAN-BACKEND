@@ -1,0 +1,52 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+ 
+<hibernate-configuration>
+    <session-factory>
+ 
+        <!-- Driver -->
+        <property name="hibernate.connection.driver_class">
+            org.postgresql.Driver
+        </property>
+ 
+        <!-- URL do banco -->
+        <property name="hibernate.connection.url">
+            jdbc:postgresql://localhost:5432/nicandb
+        </property>
+ 
+        <!-- Usuário -->
+        <property name="hibernate.connection.username">
+            postgres
+        </property>
+ 
+        <!-- Senha -->
+        <property name="hibernate.connection.password">
+        </property>
+ 
+        <!-- Dialeto (Hibernate 6) -->
+        <property name="hibernate.dialect">
+            org.hibernate.dialect.PostgreSQLDialect
+        </property>
+ 
+        <!-- Atualização automática do schema -->
+        <property name="hibernate.hbm2ddl.auto">
+            update
+        </property>
+ 
+        <!-- Logs SQL -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+ 
+        <!-- Mapeamento das entidades -->
+        <!-- Exemplo -->
+        <!-- <mapping class="com.exemplo.model.Produto"/> -->
+        <!-- Entidades de Login -->
+        <mapping class="com.faculdade.projeto.login.classes.Usuario"/>
+        <mapping class="com.faculdade.projeto.login.classes.Admin"/>
+
+        <!-- Entidades do Almoxarife -->
+        <mapping class="com.faculdade.projeto.almoxarife.classes.Item"/> 
+    </session-factory>
+</hibernate-configuration>
+

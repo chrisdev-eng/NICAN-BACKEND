@@ -1,62 +1,109 @@
 package com.faculdade.projeto.login.classes;
 
-/**
- *  ~ Representa um Usuario do Sistema Nican ~
+
+
+import org.hibernate.annotations.*;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+
+/*  
+ *  Classe de Usuario do Sistema.
  *
- *  Cada usuario tem: nome, email, senha e um Perfil (USUARIO ou ADMIN).
- *  O ID e gerado automaticamente na criacao.
+ *  Conecta a tabela do banco do PostgreSQL pelos metodos do JPA. 
+ *  Ao definir @Entity, ele conecta com o Hibernate-cfg.xml que configuramos, e diz que essa classe representara
+ *  a tabela usuario do banco.
  */
+@Entity
+@Table(name = "usuario")
 public class Usuario {
 
-  private static int contadorId = 1;  //  ~ Contador estatico para gerar IDs unicos
-  private final int    id;
-  private       String nome;
-  private       String email;
-  private       String senha;
-  private       Perfil perfil;
-  private       boolean ativo;
+
+
+  //  ~ Definimos que a variavel vai ser um do tipo de um ID, 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)     //  ~ Diz que e do tipo serial (auto incremento de id)
+  @Column(name = "idUsuario")                             //  ~ Nome da Coluna que vai se relacionar      
+  private Integer id;
+  
+  @Column(name = "nome", nullable = false, length = 100)  //  ~ Variavel do tipo Varchar, que n pode ser null. 
+  private String nome;
+
+  @Column(name = "login", nullable = false, length = 100, unique = true)   //  ~ Mudanca de Email -> Login 
+  private String login;
+  
+  @Column(name = "senha", nullable = false, length = 255)
+  private String senha;
+
+  @Column(name = "idAdmin", nullable = false)             //  ~ Criacao da FK pro Admin que gerou esse Usuario...
+  private Integer idAdmin;
+
+  @Enumerated(  EnumType.STRING  )                        //  ~ Salva o perfil de tipo Usuario ou Admin; 
+  @Column(name = "perfil", nullable = false)
+  private Perfil perfil;
+
+  @CreationTimestamp
+  @Column(name = "criadoEm", updatable = false)
+  private LocalDateTime criadoEm;
+
+  @CreationTimestamp
+  @Column(name = "atualizadoEm")
+  private LocalDateTime atualizadoEm;
+
+  @Column(name = "ativo")  
+  private boolean ativo;
 
 
 
 
-  public Usuario(String nome, String email, String senha, Perfil perfil) {
-    this.id     = contadorId++;
-    this.nome   = nome.trim();
-    this.email  = email.trim().toLowerCase();
-    this.senha  = senha;
+
+  //  ~ Constructor do Usuario Ajustado pros novos itens alocados do JPA...
+  public Usuario(String nome, String login, String senha, Perfil perfil, Integer idAdmin) {
+    this.nome = nome.trim();
+    this.login = login.trim().toLowerCase();
+    this.senha = senha;
     this.perfil = perfil;
-    this.ativo  = true;
+    this.idAdmin = idAdmin;
+    this.ativo = true;
   }
+  
+  //  ~ O hibernate exige um constructor vazio...
+  public Usuario() {}
+
+
 
 
 
 
   //  ~ GETTERS ~
-  public int     getId()     { return id;     }
-  public String  getNome()   { return nome;   }
-  public String  getEmail()  { return email;  }
-  public String  getSenha()  { return senha;  }
-  public Perfil  getPerfil() { return perfil; }
-  public boolean isAtivo()   { return ativo;  }
-  public boolean isAdmin()   { return perfil == Perfil.ADMIN; }
-
-
+  public Integer getId()     {  return id;      }
+  public String  getNome()   {  return nome;    }
+  public String  getLogin()  {  return login;   }
+  public String  getSenha()  {  return senha;   }
+  public Perfil  getPerfil() {  return perfil;  }
+  public boolean isAtivo()   {  return ativo;   }
+  public boolean isAdmin()   {  return perfil == Perfil.ADMIN; }
+  public Integer getIdAdmin(){  return idAdmin; }
 
 
   //  ~ SETTERS ~
-  public void setNome(String nome)     { this.nome  = nome.trim();              }
-  public void setEmail(String email)   { this.email = email.trim().toLowerCase(); }
-  public void setSenha(String senha)   { this.senha = senha;                    }
-  public void setPerfil(Perfil perfil) { this.perfil = perfil;                  }
-  public void setAtivo(boolean ativo)  { this.ativo  = ativo;                   }
+  public void setId(  Integer id  )         {  this.id = id; }
+  public void setNome(  String nome  )      {  this.nome  = nome.trim();                }
+  public void setLogin(  String email  )    {  this.login = email.trim().toLowerCase(); }
+  public void setSenha(  String senha  )    {  this.senha = senha;                      }
+  public void setPerfil(  Perfil perfil  )  {  this.perfil = perfil;                    }
+  public void setAtivo(  boolean ativo  )   {  this.ativo  = ativo;                     }
+  public void setIdAdmin(  Integer idAdmin ){  this.idAdmin = idAdmin;                  }
 
 
 
 
+
+  //  ~ METODO's ~
   public void infosUsuario() {
     System.out.println("\n~ " + getNome() + " ~");
     System.out.println("[ ID ]: "   + getId());
-    System.out.println("Email: "    + getEmail());
+    System.out.println("Email: "    + getLogin());
     System.out.println("Perfil: "   + getPerfil());
     System.out.println("Status: "   + (isAtivo() ? "Ativo" : "Inativo"));
     System.out.println();
