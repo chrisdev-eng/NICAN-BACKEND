@@ -35,12 +35,17 @@ public class Usuario {
   @Column(name = "senha", nullable = false, length = 255)
   private String senha;
 
-  @Column(name = "idAdmin", nullable = false)             //  ~ Criacao da FK pro Admin que gerou esse Usuario...
-  private Integer idAdmin;
+
+  @ManyToOne                                              //  ~ ManyToOne pra indicar que varios users podem ter o msm id de admin ao criar...  
+  @JoinColumn(name = "adminResponsavel", nullable = false)         //  ~ Criacao da FK pro Admin que gerou esse Usuario...
+  private Admin adminResponsavel;
+
 
   @Enumerated(  EnumType.STRING  )                        //  ~ Salva o perfil de tipo Usuario ou Admin; 
   @Column(name = "perfil", nullable = false)
   private Perfil perfil;
+
+
 
   @CreationTimestamp
   @Column(name = "criadoEm", updatable = false)
@@ -49,6 +54,8 @@ public class Usuario {
   @CreationTimestamp
   @Column(name = "atualizadoEm")
   private LocalDateTime atualizadoEm;
+
+
 
   @Column(name = "ativo")  
   private boolean ativo;
@@ -63,7 +70,7 @@ public class Usuario {
     this.login = login.trim().toLowerCase();
     this.senha = senha;
     this.perfil = perfil;
-    this.idAdmin = idAdmin;
+    this.adminResponsavel = idAdmin;
     this.ativo = true;
   }
   
@@ -83,7 +90,9 @@ public class Usuario {
   public Perfil  getPerfil() {  return perfil;  }
   public boolean isAtivo()   {  return ativo;   }
   public boolean isAdmin()   {  return perfil == Perfil.ADMIN; }
-  public Integer getIdAdmin(){  return idAdmin; }
+  public Admin getAdminResponsavel() {  return adminResponsavel; }
+  public LocalDateTime getCriadoEm() {  return criadoEm;  }
+  public LocalDateTime getAtualizadoEm() {  return atualizadoEm;  }
 
 
   //  ~ SETTERS ~
@@ -93,8 +102,8 @@ public class Usuario {
   public void setSenha(  String senha  )    {  this.senha = senha;                      }
   public void setPerfil(  Perfil perfil  )  {  this.perfil = perfil;                    }
   public void setAtivo(  boolean ativo  )   {  this.ativo  = ativo;                     }
-  public void setIdAdmin(  Integer idAdmin ){  this.idAdmin = idAdmin;                  }
-
+  public void setAdminResponsavel(  Admin adminResponsavel )  {  this.adminResponsavel = adminResponsavel;  }
+  public void setAtualizadoEm(LocalDateTime atualizadoEm)     {  this.atualizadoEm = atualizadoEm;  }
 
 
 

@@ -37,6 +37,8 @@ public class Admin {
   private String senha;
 
 
+
+  //  ~ As coisas de datas e horas da tabela (se ta no diagrama, n da pra deixar de fora)
   @CreationTimestamp
   @Column(name = "criadoEm", updatable = false)
   private LocalDateTime criadoEm;
@@ -48,4 +50,42 @@ public class Admin {
 
 
 
+
+  public Admin() {}
+
+
+  public Admin(  String nome, String login, String senha  ) {
+    this.nome = nome;
+    this.login = login;
+    this.senha = senha;
+    this.criadoEm = LocalDateTime.now();
+    this.atualizadoEm = LocalDateTime.now();
+  }
+
+
+
+
+
+  //  ~ GETTER's ~
+  public Integer getId()     {  return id;      }
+  public String  getNome()   {  return nome;    }
+  public String  getLogin()  {  return login;   }
+  public String  getSenha()  {  return senha;   }
+  public LocalDateTime getCriadoEm() { return criadoEm; }
+  public LocalDateTime getAtualizadoEm() { return atualizadoEm; }
+
+
+
+  //  ~ SETTER's ~
+  public void setId(  Integer id  )         {  this.id = id; }
+  public void setNome(  String nome  )      {  this.nome  = nome.trim();                }
+  public void setLogin(  String email  )    {  this.login = email.trim().toLowerCase(); }
+  public void setSenha(  String senha  )    {  this.senha = senha;                      }
+  public void setAtualizadoEm(LocalDateTime atualizadoEm) { this.atualizadoEm = atualizadoEm; }
+
+
+
+
+
+  
 }
