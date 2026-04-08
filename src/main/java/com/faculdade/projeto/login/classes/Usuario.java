@@ -1,7 +1,7 @@
 package com.faculdade.projeto.login.classes;
 
 
-
+import com.faculdade.projeto.login.classes.Admin;
 import org.hibernate.annotations.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -47,7 +47,7 @@ public class Usuario {
 
 
 
-  @CreationTimestamp
+  @CreationTimestamp                                      //  ~ Ah esses 2 aq serve pra ter uma nocao da hora de criacao/atualizacao do user
   @Column(name = "criadoEm", updatable = false)
   private LocalDateTime criadoEm;
 
@@ -65,16 +65,17 @@ public class Usuario {
 
 
   //  ~ Constructor do Usuario Ajustado pros novos itens alocados do JPA...
-  public Usuario(String nome, String login, String senha, Perfil perfil, Integer idAdmin) {
+  public Usuario(String nome, String login, String senha, Perfil perfil, Admin adminResponsavel) {
     this.nome = nome.trim();
     this.login = login.trim().toLowerCase();
     this.senha = senha;
     this.perfil = perfil;
-    this.adminResponsavel = idAdmin;
+    this.adminResponsavel = adminResponsavel;
     this.ativo = true;
   }
   
-  //  ~ O hibernate exige um constructor vazio...
+  //  ~ O hibernate exige um constructor vazio, pois primeiro, ao rodar o codigo, precisa executar a classe
+  //  ~ de entidade sem a passagem de parametros ("definir"), e dps pode ser usado um constructor (como classe normal) 
   public Usuario() {}
 
 
