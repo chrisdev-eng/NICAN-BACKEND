@@ -1,0 +1,161 @@
+
+-- _______________________________________________
+--
+--  Admin - armazenar os administradores do sistema, gerenciar tudo: criar usuários, 
+--  aprovar requerimentos, registrar presenças, movimentar estoque.
+-- _______________________________________________
+create table admin(
+	idAdmin serial primary key,
+	nome varchar(100) not null,
+	login varchar(100) not null,
+	senha varchar(100) not null,
+	criadoEm timestamp,
+	atualizadoEm timestamp
+	
+);
+
+select * from admin;
+
+-- _______________________________________________
+--  armazenar usuários comuns, poder solicitar itens, reportar estado de ferramentas
+--  e justificar faltas
+-- _______________________________________________
+
+create table usuario(
+	idUsuario serial primary key,
+	nome varchar(100) not null,
+	login varchar(100) not null,
+	senha varchar(100) not null,
+	idAdmin_fk INTEGER not null,
+	criadoEm timestamp,
+	atualizadoEm timestamp,
+	foreign key (idAdmin_fk) references admin(idAdmin)
+);
+
+select * from usuario;
+
+
+
+-- _______________________________________________
+--  cada item/ferramenta existente no estoque, guarda qtd total e disponível
+--  e qual admin é responsável por aquele item
+-- _______________________________________________
+
+create table almoxarifado(
+	idItem serial primary key,
+	nome varchar(100) not null,
+	categoria varchar(100) not null,
+	quantidadeTotal integer,
+	quantidadeDisp integer,
+	idAdmin_fk integer not null,
+	criadoEm timestamp,
+	atualizadoEm timestamp,
+	foreign key (idAdmin_fk) references admin(idAdmin)
+	
+);
+
+-- _______________________________________________
+--  pedido formal que o usuário faz para pegar o item emprestado
+--  pendente até aprovação ou negativa do admin operacionalmente
+-- _______________________________________________
+
+create table requerimento(
+	idRequerimento serial primary key not null,
+	idUsuario_fk integer not null,
+	idItem_fk integer not null,
+	qtdSolicitado integer not null,
+	status varchar(10),
+	idAdmin_fk integer not null,
+	dataSolicitacao date,
+	dataAprovacao date,
+	criadoEm timestamp,
+	atualizadoEm timestamp,
+	foreign key (idUsuario_fk) references usuario(idUsuario),
+	foreign key (idItem_fk) references almoxarifado(idItem),
+	foreign key (idAdmin_fk) references admin(idAdmin)
+);
+
+
+-- _______________________________________________
+--  só é criado quando o admin aprova um requerimento, registra a saida do item
+--  quando foi pego, prazo de devolução e quando foi devolvido
+-- _______________________________________________
+
+create table emprestar(
+	idEmprestimo serial primary key not null,
+	idRequerimento_fk integer not null,
+	idUsuario_fk integer not null, 
+	idItem_fk integer not null,
+	qtdPega integer not null,
+	dataPegou date not null,
+	DevPrevista date not null,
+	dataDev date,
+	criadoEm timestamp,
+	atualizadoEm timestamp,
+	foreign key (idRequerimento_fk) references requerimento(idRequerimento),
+	foreign key (idUsuario_fk) references usuario(idUsuario),
+	foreign key (idItem_fk) references almoxarifado(idItem)
+);
+
+-- _______________________________________________
+--  registra quando admin adc ou remove itens do almoxarifado fisicamente
+--  ex: chegaram 10 martelos novos e 2 foram descartados
+-- _______________________________________________
+
+create table movimentoEstoque (
+	idMovimentacao serial primary key not null,
+	idItem_fk integer not null,
+	idAdmin_fk integer not null,
+	tipoAcao varchar(100) not null,
+	qtd integer not null,
+	observacao text,
+	criadoEm timestamp,
+	foreign key (idItem_fk) references almoxarifado(idItem),
+	foreign key (idAdmin_fk) references admin(idAdmin)
+);
+
+-- _______________________________________________
+--  quando um usuário devolve uma ferramenta e percebe algo, ele reporta o estado dela
+--  aqui, se ta bom, com defeito ou se precisa ser trocado
+-- _______________________________________________
+
+
+create table relatorioEstado(
+	idRelatorio serial primary key not null,
+	idItem_fk integer not null,
+	idUsuario_fk integer not null,
+	estado varchar(100) not null,
+	criadoEm timestamp,
+	foreign key (idItem_fk) references almoxarifado(idItem),
+	foreign key (idUsuario_fk) references usuario(idUsuario)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
