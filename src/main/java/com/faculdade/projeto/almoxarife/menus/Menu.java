@@ -6,12 +6,14 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.faculdade.projeto.almoxarife.classes.*;
+import com.faculdade.projeto.login.classes.*;
 
 
 
 
 public class Menu {
   
+  //  ~ Controler se e p roda o menu de almoxarife...
   private static boolean menuAlmoxarife = true;
 
 
@@ -19,13 +21,15 @@ public class Menu {
 
   public static void main(String[] args, ListaItems lista, Scanner leitor) {    
     int escolhaMenu = 0;
+    
+
     do {
       System.out.println("\n\n=== MENU ALMOXARIFE ===\n");
       System.out.println("O que voce deseja saber/fazer?\n");
       System.out.println("[1] ~ Ver lista de Materiais da Sede.");
       System.out.println("[2] ~ Adicionar/Remover algum Material.");
-      //System.out.println("[3] ~ Requerimento de Algum Material.");
-      //System.out.println("[4] ~ Validar Requerimentos de Materiais");
+      System.out.println("[3] ~ Requerimento de Algum Material.");
+      System.out.println("[4] ~ Validar Requerimentos de Materiais");
       System.out.println("\n[3] ~ Voltar ao Menu Principal");
       System.out.println("\n\n");
       
@@ -37,16 +41,22 @@ public class Menu {
         
 
         switch (  escolhaMenu  ) {
+          //  ~ Agora nao vamos mais passar a lista de passavamos pelos metodos, pois puxaremos da classe/banco automatico...
           case 1:
-            listarMateriais(  lista, leitor  );
+            listarMateriais(  leitor  );
             break;
           case 2:
-            adicionarRemover(  lista, leitor  );
+            //  ~ Somentes admins podem realizar crud dos itens...
+            if (  !Sessao.get().usuarioEhAdmin()  ) {
+              System.out.println("\n SOMENTE ADMINS...\n");
+              break;
+            }
+            adicionarRemover(  leitor  );
             break;
-          /*case 3:
-            System.out.println("Menu 3");
+          case 3:
+            fazerRequerimento(  leitor  );
             break;
-          case 4:
+          /*case 4:
             System.out.println("Menu 4");
             break;*/
           default:  
@@ -65,8 +75,13 @@ public class Menu {
 
 
 
-  //  ~ Opcao 1;
-  private static void listarMateriais(  ListaItems lista, Scanner leitor  ) {  
+
+
+
+
+
+  //  ~ Opcao 1 do Menu;
+  private static void listarMateriais(  Scanner leitor  ) {  
     
     boolean subMenu = true;
     int escolhaMenu = 0;
@@ -106,14 +121,21 @@ public class Menu {
       catch (  InputMismatchException e  ) {
         System.out.println("Entrada invalida! Tentando novamente... ");
         leitor.nextLine();
+      } 
+      catch (  Exception exception  ) {
+        System.out.println("Deu erro aq:" + exception.getMessage() + " :/");
       }
     } while (  subMenu  );
   }
 
 
 
-  //  ~ Opcao 2
-  private static void adicionarRemover(  ListaItems lista, Scanner leitor  ) {
+
+
+
+
+  //  ~ Opcao 2 do menu Principal...
+  private static void adicionarRemover(  Scanner leitor  ) {
     
     boolean subMenu = true;
     int escolhaMenu = 0;
@@ -138,7 +160,7 @@ public class Menu {
 
           //  ~ Adicionar Item
           case 1:
-            adicionarItem(  leitor  );
+            MenuItens.adicionarItem(  leitor  );
             break;
 
 
@@ -191,104 +213,5 @@ public class Menu {
       }
     } while (  subMenu  );
 
-  }
-
-
-
-  //  ~ Logica de Adicionar Item separada para ficar mais limpo
-  private static void adicionarItem(  Scanner leitor  ) {
-
-    String nomeItem       = "";
-    int quantidadeItem    = 0;
-    String ramoSecaoItem  = "";
-    Qualidade qualidade   = null;
-    Categoria categoria   = null;
-
-    try {
-      System.out.println("\n\n=== Novo Item ===\n");
-
-      //  ~ Nome
-      System.out.print("Digite o nome do item: ");
-      leitor.nextLine();  //  ~ Limpa o buffer antes de ler String
-      nomeItem = leitor.nextLine();
-
-      //  ~ Quantidade
-      System.out.print("Digite a quantidade do item: ");
-      try {
-        quantidadeItem = leitor.nextInt();
-      } catch (  InputMismatchException e  ) {
-        System.out.println("Quantidade invalida! Usando 1 como padrao.");
-        quantidadeItem = 1;
-        leitor.nextLine();
-      }
-
-      //  ~ Ramo/Secao (opcional)
-      System.out.print("\nEsse item pertence a algum Ramo/Secao especifico? [s/n]: ");
-      leitor.nextLine();  //  ~ Limpa buffer apos nextInt
-      String temRamo = leitor.nextLine().trim().toLowerCase();
-      if (  temRamo.equals("s")  ) {
-        System.out.print("Digite o nome do Ramo/Secao: ");
-        ramoSecaoItem = leitor.nextLine();
-      }
-
-      //  ~ Categoria
-      List<String> listaCategorias = Categoria.getListaCategorias();
-      System.out.println("\n=== Categorias Disponiveis ===\n");
-      for (  int i = 0; i < listaCategorias.size(); i++  ) {
-        System.out.println("[ " + i + " ] " + listaCategorias.get(i));
-      }
-      System.out.print("\nDigite o numero da Categoria: ");
-
-      int escolhaCategoria = -1;
-      try {
-        escolhaCategoria = leitor.nextInt();
-        if (  escolhaCategoria >= 0 && escolhaCategoria < Categoria.values().length  ) {
-          categoria = Categoria.values()[escolhaCategoria];
-        } else {
-          System.out.println("Opcao invalida! Usando categoria padrao: " + Categoria.values()[0].getCategoria());
-          categoria = Categoria.values()[0];
-        }
-      } catch (  InputMismatchException e  ) {
-        System.out.println("Entrada invalida! Usando categoria padrao: " + Categoria.values()[0].getCategoria());
-        categoria = Categoria.values()[0];
-        leitor.nextLine();
-      }
-
-      //  ~ Qualidade
-      List<String> listaQualidades = Qualidade.getListaQualidade();
-      System.out.println("\n=== Estados de Conservacao Disponiveis ===\n");
-      for (  int i = 0; i < listaQualidades.size(); i++  ) {
-        System.out.println("[ " + i + " ] " + listaQualidades.get(i));
-      }
-      System.out.print("\nDigite o numero do Estado de Conservacao: ");
-
-      int escolhaQualidade = -1;
-      try {
-        escolhaQualidade = leitor.nextInt();
-        if (  escolhaQualidade >= 0 && escolhaQualidade < Qualidade.values().length  ) {
-          qualidade = Qualidade.values()[escolhaQualidade];
-        } else {
-          System.out.println("Opcao invalida! Usando qualidade padrao: " + Qualidade.values()[0].getEstado());
-          qualidade = Qualidade.values()[0];
-        }
-      } catch (  InputMismatchException e  ) {
-        System.out.println("Entrada invalida! Usando qualidade padrao: " + Qualidade.values()[0].getEstado());
-        qualidade = Qualidade.values()[0];
-        leitor.nextLine();
-      }
-
-      //  ~ Criando o Item (com ou sem Ramo/Secao)
-      if (  ramoSecaoItem.isEmpty()  ) {
-        new Item(  nomeItem, quantidadeItem, qualidade, categoria  );
-      } else {
-        new Item(  nomeItem, quantidadeItem, ramoSecaoItem, qualidade, categoria  );
-      }
-
-      System.out.println("\nItem '" + nomeItem + "' adicionado com sucesso!\n");
-
-    } catch (  Exception e  ) {
-      System.out.println("\nErro inesperado ao adicionar item: " + e.getMessage() + "\n");
-      leitor.nextLine();
-    }
   }
 }

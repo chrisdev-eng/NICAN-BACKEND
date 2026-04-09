@@ -14,13 +14,16 @@ import com.faculdade.projeto.login.classes.Sessao;
  *  ~ Sistema Nican — Ponto de entrada principal ~
  *
  *  Mudancas em relacao ao App.java original:
- *    - cases 1-4 agora chamam o modulo de Login
- *    - case 5 (almoxarife) so e exibido/acessivel se houver sessao ativa
  *    - O cabecalho mostra quem esta logado
+ *    - Integration com o Banco de dados em TODAS as operacoes (Requerimento, Almoxarife, Logins)
+ *    
  */
 public class App {
   public static void main(String[] args) {
 
+
+
+    //  ~ Variaveis de sistema
     Scanner leitor = new Scanner(System.in);
     ListaItems almoxarife = new ListaItems();
     //  ~ Aqui a gente cria essa variavel para definir/logar alguem e/ou verificar se ha alguem logado e talz
@@ -28,6 +31,9 @@ public class App {
 
     int escolhaSistema;
     boolean sistemaCanRun = true;
+
+
+
 
 
     do {

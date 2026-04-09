@@ -1,6 +1,8 @@
 package com.faculdade.projeto.almoxarife.classes;
 
 import com.faculdade.projeto.login.classes.Admin;
+import com.faculdade.projeto.login.classes.Usuario;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -49,7 +51,7 @@ public class Item {
   //  ~ Relacionamento JPA, um admin e responsavel por varios itens...
   @ManyToOne
   @JoinColumn(name = "idAdmin", nullable = false)
-  private Admin adminResponsavel;
+  private Usuario adminResponsavel;
 
 
 
@@ -74,13 +76,13 @@ public class Item {
 
 
 
-  public Item(String nome, int qtdTotal, int qtdDisponivel, Qualidade qualidade, Categoria categoria, Admin admin) {
+  public Item(String nome, int qtdTotal, int qtdDisponivel, Qualidade qualidade, Categoria categoria, Usuario responsavel  ) {
       this.nomeItem = nome;
       this.quantidadeTotal = qtdTotal;
       this.quantidadeDisponivel = qtdDisponivel;
       this.qualidadeItem = qualidade.getEstado();
       this.categoriaItem = categoria.getCategoria();
-      this.adminResponsavel = admin;
+      this.adminResponsavel = responsavel;
   }
 
 

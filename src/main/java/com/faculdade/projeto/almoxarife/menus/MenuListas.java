@@ -9,6 +9,10 @@ import com.faculdade.projeto.almoxarife.classes.*;
 
 
 public final class MenuListas {
+
+
+
+
   //  ~ Acessando a classe pois o metodo getListaItems e estatico (nao e nescessario uma variavel...)
   public static void listarTudo() {
     System.out.println("\n\n====== Lista Completa de Materiais ======\n\n");
@@ -16,6 +20,8 @@ public final class MenuListas {
       itemLista.infosGeralItem();
     }
   }
+
+
 
 
 
@@ -47,6 +53,8 @@ public final class MenuListas {
 
 
 
+
+
   //  ~ Mesmo conceito de antes, mas agora vamos estar vendo o estado de conservacao dos itens...
   public static void listarMenuEstado() {
     for (  String qualty : Qualidade.getListaQualidade()  ) {
@@ -72,4 +80,6 @@ public final class MenuListas {
       }
     }
   }
+
+
 }
