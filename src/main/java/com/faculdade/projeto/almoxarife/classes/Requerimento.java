@@ -45,7 +45,7 @@ public class Requerimento {
 
   @ManyToOne                                                    //  ~ Novamente, muitos ade eme p um requerimento
   @JoinColumn(name = "idAdmin")
-  private Admin adminAvaliador;
+  private Usuario adminAvaliador;
 
 
 
@@ -93,7 +93,7 @@ public class Requerimento {
   public void setItem(Item item) { this.item = item; }
   public void setQuantidadeSolicitada(Integer qtd) { this.quantidadeSolicitada = qtd; }
   public void setStatus(String status) { this.status = status; }
-
+  public void setAdminAvaliador(Usuario adminAvaliador) {this.adminAvaliador = adminAvaliador;}
 
 
 

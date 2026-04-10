@@ -4,6 +4,7 @@ import com.faculdade.projeto.models.JPAUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
+import java.util.Scanner;
 
 
 
@@ -17,60 +18,109 @@ import java.util.List;
 //
 //
 public class ListaItems {
-  
+      
 
-  //  ~ Metodo de salvar u7m novo item no banco de dados 
-  public static boolean salvar(Item item) {
+
+
+
+  //  ~ Pega todos os itens da lista...
+  public static List<Item> getListaItems() {
+        EntityManager em = JPAUtils.getEntityManager();
+        try {
+            return em.createQuery("SELECT i FROM Item i ORDER BY i.nomeItem", Item.class).getResultList();
+        } finally { em.close(); }
+    }
+  //  ~ Pega um item by seu id 
+  public static Item buscarPorId(Integer id) {
+      EntityManager em = JPAUtils.getEntityManager();
+      try {
+          return em.find(Item.class, id);
+        } 
+      finally { em.close(); }
+    }
+
+
+
+
+
+
+  //  ~ Add
+    public static void adicionarItem(Item novoItem) {
         EntityManager em = JPAUtils.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(item);
+            em.persist(novoItem);
             em.getTransaction().commit();
-            return true;
-        } catch (Exception e) {
-            em.getTransaction().rollback();
+        } catch (Exception e) { 
+            em.getTransaction().rollback(); 
             e.printStackTrace();
-            return false;
-        } finally {
-            em.close();
-        }
+        } finally { em.close(); }
     }
 
 
-    //  ~ Lista td os itens 
-    public static List<Item> getListaItems() {
+
+
+
+    //  ~ Remove
+    public static void removerItem(Item item) {
         EntityManager em = JPAUtils.getEntityManager();
         try {
-            TypedQuery<Item> query = em.createQuery("SELECT i FROM Item i", Item.class);
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
+            em.getTransaction().begin();
+            // Precisamos buscar o item gerenciado antes de remover
+            Item gerenciado = em.find(Item.class, item.getIdItem());
+            if (gerenciado != null) em.remove(gerenciado);
+            em.getTransaction().commit();
+        } catch (Exception e) { 
+            em.getTransaction().rollback(); 
+            e.printStackTrace();
+        } finally { em.close(); }
     }
 
-    // Buscar por ID
-    public static Item buscarPorId(Integer id) {
-        EntityManager em = JPAUtils.getEntityManager();
-        try {
-            return em.find(Item.class, id);
-        } finally {
-            em.close();
-        }
-    }
+
+
+
     
-    // Atualizar quantidade (exemplo de merge)
     public static boolean atualizar(Item item) {
         EntityManager em = JPAUtils.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.merge(item);
+            em.merge(item); // merge atualiza ou insere se não existir
             em.getTransaction().commit();
             return true;
-        } catch(Exception e) {
-            em.getTransaction().rollback();
+        } catch (Exception e) { 
+            em.getTransaction().rollback(); 
+            e.printStackTrace();
             return false;
-        } finally {
-            em.close();
+        } finally { em.close(); }
+    }
+
+
+
+
+
+
+
+
+    //  ~ Cria um "sub-menu" p escolher um item
+    public static Item getItemLista(Scanner leitor) {
+        List<Item> lista = getListaItems();
+        if (lista.isEmpty()) {
+            System.out.println("Nenhum item cadastrado.");
+            return null;
+        }
+        for (Item i : lista) i.infosGeralItem();
+        
+        System.out.print("Digite o ID do item: ");
+        try {
+            int id = leitor.nextInt();
+            leitor.nextLine();
+            return buscarPorId(id); // Mais eficiente que filtrar lista em memória
+        } catch (Exception e) {
+            System.out.println("Entrada inválida.");
+            leitor.nextLine();
+            return null;
         }
     }
+
+
 }

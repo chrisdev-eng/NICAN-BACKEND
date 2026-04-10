@@ -100,7 +100,7 @@ public class Item {
   public String getCategoria()  {  return this.categoriaItem;  } 
   public int getQuantidadeTotal()    {  return this.quantidadeTotal;  }
   public int getQuantidadeDisponivel()    {  return this.quantidadeDisponivel;  }
-  public Admin getAdminResponsavel() {  return adminResponsavel;  }
+  public Usuario getAdminResponsavel() {  return this.adminResponsavel;  }
   //public String getRamoSecao()  {  return this.ramoSecaoItem;  }
 
   
@@ -111,7 +111,9 @@ public class Item {
   public void setNomeItem(  String nomeItem  ) {  this.nomeItem = nomeItem;  }
   public void mudarQualidade(  String novaQualidade  ) {  this.qualidadeItem = novaQualidade;  }
   public void setCategoriaItem(String categoriaItem) {  this.categoriaItem = categoriaItem;  }
-  public void setAdminResponsavel(Admin adminResponsavel) {  this.adminResponsavel = adminResponsavel;  }
+  public void setAdminResponsavel(Usuario adminResponsavel) {  this.adminResponsavel = adminResponsavel;  }
+
+
 
 
 
@@ -130,6 +132,8 @@ public class Item {
       this.quantidadeDisponivel += quant;
       this.quantidadeTotal += quant;
   }
+
+
 
 
   public void infosGeralItem() {

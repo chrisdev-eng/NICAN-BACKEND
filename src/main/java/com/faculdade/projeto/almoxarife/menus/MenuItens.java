@@ -90,13 +90,67 @@ public class MenuItens {
       Item novoItem = new Item(nomeItem, quantidadeItem, quantidadeItem, qualidade, categoria, userLogado);
 
 
-      if (  ListaItems.adicionar(  novoItem  )  ) {
-      }
+      ListaItems.adicionarItem(  novoItem  ); 
+      System.out.println("\n\n Item Cadsatrado no Sistema! \n\n");   
 
 
     } catch (  Exception e  ) {
       System.out.println( "\nErro ao adicionar item:  " + e.getMessage() +  "\n ");
       leitor.nextLine();
     }
+  }
+
+
+
+
+
+  
+
+  //  ~ Metodo 2 d remover um item da lista;
+  public static void removerItem(  Scanner leitor  ) {
+    Item escolherItem = ListaItems.getItemLista(leitor);
+    if (  escolherItem != null  ) {  
+        ListaItems.removerItem(escolherItem);
+        System.out.println( "\nItem removido com sucesso!\n ");
+    } else {
+        System.out.println( "\nItem nao encontrado!\n ");
+    }
+  }
+
+
+
+
+
+  //  ~ Methodo 3, Mudar quantidade
+  public static void mudarQuantidade(  Scanner leitor  ) {
+    Item escolherQuantItem = ListaItems.getItemLista(leitor);
+    
+
+    if (  escolherQuantItem != null  ) {
+      
+      System.out.println( "\n\n=== Insira a Quantidade: [Positivo add, Negativo remov.] ===\n\n ");
+      
+
+
+      try {
+
+        int quantChange = leitor.nextInt();
+    
+
+        if (  quantChange  >= 0  ) {  escolherQuantItem.aumentarQuant(quantChange);  }
+        else {  escolherQuantItem.diminuirQuant(Math.abs(quantChange));  }
+                
+
+
+        ListaItems.atualizar(escolherQuantItem); // Salva no banco
+        System.out.println( "\nQuantidade atualizada com sucesso!\n ");        
+      } 
+      catch (  InputMismatchException e  ) {
+          System.out.println( "Entrada invalida! Digite apenas numeros. ");
+          leitor.nextLine();
+        }
+            } 
+    else {  System.out.println( "\nItem nao encontrado...\n ");  }
+
   }
 }
