@@ -50,6 +50,9 @@ public class ListaUsuarios {
         }
     }
 
+
+
+    //  ~ Email -> Login 
     public static Usuario buscarPorLogin(String login) {
         EntityManager em = JPAUtils.getEntityManager();
         try {

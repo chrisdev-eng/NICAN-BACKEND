@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS requerimento (
     dataSolicitacao DATE DEFAULT CURRENT_DATE, criadoEm TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- (Opcional: Crie movimentacao_estoque e emprestar se quiser, mas as 4 acima cobrem o essencial)
 
 -- TRIGGER 1: Atualiza data automaticamente
 CREATE OR REPLACE FUNCTION trg_update_ts() RETURNS TRIGGER AS $$

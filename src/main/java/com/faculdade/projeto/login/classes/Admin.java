@@ -24,7 +24,7 @@ public class Admin {
   //  ~ Definimos que a variavel vai ser um do tipo de um ID, 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)     //  ~ Diz que e do tipo serial (auto incremento de id)
-  @Column(name = "idUsuario")                             //  ~ Nome da Coluna que vai se relacionar      
+  @Column(name = "idAdmin")                             //  ~ Nome da Coluna que vai se relacionar      
   private Integer id;
   
   @Column(name = "nome", nullable = false, length = 100)  //  ~ Variavel do tipo Varchar, que n pode ser null. 
