@@ -7,20 +7,37 @@ import com.faculdade.projeto.almoxarife.Almoxarife;
 import com.faculdade.projeto.almoxarife.classes.ListaItems;
 import com.faculdade.projeto.login.Login;
 import com.faculdade.projeto.login.classes.Sessao;
-
+import org.flywaydb.core.Flyway;
 
 
 /**
  *  ~ Sistema Nican — Ponto de entrada principal ~
  *
  *  Mudancas em relacao ao App.java original:
- *    - cases 1-4 agora chamam o modulo de Login
- *    - case 5 (almoxarife) so e exibido/acessivel se houver sessao ativa
  *    - O cabecalho mostra quem esta logado
+ *    - Integration com o Banco de dados em TODAS as operacoes (Requerimento, Almoxarife, Logins)
+ *    
  */
 public class App {
   public static void main(String[] args) {
 
+
+    try {
+      Flyway flyway = Flyway.configure()
+              .dataSource("jdbc:postgresql://localhost:5432/nicandb", "postgres", "")
+              .locations("classpath:db/migration")
+              .baselineOnMigrate(true)
+              .load();
+      flyway.migrate();
+      System.out.println("[OK] Banco inicializado pelo Flyway.\n");
+    } catch (Exception e) {
+      System.out.println("[ERRO] Falha ao executar Flyway: " + e.getMessage());
+      System.out.println("Verifique se o PostgreSQL está rodando e o banco 'nicandb' existe.");
+      return;  // Encerra se o banco não estiver disponível
+    }
+
+
+    //  ~ Variaveis de sistema
     Scanner leitor = new Scanner(System.in);
     ListaItems almoxarife = new ListaItems();
     //  ~ Aqui a gente cria essa variavel para definir/logar alguem e/ou verificar se ha alguem logado e talz
@@ -28,6 +45,9 @@ public class App {
 
     int escolhaSistema;
     boolean sistemaCanRun = true;
+
+
+
 
 
     do {

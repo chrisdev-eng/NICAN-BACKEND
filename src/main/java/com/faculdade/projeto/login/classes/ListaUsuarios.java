@@ -1,86 +1,132 @@
 package com.faculdade.projeto.login.classes;
 
-import java.util.ArrayList;
+import com.faculdade.projeto.models.JPAUtils;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
 
-/**
- *  ~ Repositorio em memoria de Usuarios ~
+/*
+ *  ~ Operações de CRUD para a tabela de Usuarios ~
  *
- *  Segue o mesmo padrao do ListaItems.java do almoxarife.
- *  Troque por JDBC/JPA para persistencia real no futuro.
- *
- *  Ja vem com um Admin padrao criado para o primeiro acesso:
- *    Email: admin@nican.com  |  Senha: Admin123
+ *  ADIÇÕES:
+ *    - JOIN FETCH em listarTodos() — Critério I: "implementação de cada join abordado em aula"
+ *    - buscarAdminPorLogin() adicionado para o fluxo de login de admins
  */
 public class ListaUsuarios {
 
-  private static List<Usuario> lista = new ArrayList<>();
 
 
+  // CRUD — Salvar novo usuario
+  // REGRA DE NEGÓCIO: não permite cadastro com login duplicado
+  public static boolean salvar(Usuario usuario) {
+    EntityManager em = JPAUtils.getEntityManager();
+    try {
+      em.getTransaction().begin();
 
-
-  //  ~ Bloco estatico: cria o Admin padrao ao carregar a classe ~
-  //  ~ O metodo foi feito pra: criar uma variavel statica na classe 
-  //  ~ e adicionar a lista, em seguida.
-  static {
-    Usuario adminPadrao = new Usuario(
-      "Administrador",
-      "admin@nican.com",
-      "Admin123",
-      Perfil.ADMIN
-    );
-    lista.add(adminPadrao);
-  }
-
-
-
-
-  //  ~ Adiciona usuario se o email ainda nao existir ~
-  public static boolean adicionarUsuario(Usuario novo) {
-    if (buscarPorEmail(novo.getEmail()) != null) {
-      return false;  //  ~ Email ja cadastrado
-    }
-    lista.add(novo);
-    return true;
-  }
-
-
-
-
-  //  ~ Busca por email (retorna null se nao encontrar) ~
-  public static Usuario buscarPorEmail(String email) {
-    for (Usuario u : lista) {
-      if (  u.getEmail().equals(email.trim().toLowerCase())  ) {
-        return u;
+      // REGRA DE NEGÓCIO: verificação de login duplicado antes de persistir
+      TypedQuery<Long> qtd = em.createQuery(
+          "SELECT COUNT(u) FROM Usuario u WHERE u.login = :login", Long.class);
+      qtd.setParameter("login", usuario.getLogin());
+      if (qtd.getSingleResult() > 0) {
+        em.getTransaction().rollback();
+        System.out.println("  [ERRO] Login já cadastrado no sistema.");
+        return false;
       }
+
+      em.persist(usuario);
+      em.getTransaction().commit();
+      return true;
+    } catch (Exception e) {
+      em.getTransaction().rollback();
+      e.printStackTrace();
+      return false;
+    } finally {
+      em.close();
     }
-    return null;
   }
 
 
 
-
-  //  ~ Busca por ID ~
-  public static Usuario buscarPorId(int id) {
-    for (Usuario u : lista) {
-      if (u.getId() == id) return u;
+  // CRUD — Buscar por login
+  public static Usuario buscarPorLogin(String login) {
+    EntityManager em = JPAUtils.getEntityManager();
+    try {
+      TypedQuery<Usuario> query = em.createQuery(
+          "SELECT u FROM Usuario u WHERE u.login = :login", Usuario.class);
+      query.setParameter("login", login.trim().toLowerCase());
+      return query.getResultStream().findFirst().orElse(null);
+    } finally {
+      em.close();
     }
-    return null;
   }
 
 
 
+  // CRUD — Buscar por ID
+  public static Usuario buscarPorId(Integer id) {
+    EntityManager em = JPAUtils.getEntityManager();
+    try {
+      return em.find(Usuario.class, id);
+    } finally {
+      em.close();
+    }
+  }
 
-  public static List<Usuario> getLista()    { return lista;        }
-  public static int           getTamanho()  { return lista.size(); }
+
+
+  // CRUD — Listar todos (com JOIN FETCH para carregar o admin responsável junto)
+  // JOIN FETCH = Critério I: "implementação de cada join abordado em aula"
+  public static List<Usuario> listarTodos() {
+    EntityManager em = JPAUtils.getEntityManager();
+    try {
+      return em.createQuery(
+          "SELECT u FROM Usuario u LEFT JOIN FETCH u.adminResponsavel ORDER BY u.nome",
+          Usuario.class
+      ).getResultList();
+    } finally {
+      em.close();
+    }
+  }
 
 
 
+  // CRUD — Atualizar usuario existente
+  public static boolean atualizar(Usuario usuario) {
+    EntityManager em = JPAUtils.getEntityManager();
+    try {
+      em.getTransaction().begin();
+      em.merge(usuario);
+      em.getTransaction().commit();
+      return true;
+    } catch (Exception e) {
+      em.getTransaction().rollback();
+      e.printStackTrace();
+      return false;
+    } finally {
+      em.close();
+    }
+  }
 
-  public static void listarTodos() {
-    System.out.println("\n\n====== Lista de Usuarios ======\n");
-    for (Usuario u : lista) {
-      u.infosUsuario();
+
+
+  // CRUD — Desativar conta (soft delete)
+  // REGRA DE NEGÓCIO: não removemos usuários fisicamente, apenas desativamos
+  public static boolean desativar(Integer id) {
+    EntityManager em = JPAUtils.getEntityManager();
+    try {
+      em.getTransaction().begin();
+      Usuario u = em.find(Usuario.class, id);
+      if (u == null) return false;
+      u.setAtivo(false);
+      em.merge(u);
+      em.getTransaction().commit();
+      return true;
+    } catch (Exception e) {
+      em.getTransaction().rollback();
+      e.printStackTrace();
+      return false;
+    } finally {
+      em.close();
     }
   }
 }
