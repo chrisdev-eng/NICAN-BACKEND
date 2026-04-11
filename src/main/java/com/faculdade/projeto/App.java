@@ -7,7 +7,7 @@ import com.faculdade.projeto.almoxarife.Almoxarife;
 import com.faculdade.projeto.almoxarife.classes.ListaItems;
 import com.faculdade.projeto.login.Login;
 import com.faculdade.projeto.login.classes.Sessao;
-
+import org.flywaydb.core.Flyway;
 
 
 /**
@@ -21,6 +21,20 @@ import com.faculdade.projeto.login.classes.Sessao;
 public class App {
   public static void main(String[] args) {
 
+
+    try {
+      Flyway flyway = Flyway.configure()
+              .dataSource("jdbc:postgresql://localhost:5432/nicandb", "postgres", "")
+              .locations("classpath:db/migration")
+              .baselineOnMigrate(true)
+              .load();
+      flyway.migrate();
+      System.out.println("[OK] Banco inicializado pelo Flyway.\n");
+    } catch (Exception e) {
+      System.out.println("[ERRO] Falha ao executar Flyway: " + e.getMessage());
+      System.out.println("Verifique se o PostgreSQL está rodando e o banco 'nicandb' existe.");
+      return;  // Encerra se o banco não estiver disponível
+    }
 
 
     //  ~ Variaveis de sistema

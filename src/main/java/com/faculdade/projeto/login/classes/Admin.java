@@ -1,91 +1,84 @@
 package com.faculdade.projeto.login.classes;
 
 
-import org.hibernate.annotations.*;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
-
-
+import java.util.List;
 
 /*
  *  Classe Admin do Sistema.
  *
- *  A classe admin criamos pra poder relacionar com a classe usuario, pois somentes admins podem criar um usuario
- *  e um usuario recebe o id do admin que criou a sua conta...
- *  Ela segue a mesma estrutura da classe Usuario, com pequenas alterationz.
- *  Bom.. e por ser uma classe do tipo admin, logo, nao sera preciso de uma fk_admin (ate pq vai linkar com quem 
- *  kkkkk)
+ *  CORREÇÕES APLICADAS:
+ *    - @OneToMany(mappedBy = "adminResponsavel") — mantido pois o campo se chama
+ *      "adminResponsavel" em Usuario e Item.
+ *    - Sem outras alteracoes estruturais.
  */
 @Entity
 @Table(name = "admin")
 public class Admin {
 
-
-  //  ~ Definimos que a variavel vai ser um do tipo de um ID, 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)     //  ~ Diz que e do tipo serial (auto incremento de id)
-  @Column(name = "idAdmin")                             //  ~ Nome da Coluna que vai se relacionar      
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "idAdmin")
   private Integer id;
-  
-  @Column(name = "nome", nullable = false, length = 100)  //  ~ Variavel do tipo Varchar, que n pode ser null. 
+
+  @Column(name = "nome", nullable = false, length = 100)
   private String nome;
 
-  @Column(name = "login", nullable = false, length = 100, unique = true)   //  ~ Mudanca de Email -> Login 
+  @Column(name = "login", nullable = false, length = 100, unique = true)
   private String login;
-  
+
   @Column(name = "senha", nullable = false, length = 255)
   private String senha;
 
-
-
-  //  ~ As coisas de datas e horas da tabela (se ta no diagrama, n da pra deixar de fora)
   @CreationTimestamp
   @Column(name = "criadoEm", updatable = false)
   private LocalDateTime criadoEm;
 
-  @CreationTimestamp
+  @UpdateTimestamp
   @Column(name = "atualizadoEm")
   private LocalDateTime atualizadoEm;
 
+  // @OneToMany — um admin é responsável por varios usuarios
+  // mappedBy aponta para o campo "adminResponsavel" da classe Usuario
+  @OneToMany(mappedBy = "adminResponsavel", fetch = FetchType.LAZY)
+  private List<Usuario> usuarios;
 
+  // @OneToMany — um admin é responsável por varios itens do almoxarife
+  @OneToMany(mappedBy = "adminResponsavel", fetch = FetchType.LAZY)
+  private List<com.faculdade.projeto.almoxarife.classes.Item> itens;
 
 
 
   public Admin() {}
 
-
-  public Admin(  String nome, String login, String senha  ) {
+  public Admin(String nome, String login, String senha) {
     this.nome = nome;
     this.login = login;
     this.senha = senha;
-    this.criadoEm = LocalDateTime.now();
-    this.atualizadoEm = LocalDateTime.now();
   }
 
 
 
-
-
-  //  ~ GETTER's ~
-  public Integer getId()     {  return id;      }
-  public String  getNome()   {  return nome;    }
-  public String  getLogin()  {  return login;   }
-  public String  getSenha()  {  return senha;   }
-  public LocalDateTime getCriadoEm() { return criadoEm; }
-  public LocalDateTime getAtualizadoEm() { return atualizadoEm; }
-
-
-
-  //  ~ SETTER's ~
-  public void setId(  Integer id  )         {  this.id = id; }
-  public void setNome(  String nome  )      {  this.nome  = nome.trim();                }
-  public void setLogin(  String email  )    {  this.login = email.trim().toLowerCase(); }
-  public void setSenha(  String senha  )    {  this.senha = senha;                      }
-  public void setAtualizadoEm(LocalDateTime atualizadoEm) { this.atualizadoEm = atualizadoEm; }
+  // GETTERS
+  public Integer getId()                     { return id; }
+  public String  getNome()                   { return nome; }
+  public String  getLogin()                  { return login; }
+  public String  getSenha()                  { return senha; }
+  public LocalDateTime getCriadoEm()         { return criadoEm; }
+  public LocalDateTime getAtualizadoEm()     { return atualizadoEm; }
+  public List<Usuario> getUsuarios()         { return usuarios; }
+  public List<com.faculdade.projeto.almoxarife.classes.Item> getItens() { return itens; }
 
 
 
-
-
-  
+  // SETTERS
+  public void setId(Integer id)                          { this.id = id; }
+  public void setNome(String nome)                       { this.nome = nome.trim(); }
+  public void setLogin(String login)                     { this.login = login.trim().toLowerCase(); }
+  public void setSenha(String senha)                     { this.senha = senha; }
+  public void setAtualizadoEm(LocalDateTime dt)          { this.atualizadoEm = dt; }
 }

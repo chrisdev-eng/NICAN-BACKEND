@@ -62,7 +62,7 @@ public final class MenuListas {
       
 
       for (  Item itemDaLista : ListaItems.getListaItems()  ) {
-        if (  itemDaLista.getQualiidade().equals(  qualty  )  ) {
+        if (  itemDaLista.getQualidade().equals(  qualty  )  ) {
           listaDaQualidade.add(  itemDaLista  );
         }
       }

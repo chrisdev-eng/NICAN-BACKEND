@@ -5,27 +5,18 @@ import java.util.Scanner;
 import com.faculdade.projeto.almoxarife.menus.*;
 import com.faculdade.projeto.almoxarife.classes.*;
 
-
-
-/**  ~ Classe principal que vai cuidar do almoxarifado ~
-  *
-  *
-  */
+/*
+ *  ~ Classe principal do módulo Almoxarife ~
+ *
+ *  CORREÇÕES:
+ *    - Removidas as instâncias de Item com construtores antigos (que usavam Strings soltas e
+ *      parâmetros incompatíveis). Esses objetos não eram salvos no banco de qualquer forma.
+ *    - O sistema agora carrega os itens diretamente do banco via ListaItems.
+ */
 public class Almoxarife {
-  public static void main(  String[] args, Scanner leitor, ListaItems almoxarife  ) {
 
-
-
-
-    //  ~ Declaracoes/Inicializacoes de Itens do Almoxarife (Terao um arquivo que inicializara)
-    Item facaoGrupo = new Item("Facao", 4, Qualidade.N, Categoria.FC);
-    Item facaoPantera = new Item("Facao", 1, "Patrulha Pantera", Qualidade.Q, Categoria.FC);
-    Item paGrupo = new Item("Pa", 2, Qualidade.Q, Categoria.FS);
-    Item barracaGrupo = new Item("Barraca de Camping", 5, Qualidade.B, Categoria.BLS);
-
-
-
-    //  ~ Arquivo Actions realizara as Acoes do Menu...
+  public static void main(String[] args, Scanner leitor, ListaItems almoxarife) {
+    // Itens são gerenciados pelo banco — o Menu carrega diretamente via ListaItems.getListaItems()
     Menu.main(args, almoxarife, leitor);
-  }  
+  }
 }

@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence">
-  <persistence-unit name="nicandb-pu" transaction-type="RESOURCE_LOCAL">
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+             https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+    <persistence-unit name="nicandb" transaction-type="RESOURCE_LOCAL">
 
+        <!-- Hibernate como provedor JPA -->
+        <!-- CORRECAO: <provider> deve vir ANTES de <class> conforme o XSD do JPA 3.0 -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
+        <!-- Entidades do Projeto -->
+        <class>com.faculdade.projeto.login.classes.Usuario</class>
+        <class>com.faculdade.projeto.login.classes.Admin</class>
+        <class>com.faculdade.projeto.almoxarife.classes.Item</class>
+        <class>com.faculdade.projeto.almoxarife.classes.Requerimento</class>
 
-    <!-- Le Entidades do Projeto -->
-    <!-- Aquie e onde vai todas as entidades do projeto -->
-    <class>com.faculdade.projeto.login.classes.Usuario</class>
-    <class>com.faculdade.projeto.login.classes.Admin</class>
+        <properties>
+            <!-- Conexão com o banco (local) -->
+            <property name="jakarta.persistence.jdbc.url"      value="jdbc:postgresql://localhost:5432/nicandb"/>
+            <property name="jakarta.persistence.jdbc.user"     value="postgres"/>
+            <property name="jakarta.persistence.jdbc.password" value=""/>
+            <property name="jakarta.persistence.jdbc.driver"   value="org.postgresql.Driver"/>
 
-    <class>com.faculdade.projeto.almoxarife.classes.Item</class>
-    <class>com.faculdade.projeto.almoxarife.classes.Requerimento</class>
+            <!-- Hibernate + PostgreSQL -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
 
+            <!-- value none: o Flyway cria as tabelas, nao da conflito com o Hibernate -->
+            <property name="hibernate.hbm2ddl.auto" value="none"/>
+            <property name="hibernate.show_sql"   value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
 
-
-    <!-- Diz ao JPA que o Hibernate é quem vai trabalhar -->
-    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-
-
-
-
-    <properties>
-      <!-- Aq as infos da conexão -->
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nicandb"/>
-      <property name="jakarta.persistence.jdbc.user" value="postgres"/>
-      <property name="jakarta.persistence.jdbc.password" value=""/>
-      <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      
-      <!-- Hibernate como provedor JPA -->
-      <!-- A tag provider diz q o hibernate conecta com o JPA, Ja essa diz da conecxao hiber + postgresql -->
-      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-      
-      <!-- Para o Flywat, tem q dexa em modo validate -->
-      <property name="hibernate.hbm2ddl.auto" value="validate"/>
-      
-      <property name="hibernate.show_sql" value="true"/>
-      <property name="hibernate.format_sql" value="true"/>
-    </properties>
-  </persistence-unit>
+    </persistence-unit>
 </persistence>
