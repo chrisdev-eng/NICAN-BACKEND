@@ -3,54 +3,75 @@ package com.faculdade.projeto.login.classes;
 /**
  *  ~ Gerencia a Sessao ativa do sistema ~
  *
- *  Singleton: existe apenas UMA sessao por vez (igual a um login real).
- *  Guarda o usuario logado e expoe metodos de verificacao de permissao.
+ *  Singleton: existe apenas UMA sessao por vez.
+ *
+ *  CORRECAO: a sessao agora guarda separadamente o Usuario logado E o Admin logado,
+ *  evitando o problema anterior onde o login de admin criava um Usuario "fantasma"
+ *  que nao existia no banco — isso causava erro de FK ao tentar salvar requerimentos
+ *  ou buscar o admin pelo ID da sessao.
  */
 public class Sessao {
 
-  //  ~ Se auto Intancia a classe
   private static Sessao instancia = new Sessao();
+
   private Usuario usuarioLogado = null;
+  // CORRECAO: campo separado para guardar o Admin logado (evita usuario "fantasma" no banco)
+  private Admin adminLogado = null;
 
-
-
-  //  ~ Constructor privado, para que ele seja instanciado/inicializado somente dentro aqui da classe 
   private Sessao() {}
 
-  public static Sessao get() {  return instancia;  }
+  public static Sessao get() { return instancia; }
 
 
 
-
-
-  //  ~ Inicia a sessao com o usuario autenticado ~
-  public void iniciar(  Usuario usuario  ) {
+  // Inicia sessao com usuario comum
+  public void iniciar(Usuario usuario) {
     this.usuarioLogado = usuario;
+    this.adminLogado = null;
   }
 
-  //  ~ Encerra a sessao (logout) ~
-  public void encerrar() {
+  // CORRECAO: metodo separado para iniciar sessao como Admin
+  public void iniciarComoAdmin(Admin admin) {
+    this.adminLogado = admin;
     this.usuarioLogado = null;
   }
 
+  // Encerra a sessao (logout)
+  public void encerrar() {
+    this.usuarioLogado = null;
+    this.adminLogado = null;
+  }
 
 
 
+  public boolean estaLogado()      { return usuarioLogado != null || adminLogado != null; }
+  public boolean usuarioEhAdmin()  { return adminLogado != null; }
 
-  //  ~ Verificacoes de estado ~
-  public boolean estaLogado() {  return usuarioLogado != null;  }
-  public boolean usuarioEhAdmin() {  return estaLogado() && usuarioLogado.isAdmin(); }
-  public Usuario getUsuarioLogado() {  return usuarioLogado;  }
+  public Usuario getUsuarioLogado() { return usuarioLogado; }
+
+  // CORRECAO: retorna o Admin diretamente (sem precisar buscar no banco pelo ID)
+  public Admin getAdminLogado()     { return adminLogado; }
+
+  // Retorna o nome de quem estiver logado (usuario ou admin)
+  public String getNomeLogado() {
+    if (adminLogado != null)   return adminLogado.getNome();
+    if (usuarioLogado != null) return usuarioLogado.getNome();
+    return "Nenhum";
+  }
+
+  // Retorna o ID de quem estiver logado
+  public Integer getIdLogado() {
+    if (adminLogado != null)   return adminLogado.getId();
+    if (usuarioLogado != null) return usuarioLogado.getId();
+    return null;
+  }
 
 
 
-
-  /**
-   *  ~ Exibe no console quem esta logado atualmente ~
-   *  ~ Util para mostrar no cabecalho dos menus.
-   */
   public void imprimirStatusSessao() {
-    if (  estaLogado()  ) {
+    if (adminLogado != null) {
+      System.out.println("  Logado como: " + adminLogado.getNome() + " [Administrador]");
+    } else if (usuarioLogado != null) {
       System.out.println("  Logado como: " + usuarioLogado.getNome()
           + " [" + usuarioLogado.getPerfil() + "]");
     } else {

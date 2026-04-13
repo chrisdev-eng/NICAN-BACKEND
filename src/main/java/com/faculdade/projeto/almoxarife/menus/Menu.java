@@ -10,10 +10,12 @@ import com.faculdade.projeto.login.classes.*;
 /*
  *  ~ Menu principal do Almoxarife ~
  *
- *  CORREÇÕES:
- *    - validarRequerimentos: agora usa ListaAdmin.buscarPorId para obter o Admin correto
- *      e chama ListaRequerimentos.aprovar/recusar com o tipo certo
- *    - Opção de recusar requerimento adicionada (regra de negócio completa)
+ *  CORRECAO: fazerRequerimento agora verifica se o usuario logado eh um admin
+ *  (admins nao tem entrada na tabela usuario, portanto nao podem ser o "solicitante"
+ *  de um requerimento — a FK idUsuario quebraria). Admins so podem aprovar/recusar.
+ *
+ *  CORRECAO: validarRequerimentos agora usa sessao.getAdminLogado() diretamente,
+ *  sem precisar de busca extra no banco.
  */
 public class Menu {
 
@@ -42,7 +44,6 @@ public class Menu {
             listarMateriais(leitor);
             break;
           case 2:
-            // REGRA DE NEGÓCIO: somente admins podem gerenciar o estoque
             if (!Sessao.get().usuarioEhAdmin()) {
               System.out.println("\n  [ERRO] Somente Administradores podem gerenciar o estoque.\n");
               break;
@@ -61,7 +62,7 @@ public class Menu {
             break;
         }
       } catch (InputMismatchException e) {
-        System.out.println("Entrada inválida! Tentando novamente...");
+        System.out.println("Entrada invalida! Tentando novamente...");
         leitor.nextLine();
       }
     } while (menuAlmoxarife);
@@ -77,7 +78,7 @@ public class Menu {
       System.out.println("\n\n====== Lista de Materiais ======\n");
       System.out.println("[1] ~ Listar Todos os Materiais.");
       System.out.println("[2] ~ Listar os Materiais por Categoria.");
-      System.out.println("[3] ~ Listar os Materiais por Estado de Conservação.");
+      System.out.println("[3] ~ Listar os Materiais por Estado de Conservacao.");
       System.out.println("\n[0] ~ Voltar...\n\n");
 
       try {
@@ -93,7 +94,7 @@ public class Menu {
             break;
         }
       } catch (InputMismatchException e) {
-        System.out.println("Entrada inválida! Tentando novamente...");
+        System.out.println("Entrada invalida! Tentando novamente...");
         leitor.nextLine();
       } catch (Exception e) {
         System.out.println("Erro: " + e.getMessage());
@@ -127,7 +128,7 @@ public class Menu {
             break;
         }
       } catch (InputMismatchException e) {
-        System.out.println("Entrada inválida! Tentando novamente...");
+        System.out.println("Entrada invalida! Tentando novamente...");
         leitor.nextLine();
       }
     } while (subMenu);
@@ -139,48 +140,53 @@ public class Menu {
     try {
       Sessao sessao = Sessao.get();
 
-      // REGRA DE NEGÓCIO: usuário precisa estar logado para solicitar material
       if (!sessao.estaLogado()) {
-        System.out.println("\n  [ERRO] Faça login para solicitar materiais.\n");
+        System.out.println("\n  [ERRO] Faca login para solicitar materiais.\n");
+        return;
+      }
+
+      // CORRECAO: admins nao existem na tabela usuario, portanto nao podem
+      // ser solicitantes de requerimento (a FK quebraria no banco).
+      if (sessao.usuarioEhAdmin()) {
+        System.out.println("\n  [AVISO] Administradores nao fazem requerimentos, apenas aprovam/recusam.\n");
         return;
       }
 
       List<Item> itens = ListaItems.getListaItems();
       if (itens.isEmpty()) {
-        System.out.println("\n  [AVISO] Estoque vazio. Nenhum item disponível para requisição.\n");
+        System.out.println("\n  [AVISO] Estoque vazio. Nenhum item disponivel para requisicao.\n");
         return;
       }
 
       System.out.println("\n====== Solicitar Material ======\n");
       for (Item i : itens) {
-        System.out.println("ID " + i.getIdItem() + " | " + i.getNome() + " | Disponível: " + i.getQuantidadeDisponivel());
+        System.out.println("ID " + i.getIdItem() + " | " + i.getNome() + " | Disponivel: " + i.getQuantidadeDisponivel());
       }
 
       System.out.print("\nDigite o ID do Item: ");
       int idEscolhido = leitor.nextInt();
       Item item = ListaItems.buscarPorId(idEscolhido);
       if (item == null) {
-        System.out.println("  Item não encontrado.");
+        System.out.println("  Item nao encontrado.");
         return;
       }
 
       System.out.print("Quantidade desejada: ");
       int qtd = leitor.nextInt();
 
-      // REGRA DE NEGÓCIO: quantidade solicitada deve ser válida e respeitar o estoque disponível
       if (qtd <= 0 || qtd > item.getQuantidadeDisponivel()) {
-        System.out.println("\n  [ERRO] Quantidade inválida ou estoque insuficiente!\n");
+        System.out.println("\n  [ERRO] Quantidade invalida ou estoque insuficiente!\n");
         return;
       }
 
       Requerimento req = new Requerimento(sessao.getUsuarioLogado(), item, qtd);
       if (ListaRequerimentos.salvar(req)) {
-        System.out.println("\n  Requerimento enviado com sucesso! Aguarde aprovação do administrador.\n");
+        System.out.println("\n  Requerimento enviado com sucesso! Aguarde aprovacao do administrador.\n");
       } else {
         System.out.println("\n  Falha ao salvar no banco.\n");
       }
     } catch (Exception e) {
-      System.out.println("Erro ao processar requisição: " + e.getMessage());
+      System.out.println("Erro ao processar requisicao: " + e.getMessage());
     }
   }
 
@@ -190,16 +196,15 @@ public class Menu {
     try {
       Sessao sessao = Sessao.get();
 
-      // REGRA DE NEGÓCIO: somente administradores podem aprovar ou recusar requerimentos
       if (!sessao.estaLogado() || !sessao.usuarioEhAdmin()) {
         System.out.println("\n  [ERRO] Acesso restrito a administradores.\n");
         return;
       }
 
-      // Busca o objeto Admin real do banco (necessário pois Sessao guarda Usuario, não Admin)
-      Admin adminLogado = ListaAdmin.buscarPorId(sessao.getUsuarioLogado().getId());
+      // CORRECAO: usa getAdminLogado() diretamente — sem busca extra no banco
+      Admin adminLogado = sessao.getAdminLogado();
       if (adminLogado == null) {
-        System.out.println("\n  [ERRO] Não foi possível identificar o admin no banco.\n");
+        System.out.println("\n  [ERRO] Nao foi possivel identificar o admin na sessao.\n");
         return;
       }
 
@@ -212,9 +217,9 @@ public class Menu {
       System.out.println("\n====== Requerimentos Pendentes ======");
       for (Requerimento r : pendentes) {
         System.out.println("Req #" + r.getIdRequerimento()
-            + " | Usuário: " + (r.getUsuario() != null ? r.getUsuario().getNome() : "N/A")
-            + " | Item: " + (r.getItem() != null ? r.getItem().getNome() : "N/A")
-            + " | Qtd: " + r.getQuantidadeSolicitada());
+            + " | Usuario: " + (r.getUsuario() != null ? r.getUsuario().getNome() : "N/A")
+            + " | Item: "    + (r.getItem()    != null ? r.getItem().getNome()    : "N/A")
+            + " | Qtd: "     + r.getQuantidadeSolicitada());
       }
 
       System.out.print("\nDigite o ID do requerimento para avaliar (0 para sair): ");
@@ -226,7 +231,7 @@ public class Menu {
           .findFirst().orElse(null);
 
       if (alvo == null) {
-        System.out.println("\n  ID não encontrado.\n");
+        System.out.println("\n  ID nao encontrado.\n");
         return;
       }
 
@@ -244,11 +249,11 @@ public class Menu {
           System.out.println("\n  Requerimento recusado.\n");
         }
       } else {
-        System.out.println("\n  Opção inválida.\n");
+        System.out.println("\n  Opcao invalida.\n");
       }
 
     } catch (Exception e) {
-      System.out.println("Erro na validação: " + e.getMessage());
+      System.out.println("Erro na validacao: " + e.getMessage());
     }
   }
 }

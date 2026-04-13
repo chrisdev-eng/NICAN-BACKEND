@@ -12,19 +12,14 @@ import org.flywaydb.core.Flyway;
 
 /**
  *  ~ Sistema Nican — Ponto de entrada principal ~
- *
- *  Mudancas em relacao ao App.java original:
- *    - O cabecalho mostra quem esta logado
- *    - Integration com o Banco de dados em TODAS as operacoes (Requerimento, Almoxarife, Logins)
- *    
  */
 public class App {
   public static void main(String[] args) {
 
-
+    // CORRECAO: senha atualizada para bater com docker-compose.yml (era string vazia)
     try {
       Flyway flyway = Flyway.configure()
-              .dataSource("jdbc:postgresql://localhost:5432/nicandb", "postgres", "")
+              .dataSource("jdbc:postgresql://localhost:5432/nicandb", "postgres", "postgres")
               .locations("classpath:db/migration")
               .baselineOnMigrate(true)
               .load();
@@ -32,27 +27,20 @@ public class App {
       System.out.println("[OK] Banco inicializado pelo Flyway.\n");
     } catch (Exception e) {
       System.out.println("[ERRO] Falha ao executar Flyway: " + e.getMessage());
-      System.out.println("Verifique se o PostgreSQL está rodando e o banco 'nicandb' existe.");
-      return;  // Encerra se o banco não estiver disponível
+      System.out.println("Verifique se o PostgreSQL esta rodando e o banco 'nicandb' existe.");
+      return;
     }
 
-
-    //  ~ Variaveis de sistema
     Scanner leitor = new Scanner(System.in);
     ListaItems almoxarife = new ListaItems();
-    //  ~ Aqui a gente cria essa variavel para definir/logar alguem e/ou verificar se ha alguem logado e talz
     Sessao sessao = Sessao.get();
 
     int escolhaSistema;
     boolean sistemaCanRun = true;
 
-
-
-
-
     do {
       System.out.println("\n\n\n\n====== Bem vindo ao Sistema Nican ======\n");
-      sessao.imprimirStatusSessao();   //  ~ Mostra quem esta logado (ou nao)
+      sessao.imprimirStatusSessao();
       System.out.println("\nO que voce deseja fazer?\n");
 
       System.out.println("[1] ~ Fazer Login no Sistema.");
@@ -60,19 +48,15 @@ public class App {
       System.out.println("[3] ~ Redefinir senha.");
       System.out.println("[4] ~ Sair da Conta (Logout).\n");
 
-      //  ~ Almoxarife so aparece se houver alguem logado
-      if (  sessao.estaLogado()  ) {
+      if (sessao.estaLogado()) {
         System.out.println("[5] ~ Ver Almoxarife (Lista de Materiais).");
 
-        
-        //  ~ Painel Admin aparece so para admins
         if (sessao.usuarioEhAdmin()) {
           System.out.println("[6] ~ Painel do Administrador.");
         }
       }
 
       System.out.println("\n[0] ~ Sair do Sistema.\n\n");
-
 
       try {
         escolhaSistema = leitor.nextInt();
@@ -100,16 +84,14 @@ public class App {
             break;
 
           case 5:
-            if (  sessao.estaLogado()  ) {
+            if (sessao.estaLogado()) {
               Almoxarife.main(args, leitor, almoxarife);
-            } 
-            else {
+            } else {
               System.out.println("\n  [AVISO] Faca login primeiro para acessar o Almoxarife.\n");
             }
             break;
 
           case 6:
-            //  ~ Redireciona para o menu completo de conta/admin ~
             Login.abrirMenu(leitor);
             break;
 
@@ -124,7 +106,6 @@ public class App {
       }
 
     } while (sistemaCanRun);
-
 
     leitor.close();
   }

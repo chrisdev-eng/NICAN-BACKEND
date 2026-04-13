@@ -7,15 +7,14 @@ import java.util.Scanner;
 import com.faculdade.projeto.almoxarife.classes.*;
 import com.faculdade.projeto.login.classes.Admin;
 import com.faculdade.projeto.login.classes.Sessao;
-import com.faculdade.projeto.login.classes.Usuario;
 
 /*
- *  ~ Menu de operações com Itens do Almoxarife ~
+ *  ~ Menu de operacoes com Itens do Almoxarife ~
  *
- *  CORREÇÕES:
- *    - adicionarItem: o construtor de Item agora exige Admin, não Usuario
- *      → busca o Admin pelo id do usuario logado para passar corretamente
- *    - REGRA DE NEGÓCIO: somente Admin pode adicionar/remover itens (já estava, mantido)
+ *  CORRECAO: adicionarItem agora usa sessao.getAdminLogado() diretamente,
+ *  sem precisar de busca extra no banco pelo ID — isso era necessario porque
+ *  a sessao antiga guardava um Usuario "fantasma" que nao existia no banco.
+ *  Com a Sessao corrigida, o Admin real ja esta disponivel direto.
  */
 public class MenuItens {
 
@@ -29,9 +28,8 @@ public class MenuItens {
     Categoria categoria = null;
 
     try {
-      // REGRA DE NEGÓCIO: somente admins podem adicionar itens
-      Usuario userLogado = Sessao.get().getUsuarioLogado();
-      if (userLogado == null || !userLogado.isAdmin()) {
+      // REGRA DE NEGOCIO: somente admins podem adicionar itens
+      if (!Sessao.get().usuarioEhAdmin()) {
         System.out.println("\n  [ERRO] Somente administradores podem adicionar itens.\n");
         return;
       }
@@ -45,38 +43,37 @@ public class MenuItens {
       try {
         quantidadeItem = leitor.nextInt();
       } catch (InputMismatchException e) {
-        System.out.println("Quantidade inválida! Usando 1 como padrão.");
+        System.out.println("Quantidade invalida! Usando 1 como padrao.");
         quantidadeItem = 1;
         leitor.nextLine();
       }
 
-      // Categoria
       List<String> listaCategorias = Categoria.getListaCategorias();
-      System.out.println("\n=== Categorias Disponíveis ===\n");
+      System.out.println("\n=== Categorias Disponiveis ===\n");
       for (int i = 0; i < listaCategorias.size(); i++) {
         System.out.println("[" + i + "] " + listaCategorias.get(i));
       }
-      System.out.print("\nDigite o número da Categoria: ");
+      System.out.print("\nDigite o numero da Categoria: ");
       int escolhaCategoria = leitor.nextInt();
       categoria = (escolhaCategoria >= 0 && escolhaCategoria < Categoria.values().length)
           ? Categoria.values()[escolhaCategoria] : Categoria.values()[0];
 
-      // Qualidade
       List<String> listaQualidades = Qualidade.getListaQualidade();
-      System.out.println("\n=== Estados de Conservação Disponíveis ===\n");
+      System.out.println("\n=== Estados de Conservacao Disponiveis ===\n");
       for (int i = 0; i < listaQualidades.size(); i++) {
         System.out.println("[" + i + "] " + listaQualidades.get(i));
       }
-      System.out.print("\nDigite o número do Estado: ");
+      System.out.print("\nDigite o numero do Estado: ");
       int escolhaQualidade = leitor.nextInt();
       qualidade = (escolhaQualidade >= 0 && escolhaQualidade < Qualidade.values().length)
           ? Qualidade.values()[escolhaQualidade] : Qualidade.values()[0];
 
-      // CORREÇÃO: Item agora exige Admin no construtor — buscamos o Admin pelo ID do usuario logado
-      // O Admin é buscado diretamente pelo EntityManager para garantir o tipo correto
-      Admin adminLogado = com.faculdade.projeto.login.classes.ListaAdmin.buscarPorId(userLogado.getId());
+      // CORRECAO: usa getAdminLogado() diretamente da sessao corrigida
+      // (antes buscava no banco via ListaAdmin.buscarPorId, o que era necessario
+      //  pois a sessao guardava um usuario fantasma; agora o Admin real ja esta na sessao)
+      Admin adminLogado = Sessao.get().getAdminLogado();
       if (adminLogado == null) {
-        System.out.println("\n  [ERRO] Admin não encontrado no banco. Faça login novamente.\n");
+        System.out.println("\n  [ERRO] Admin nao encontrado na sessao. Faca login novamente.\n");
         return;
       }
 
@@ -93,7 +90,6 @@ public class MenuItens {
 
 
   public static void removerItem(Scanner leitor) {
-    // REGRA DE NEGÓCIO: somente admins podem remover itens
     if (!Sessao.get().usuarioEhAdmin()) {
       System.out.println("\n  [ERRO] Somente administradores podem remover itens.\n");
       return;
@@ -103,7 +99,7 @@ public class MenuItens {
       ListaItems.removerItem(escolherItem);
       System.out.println("\n  Item removido com sucesso!\n");
     } else {
-      System.out.println("\n  Item não encontrado!\n");
+      System.out.println("\n  Item nao encontrado!\n");
     }
   }
 
@@ -121,7 +117,6 @@ public class MenuItens {
         if (quantChange >= 0) {
           escolherQuantItem.aumentarQuant(quantChange);
         } else {
-          // REGRA DE NEGÓCIO: não permite quantidade disponível negativa (tratada em diminuirQuant)
           escolherQuantItem.diminuirQuant(Math.abs(quantChange));
         }
 
@@ -129,11 +124,11 @@ public class MenuItens {
         System.out.println("\n  Quantidade atualizada com sucesso!\n");
 
       } catch (InputMismatchException e) {
-        System.out.println("Entrada inválida! Digite apenas números.");
+        System.out.println("Entrada invalida! Digite apenas numeros.");
         leitor.nextLine();
       }
     } else {
-      System.out.println("\n  Item não encontrado...\n");
+      System.out.println("\n  Item nao encontrado...\n");
     }
   }
 }
