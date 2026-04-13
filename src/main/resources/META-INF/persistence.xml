@@ -6,27 +6,21 @@
              version="3.0">
     <persistence-unit name="nicandb" transaction-type="RESOURCE_LOCAL">
 
-        <!-- Hibernate como provedor JPA -->
-        <!-- CORRECAO: <provider> deve vir ANTES de <class> conforme o XSD do JPA 3.0 -->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <!-- Entidades do Projeto -->
         <class>com.faculdade.projeto.login.classes.Usuario</class>
         <class>com.faculdade.projeto.login.classes.Admin</class>
         <class>com.faculdade.projeto.almoxarife.classes.Item</class>
         <class>com.faculdade.projeto.almoxarife.classes.Requerimento</class>
 
         <properties>
-            <!-- Conexão com o banco (local) -->
+            <!-- CORRECAO: senha atualizada para bater com o docker-compose.yml -->
             <property name="jakarta.persistence.jdbc.url"      value="jdbc:postgresql://localhost:5432/nicandb"/>
             <property name="jakarta.persistence.jdbc.user"     value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value=""/>
+            <property name="jakarta.persistence.jdbc.password" value="postgres"/>
             <property name="jakarta.persistence.jdbc.driver"   value="org.postgresql.Driver"/>
 
-            <!-- Hibernate + PostgreSQL -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-
-            <!-- value none: o Flyway cria as tabelas, nao da conflito com o Hibernate -->
             <property name="hibernate.hbm2ddl.auto" value="none"/>
             <property name="hibernate.show_sql"   value="true"/>
             <property name="hibernate.format_sql" value="true"/>

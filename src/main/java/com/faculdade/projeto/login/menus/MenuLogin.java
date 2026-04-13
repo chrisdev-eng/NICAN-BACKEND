@@ -6,27 +6,24 @@ import java.util.Scanner;
 import com.faculdade.projeto.login.classes.*;
 
 /*
- *  ~ Menus de interação do sistema de Login ~
+ *  ~ Menus de interacao do sistema de Login ~
  *
- *  CORREÇÕES:
- *    - cadastrar(): agora trata corretamente o caso de admin nulo (primeiro cadastro)
- *    - cadastrarAdmin(): cria um objeto Admin no banco, não apenas Usuario com perfil ADMIN
- *    - painelAdmin(): exibe lista completa com JOIN (usuarios e admins)
+ *  CORRECAO principal: fazerLogin agora chama sessao.iniciarComoAdmin(admin)
+ *  em vez de criar um Usuario "fantasma" — o usuario fantasma nao existia no banco
+ *  e causava erro de FK ao salvar requerimentos.
  */
 public class MenuLogin {
 
 
 
-  // Cadastro de usuário comum
   public static void cadastrarUsuario(Scanner leitor) {
-    System.out.println("\n\n====== Cadastro de Usuário ======\n");
+    System.out.println("\n\n====== Cadastro de Usuario ======\n");
     cadastrarUsuarioInterno(leitor);
   }
 
 
 
-  // Cadastro de administrador — somente outro admin pode cadastrar
-  // REGRA DE NEGÓCIO: somente um Admin autenticado pode cadastrar outro Admin
+  // REGRA DE NEGOCIO: somente Admin autenticado pode cadastrar outro Admin
   public static void cadastrarAdmin(Scanner leitor) {
     Sessao sessao = Sessao.get();
     if (!sessao.estaLogado() || !sessao.usuarioEhAdmin()) {
@@ -47,17 +44,17 @@ public class MenuLogin {
       if (Validador.temErro(Validador.validarEmail(login))) return;
 
       if (ListaAdmin.buscarPorLogin(login) != null) {
-        System.out.println("  [ERRO] Este login já está cadastrado como admin.");
+        System.out.println("  [ERRO] Este login ja esta cadastrado como admin.");
         return;
       }
 
-      System.out.print("Senha (mín. 8 chars): ");
+      System.out.print("Senha (min. 8 chars): ");
       String senha = leitor.nextLine();
       if (Validador.temErro(Validador.validarSenha(senha))) return;
 
       System.out.print("Confirme a senha: ");
       if (!leitor.nextLine().equals(senha)) {
-        System.out.println("  [ERRO] As senhas não coincidem.");
+        System.out.println("  [ERRO] As senhas nao coincidem.");
         return;
       }
 
@@ -74,7 +71,6 @@ public class MenuLogin {
 
 
 
-  // Cadastro interno de usuário comum
   private static void cadastrarUsuarioInterno(Scanner leitor) {
     try {
       leitor.nextLine();
@@ -87,32 +83,33 @@ public class MenuLogin {
       if (Validador.temErro(Validador.validarEmail(login))) return;
 
       if (ListaUsuarios.buscarPorLogin(login) != null) {
-        System.out.println("  [ERRO] Este login já está cadastrado.");
+        System.out.println("  [ERRO] Este login ja esta cadastrado.");
         return;
       }
 
-      System.out.print("Senha (mín. 8 chars): ");
+      System.out.print("Senha (min. 8 chars): ");
       String senha = leitor.nextLine();
       if (Validador.temErro(Validador.validarSenha(senha))) return;
 
       System.out.print("Confirme a senha: ");
       if (!leitor.nextLine().equals(senha)) {
-        System.out.println("  [ERRO] As senhas não coincidem.");
+        System.out.println("  [ERRO] As senhas nao coincidem.");
         return;
       }
 
-      // Admin responsável: pega o admin logado, se houver. Senão, null (primeiro cadastro)
+      // Admin responsavel: pega o admin logado se houver, senao null
       Admin adminResponsavel = null;
-      if (Sessao.get().estaLogado() && Sessao.get().usuarioEhAdmin()) {
-        adminResponsavel = ListaAdmin.buscarPorId(Sessao.get().getUsuarioLogado().getId());
+      if (Sessao.get().usuarioEhAdmin()) {
+        // CORRECAO: usa getAdminLogado() diretamente (sem busca no banco por ID)
+        adminResponsavel = Sessao.get().getAdminLogado();
       }
 
       Usuario novo = new Usuario(nome, login, senha, Perfil.USUARIO, adminResponsavel);
       if (ListaUsuarios.salvar(novo)) {
-        System.out.println("\n  [OK] Usuário '" + nome + "' cadastrado com sucesso!");
+        System.out.println("\n  [OK] Usuario '" + nome + "' cadastrado com sucesso!");
         if (!Sessao.get().estaLogado()) {
           Sessao.get().iniciar(novo);
-          System.out.println("  [OK] Login automático realizado.");
+          System.out.println("  [OK] Login automatico realizado.");
         }
       } else {
         System.out.println("\n  [ERRO] Falha ao salvar no banco.");
@@ -124,12 +121,11 @@ public class MenuLogin {
 
 
 
-  // Login — verifica usuario comum E admin
   public static void fazerLogin(Scanner leitor) {
     try {
       Sessao sessao = Sessao.get();
       if (sessao.estaLogado()) {
-        System.out.println("\n  [AVISO] Já existe sessão ativa (" + sessao.getUsuarioLogado().getNome() + ").");
+        System.out.println("\n  [AVISO] Ja existe sessao ativa (" + sessao.getNomeLogado() + ").");
         return;
       }
 
@@ -143,11 +139,8 @@ public class MenuLogin {
       // Tenta login como Admin primeiro
       Admin admin = ListaAdmin.buscarPorLogin(login);
       if (admin != null && admin.getSenha().equals(senha)) {
-        // Cria um Usuario "ponte" para a sessão que representa o admin
-        // (A sessão guarda Usuario — o admin logado é representado como usuario com perfil ADMIN)
-        Usuario usuarioAdmin = new Usuario(admin.getNome(), admin.getLogin(), admin.getSenha(), Perfil.ADMIN, null);
-        usuarioAdmin.setId(admin.getId());
-        sessao.iniciar(usuarioAdmin);
+        // CORRECAO: usa iniciarComoAdmin — nao cria mais usuario "fantasma" que nao existe no banco
+        sessao.iniciarComoAdmin(admin);
         System.out.println("\n  [OK] Bem-vindo, " + admin.getNome() + " [Administrador]\n");
         return;
       }
@@ -159,7 +152,7 @@ public class MenuLogin {
         return;
       }
 
-      // REGRA DE NEGÓCIO: conta desativada não pode fazer login
+      // REGRA DE NEGOCIO: conta desativada nao pode fazer login
       if (!usuario.isAtivo()) {
         System.out.println("\n  [ERRO] Conta desativada. Contate o administrador.\n");
         return;
@@ -175,7 +168,6 @@ public class MenuLogin {
 
 
 
-  // Redefinir senha
   public static void redefinirSenha(Scanner leitor) {
     try {
       leitor.nextLine();
@@ -185,7 +177,7 @@ public class MenuLogin {
 
       Usuario usuario = ListaUsuarios.buscarPorLogin(login);
       if (usuario == null) {
-        System.out.println("  [ERRO] Usuário não encontrado.");
+        System.out.println("  [ERRO] Usuario nao encontrado.");
         return;
       }
 
@@ -210,7 +202,6 @@ public class MenuLogin {
 
 
 
-  // Logout
   public static void fazerLogout() {
     Sessao.get().encerrar();
     System.out.println("\n  [OK] Logout realizado.\n");
@@ -218,7 +209,6 @@ public class MenuLogin {
 
 
 
-  // Painel admin — lista usuários e admins cadastrados
   public static void painelAdmin(Scanner leitor) {
     if (!Sessao.get().usuarioEhAdmin()) {
       System.out.println("\n  [ERRO] Acesso restrito.\n");
@@ -228,29 +218,28 @@ public class MenuLogin {
     boolean subMenu = true;
     while (subMenu) {
       System.out.println("\n====== Painel do Administrador ======\n");
-      System.out.println("[1] ~ Listar todos os Usuários.");
+      System.out.println("[1] ~ Listar todos os Usuarios.");
       System.out.println("[2] ~ Cadastrar novo Administrador.");
-      System.out.println("[3] ~ Desativar conta de Usuário.");
+      System.out.println("[3] ~ Desativar conta de Usuario.");
       System.out.println("\n[0] ~ Voltar.\n");
 
       try {
         int op = leitor.nextInt();
         switch (op) {
           case 1:
-            System.out.println("\n--- Usuários cadastrados ---");
+            System.out.println("\n--- Usuarios cadastrados ---");
             ListaUsuarios.listarTodos().forEach(u -> u.infosUsuario());
             break;
           case 2:
             cadastrarAdmin(leitor);
             break;
           case 3:
-            System.out.print("ID do usuário a desativar: ");
+            System.out.print("ID do usuario a desativar: ");
             int id = leitor.nextInt();
-            // REGRA DE NEGÓCIO: admin pode desativar contas de usuários
             if (ListaUsuarios.desativar(id)) {
               System.out.println("  [OK] Conta desativada.");
             } else {
-              System.out.println("  [ERRO] Usuário não encontrado.");
+              System.out.println("  [ERRO] Usuario nao encontrado.");
             }
             break;
           default:
@@ -258,7 +247,7 @@ public class MenuLogin {
             break;
         }
       } catch (InputMismatchException e) {
-        System.out.println("Entrada inválida.");
+        System.out.println("Entrada invalida.");
         leitor.nextLine();
       }
     }

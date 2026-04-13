@@ -22,9 +22,7 @@
             <scope>test</scope>
         </dependency>
 
-
-        <!-- Driver JPA + Hibernate + PostgreSQL JDBC -->
-        <!-- Hibernate -->
+        <!-- Hibernate (implementa JPA 3.1) -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -32,15 +30,18 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- JPA -->
+        <!--
+            CORRECAO: era 3.2.0, incompativel com Hibernate 6.4 que implementa JPA 3.1.
+            Versao 3.2.0 causava conflito de contrato na inicializacao do EntityManagerFactory.
+        -->
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
-            <version>3.2.0</version>
+            <version>3.1.0</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- PostgreSQL -->
+        <!-- PostgreSQL JDBC Driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -48,31 +49,25 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- FlyWay -->
+        <!-- Flyway -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>12.3.0</version>
+            <version>10.10.0</version>
         </dependency>
+        <!--
+            CORRECAO: flyway-database-postgresql deve ter a mesma versao do flyway-core.
+            Versao 12.x exige JRE 21+; como o projeto usa Java 17, usamos Flyway 10.x.
+        -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
-            <version>12.3.0</version> <!-- mesma versão do flyway-core -->
+            <version>10.10.0</version>
         </dependency>
 
     </dependencies>
 
-
-
-
-
     <build>
-
-        <!--
-          CORREÇÃO PRINCIPAL: sem isso o Maven NÃO copia o persistence.xml
-          para dentro do .jar/classpath, causando o erro
-          "Could not find any META-INF/persistence.xml file in the classpath"
-        -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -83,8 +78,6 @@
         </resources>
 
         <plugins>
-
-            <!-- Plugin que define a classe principal do .jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -96,7 +89,6 @@
                     </archive>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>

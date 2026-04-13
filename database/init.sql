@@ -1,1 +1,4 @@
--  Aqui sir christian vc coloca os coiso do banco de dados (O inicializador; criar as tabela e inserir valores)
+-- Este arquivo e executado pelo Docker na criacao do container.
+-- CORRECAO: o init.sql NAO deve criar tabelas — isso e responsabilidade do Flyway.
+-- Deixar vazio evita conflito entre Docker e Flyway (tabelas duplicadas causavam erro).
+-- O Flyway roda V1__schema__inicalizarBanco.sql automaticamente ao subir a aplicacao.
