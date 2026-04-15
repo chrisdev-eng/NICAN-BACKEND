@@ -15,7 +15,7 @@ public class Sessao {
   private static Sessao instancia = new Sessao();
 
   private Usuario usuarioLogado = null;
-  // CORRECAO: campo separado para guardar o Admin logado (evita usuario "fantasma" no banco)
+  //  ~ campo separado para guardar o Admin logado (evita usuario "fantasma" no banco)
   private Admin adminLogado = null;
 
   private Sessao() {}
@@ -24,19 +24,19 @@ public class Sessao {
 
 
 
-  // Inicia sessao com usuario comum
+  //  ~ Inicia sessao com usuario comum
   public void iniciar(Usuario usuario) {
     this.usuarioLogado = usuario;
     this.adminLogado = null;
   }
 
-  // CORRECAO: metodo separado para iniciar sessao como Admin
+  //  ~ metodo separado para iniciar sessao como Admin
   public void iniciarComoAdmin(Admin admin) {
     this.adminLogado = admin;
     this.usuarioLogado = null;
   }
 
-  // Encerra a sessao (logout)
+  //  ~ Encerra a sessao (logout)
   public void encerrar() {
     this.usuarioLogado = null;
     this.adminLogado = null;
@@ -49,17 +49,17 @@ public class Sessao {
 
   public Usuario getUsuarioLogado() { return usuarioLogado; }
 
-  // CORRECAO: retorna o Admin diretamente (sem precisar buscar no banco pelo ID)
+  //  ~ retorna o Admin diretamente (sem precisar buscar no banco pelo ID)
   public Admin getAdminLogado()     { return adminLogado; }
 
-  // Retorna o nome de quem estiver logado (usuario ou admin)
+  //  ~ Retorna o nome de quem estiver logado (usuario ou admin)
   public String getNomeLogado() {
     if (adminLogado != null)   return adminLogado.getNome();
     if (usuarioLogado != null) return usuarioLogado.getNome();
     return "Nenhum";
   }
 
-  // Retorna o ID de quem estiver logado
+  //  ~ Retorna o ID de quem estiver logado
   public Integer getIdLogado() {
     if (adminLogado != null)   return adminLogado.getId();
     if (usuarioLogado != null) return usuarioLogado.getId();

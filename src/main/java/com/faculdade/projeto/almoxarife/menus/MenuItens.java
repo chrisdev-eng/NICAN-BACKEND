@@ -28,7 +28,7 @@ public class MenuItens {
     Categoria categoria = null;
 
     try {
-      // REGRA DE NEGOCIO: somente admins podem adicionar itens
+      //  ~ somente admins podem adicionar itens
       if (!Sessao.get().usuarioEhAdmin()) {
         System.out.println("\n  [ERRO] Somente administradores podem adicionar itens.\n");
         return;
@@ -68,9 +68,9 @@ public class MenuItens {
       qualidade = (escolhaQualidade >= 0 && escolhaQualidade < Qualidade.values().length)
           ? Qualidade.values()[escolhaQualidade] : Qualidade.values()[0];
 
-      // CORRECAO: usa getAdminLogado() diretamente da sessao corrigida
-      // (antes buscava no banco via ListaAdmin.buscarPorId, o que era necessario
-      //  pois a sessao guardava um usuario fantasma; agora o Admin real ja esta na sessao)
+      //  ~ usa getAdminLogado() diretamente da sessao corrigida
+      //  ~ (antes buscava no banco via ListaAdmin.buscarPorId, o que era necessario
+      //  ~ pois a sessao guardava um usuario fantasma; agora o Admin real ja esta na sessao)
       Admin adminLogado = Sessao.get().getAdminLogado();
       if (adminLogado == null) {
         System.out.println("\n  [ERRO] Admin nao encontrado na sessao. Faca login novamente.\n");

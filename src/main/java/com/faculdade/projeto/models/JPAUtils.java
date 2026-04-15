@@ -6,6 +6,8 @@ import jakarta.persistence.Persistence;
 
 
 public class JPAUtils {
+  
+
   //  ~ Variavel do tipo static, para q possa ser acessada, sem precisar "instanciar" o objeto
   private static EntityManagerFactory emf;
 

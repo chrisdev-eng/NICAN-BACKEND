@@ -16,7 +16,21 @@ import org.flywaydb.core.Flyway;
 public class App {
   public static void main(String[] args) {
 
-    // CORRECAO: senha atualizada para bater com docker-compose.yml (era string vazia)
+
+    //  ~ Regras de Negocio do Nosso sitema:
+    //  ~ 1- Conta desativada Nao realiza login;
+    //  ~ 2- Somente Contas ADMIN criam contas, itens, validam requerimentos etc...
+    //  ~ 3- Login Duplicado nao e permitido...
+    //  ~ 4- Somente admin cadastra admin,
+    //  ~ 5- Itens com requerimentos nao podem ser removidos..
+    //  ~ 6- Menu Dinamico dependendo do tipo de usuario (Ja existente)
+    //  ~
+    //  ~ Entre outras regras que foram aplicadas desde o primeiro mensal.
+
+
+
+
+    //  ~ A primeira coisa que tentamos fazer e uma conexao com o flyway (garante que o banco esteja em ordem e as tabela la)
     try {
       Flyway flyway = Flyway.configure()
               .dataSource("jdbc:postgresql://localhost:5432/nicandb", "postgres", "postgres")
@@ -25,18 +39,26 @@ public class App {
               .load();
       flyway.migrate();
       System.out.println("[OK] Banco inicializado pelo Flyway.\n");
-    } catch (Exception e) {
+    }
+    catch (Exception e) {
       System.out.println("[ERRO] Falha ao executar Flyway: " + e.getMessage());
       System.out.println("Verifique se o PostgreSQL esta rodando e o banco 'nicandb' existe.");
       return;
     }
 
+
+    //  ~ Variaveis de sistema.
     Scanner leitor = new Scanner(System.in);
     ListaItems almoxarife = new ListaItems();
     Sessao sessao = Sessao.get();
 
     int escolhaSistema;
     boolean sistemaCanRun = true;
+
+
+
+
+
 
     do {
       System.out.println("\n\n\n\n====== Bem vindo ao Sistema Nican ======\n");
@@ -48,6 +70,8 @@ public class App {
       System.out.println("[3] ~ Redefinir senha.");
       System.out.println("[4] ~ Sair da Conta (Logout).\n");
 
+
+
       if (sessao.estaLogado()) {
         System.out.println("[5] ~ Ver Almoxarife (Lista de Materiais).");
 
@@ -56,7 +80,11 @@ public class App {
         }
       }
 
+
       System.out.println("\n[0] ~ Sair do Sistema.\n\n");
+
+
+
 
       try {
         escolhaSistema = leitor.nextInt();
