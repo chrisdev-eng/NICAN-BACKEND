@@ -33,8 +33,8 @@ public class Usuario {
   @Column(name = "senha", nullable = false, length = 255)
   private String senha;
 
-  // CORRECAO: nome da coluna era "idAdmin", o correto e "idAdmin_fk" (igual ao banco)
-  // nullable = true pois o primeiro usuario pode ser cadastrado sem admin previo
+  //  ~ nome da coluna era "idAdmin", o correto e "idAdmin_fk" (igual ao banco)
+  //  ~ nullable = true pois o primeiro usuario pode ser cadastrado sem admin previo
   @ManyToOne
   @JoinColumn(name = "idAdmin_fk", nullable = true)
   private Admin adminResponsavel;
@@ -65,12 +65,12 @@ public class Usuario {
     this.ativo = true;
   }
 
-  // Constructor vazio obrigatorio para o Hibernate
+  //  ~ Constructor vazio obrigatorio para o Hibernate
   public Usuario() {}
 
 
 
-  // GETTERS
+  //  ~ GETTERS
   public Integer getId()                       { return id; }
   public String  getNome()                     { return nome; }
   public String  getLogin()                    { return login; }
@@ -84,7 +84,7 @@ public class Usuario {
 
 
 
-  // SETTERS
+  //  ~ SETTERS
   public void setId(Integer id)                            { this.id = id; }
   public void setNome(String nome)                         { this.nome = nome.trim(); }
   public void setLogin(String login)                       { this.login = login.trim().toLowerCase(); }
@@ -96,7 +96,7 @@ public class Usuario {
 
 
 
-  // MÉTODOS
+  //  ~ MÉTODOS
   public void infosUsuario() {
     System.out.println("\n~ " + getNome() + " ~");
     System.out.println("[ ID ]: " + getId());

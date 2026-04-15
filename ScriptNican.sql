@@ -20,6 +20,7 @@ insert into admin (nome, login, senha, criadoEm, atualizadoEm)
 values 
 ('Christian','chris@gmail.com', '12345679', now(), now()),
 ('Henrique','henrique@gmail.com', '97654321', now(), now());
+('Admin ','admin@nican.com', 'Admin123', now(), now());
 
 delete from admin where idAdmin = 2;
 

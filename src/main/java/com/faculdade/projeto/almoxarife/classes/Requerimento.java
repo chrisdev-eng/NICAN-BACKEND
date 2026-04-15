@@ -25,24 +25,24 @@ public class Requerimento {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer idRequerimento;
 
-  // CORRECAO: nome da coluna alinhado com o SQL corrigido
+  //  ~ nome da coluna alinhado com o SQL corrigido
   @ManyToOne
   @JoinColumn(name = "idUsuario", nullable = false)
   private Usuario usuario;
 
-  // CORRECAO: nome da coluna alinhado com o SQL corrigido
+  //  ~ nome da coluna alinhado com o SQL corrigido
   @ManyToOne
   @JoinColumn(name = "idItem", nullable = false)
   private Item item;
 
-  // CORRECAO: nome da coluna alinhado com o SQL corrigido
+  //  ~ nome da coluna alinhado com o SQL corrigido
   @Column(name = "quantidadeSolicitada")
   private Integer quantidadeSolicitada;
 
   private String status;  // pendente | aprovado | recusado
 
-  // CORRECAO: era "Usuario adminAvaliador" — deve ser "Admin" pois só admins avaliam
-  // CORRECAO: nome da coluna alinhado com o SQL corrigido
+  //  ~ era "Usuario adminAvaliador" — deve ser "Admin" pois só admins avaliam
+  //  ~ nome da coluna alinhado com o SQL corrigido
   @ManyToOne
   @JoinColumn(name = "idAdmin")
   private Admin adminAvaliador;
@@ -66,7 +66,7 @@ public class Requerimento {
 
 
 
-  // GETTERS
+  //  ~ GETTERS
   public Integer  getIdRequerimento()       { return idRequerimento; }
   public Usuario  getUsuario()              { return usuario; }
   public Item     getItem()                 { return item; }
@@ -79,7 +79,7 @@ public class Requerimento {
 
 
 
-  // SETTERS
+  //  ~ SETTERS
   public void setUsuario(Usuario usuario)              { this.usuario = usuario; }
   public void setItem(Item item)                       { this.item = item; }
   public void setQuantidadeSolicitada(Integer qtd)     { this.quantidadeSolicitada = qtd; }
@@ -88,15 +88,15 @@ public class Requerimento {
 
 
 
-  // MÉTODO DE NEGÓCIO: aprovacao por admin
-  // REGRA DE NEGÓCIO: somente um Admin pode aprovar um requerimento
+  //  ~ aprovacao por admin
+  //  ~ somente um Admin pode aprovar um requerimento
   public void aprovar(Admin admin) {
     this.status = "aprovado";
     this.adminAvaliador = admin;
     this.dataAprovacao = LocalDate.now();
   }
 
-  // REGRA DE NEGÓCIO: recusa por admin
+  //  ~ recusa por admin
   public void recusar(Admin admin) {
     this.status = "recusado";
     this.adminAvaliador = admin;

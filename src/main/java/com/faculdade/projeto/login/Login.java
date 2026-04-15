@@ -12,6 +12,10 @@ import com.faculdade.projeto.login.menus.MenuLogin;
  */
 public class Login {
 
+
+
+
+
   public static void abrirMenu(Scanner leitor) {
     Sessao sessao = Sessao.get();
     boolean rodando = true;
@@ -34,6 +38,10 @@ public class Login {
         System.out.println("\n[3] ~ Sair da conta (Logout).");
         System.out.println("[4] ~ Voltar ao Menu Principal.\n\n");
       }
+
+
+
+
 
       try {
         escolha = leitor.nextInt();

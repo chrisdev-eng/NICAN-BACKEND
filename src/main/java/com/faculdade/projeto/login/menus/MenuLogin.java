@@ -23,7 +23,7 @@ public class MenuLogin {
 
 
 
-  // REGRA DE NEGOCIO: somente Admin autenticado pode cadastrar outro Admin
+  //  ~ Somente Admin autenticado pode cadastrar outro Admin
   public static void cadastrarAdmin(Scanner leitor) {
     Sessao sessao = Sessao.get();
     if (!sessao.estaLogado() || !sessao.usuarioEhAdmin()) {
@@ -97,10 +97,10 @@ public class MenuLogin {
         return;
       }
 
-      // Admin responsavel: pega o admin logado se houver, senao null
+      //  ~ Admin responsavel: pega o admin logado se houver, senao null
       Admin adminResponsavel = null;
       if (Sessao.get().usuarioEhAdmin()) {
-        // CORRECAO: usa getAdminLogado() diretamente (sem busca no banco por ID)
+        //  ~ usa getAdminLogado() diretamente (sem busca no banco por ID)
         adminResponsavel = Sessao.get().getAdminLogado();
       }
 
@@ -136,23 +136,26 @@ public class MenuLogin {
       System.out.print("Senha: ");
       String senha = leitor.nextLine();
 
-      // Tenta login como Admin primeiro
+
+
+      //  ~ Tenta login como Admin primeiro
       Admin admin = ListaAdmin.buscarPorLogin(login);
       if (admin != null && admin.getSenha().equals(senha)) {
-        // CORRECAO: usa iniciarComoAdmin — nao cria mais usuario "fantasma" que nao existe no banco
+        //  ~ usa iniciarComoAdmin — nao cria mais usuario "fantasma" que nao existe no banco
         sessao.iniciarComoAdmin(admin);
         System.out.println("\n  [OK] Bem-vindo, " + admin.getNome() + " [Administrador]\n");
         return;
       }
 
-      // Tenta login como Usuario comum
+
+      //  ~ Tenta login como Usuario comum
       Usuario usuario = ListaUsuarios.buscarPorLogin(login);
       if (usuario == null || !usuario.getSenha().equals(senha)) {
         System.out.println("\n  [ERRO] Login ou senha incorretos.\n");
         return;
       }
 
-      // REGRA DE NEGOCIO: conta desativada nao pode fazer login
+      //  ~ conta desativada nao pode fazer login
       if (!usuario.isAtivo()) {
         System.out.println("\n  [ERRO] Conta desativada. Contate o administrador.\n");
         return;

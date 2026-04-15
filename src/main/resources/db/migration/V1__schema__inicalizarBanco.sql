@@ -1,63 +1,77 @@
 -- _______________________________________________
---  Admin
+--
+--  Admin - armazenar os administradores do sistema, gerenciar tudo: criar usuarios,
+--  aprovar requerimentos, registrar presenças, movimentar estoque.
 -- _______________________________________________
 create table admin(
-    idAdmin serial primary key,
-    nome varchar(100) not null,
-    login varchar(100) not null,
-    senha varchar(100) not null,
-    criadoEm timestamp,
-    atualizadoEm timestamp
+	idAdmin serial primary key,
+	nome varchar(100) not null,
+	login varchar(100) not null,
+	senha varchar(100) not null,
+	criadoEm timestamp,
+	atualizadoEm timestamp
+
 );
 
+-- CORRECAO 1: removidos os SELECTs (invalidos no Flyway — ele so aceita DDL e DML, nao queries de leitura)
+-- CORRECAO 1: removido o insert do Henrique + delete subsequente; substituido pelo admin do sistema
 insert into admin (nome, login, senha, criadoEm, atualizadoEm)
 values
-('ADMIN MESTRE','admin@nican.com', 'Admin123', now(), now());
+('Admin','admin@nican.com', 'Admin123', now(), now());
 
 
 -- _______________________________________________
---  Usuario
+--  armazenar usuarios comuns, poder solicitar itens, reportar estado de ferramentas
+--  e justificar faltas
 -- _______________________________________________
+
 create table usuario(
-    idUsuario serial primary key,
-    nome varchar(100) not null,
-    login varchar(100) not null,
-    senha varchar(100) not null,
-    -- CORRECAO: nullable para permitir primeiro cadastro sem admin logado
-    idAdmin_fk INTEGER,
-    -- CORRECAO: colunas perfil e ativo adicionadas (existiam no Java mas nao no SQL original do Flyway)
-    perfil varchar(20) not null default 'USUARIO',
-    ativo boolean not null default true,
-    criadoEm timestamp,
-    atualizadoEm timestamp,
-    foreign key (idAdmin_fk) references admin(idAdmin)
+	idUsuario serial primary key,
+	nome varchar(100) not null,
+	login varchar(100) not null,
+	senha varchar(100) not null,
+	-- CORRECAO 2: nullable (era NOT NULL no script original) para permitir cadastro sem admin logado
+	idAdmin_fk INTEGER,
+	-- CORRECAO 3: colunas perfil e ativo adicionadas — existem no Usuario.java mas nao estavam no script original
+	perfil varchar(20) not null default 'USUARIO',
+	ativo boolean not null default true,
+	criadoEm timestamp,
+	atualizadoEm timestamp,
+	foreign key (idAdmin_fk) references admin(idAdmin)
 );
 
+-- CORRECAO 1: removido o SELECT
+-- CORRECAO 2: removidos Peter e Bella (referenciavam idAdmin=3 que nao existe)
 insert into usuario(nome, login, senha, idAdmin_fk, perfil, ativo, criadoEm, atualizadoEm)
 values
 ('Daniel','daniel@gmail.com','456123',1,'USUARIO',true, now(), now()),
 ('Lucas','lucas@gmail.com','9090876',1,'USUARIO',true, now(), now());
 
+-- _______________________________________________
+--  cada item/ferramenta existente no estoque, guarda qtd total e disponivel
+--  e qual admin e responsavel por aquele item
+-- _______________________________________________
 
--- _______________________________________________
---  Almoxarifado
--- _______________________________________________
 create table almoxarifado(
-    idItem serial primary key,
-    nome varchar(100) not null,
-    categoria varchar(100) not null,
-    quantidadeTotal integer not null default 0,
-    -- CORRECAO: era quantidadeDisp no ScriptNican.sql original; corrigido para quantidadeDisponivel
-    --           para bater com o @Column(name="quantidadeDisponivel") em Item.java
-    quantidadeDisponivel integer not null default 0,
-    -- CORRECAO: coluna qualidade adicionada (existia no Java mas nao no SQL original)
-    qualidade varchar(100) not null default 'Bom para uso',
-    idAdmin_fk integer not null,
-    criadoEm timestamp,
-    atualizadoEm timestamp,
-    foreign key (idAdmin_fk) references admin(idAdmin)
+	idItem serial primary key,
+	nome varchar(100) not null,
+	categoria varchar(100) not null,
+	quantidadeTotal integer not null default 0,
+	-- CORRECAO 4: era "quantidadeDisp" — renomeado para "quantidadeDisponivel" para bater com @Column em Item.java
+	quantidadeDisponivel integer not null default 0,
+	-- CORRECAO 3: coluna qualidade adicionada — existe no Item.java mas nao estava no script original
+	qualidade varchar(100) not null default 'Bom para uso',
+	idAdmin_fk integer not null,
+	criadoEm timestamp,
+	atualizadoEm timestamp,
+	foreign key (idAdmin_fk) references admin(idAdmin)
+
 );
 
+-- CORRECAO 1: removido o SELECT
+-- CORRECAO 2: removidas Corda e Pa (referenciavam idAdmin=3 que nao existe); idAdmin_fk trocado para 1
+-- CORRECAO 4: coluna renomeada de quantidadeDisp para quantidadeDisponivel
+-- CORRECAO 3: coluna qualidade adicionada nos inserts
 insert into almoxarifado(nome, categoria, quantidadeTotal, quantidadeDisponivel, qualidade, idAdmin_fk, criadoEm, atualizadoEm)
 values
 ('Barraca de Camping', 'Barracas, Lonas, Sacos de Dormir',15,14,'Bom para uso', 1, now(), now()),
@@ -67,31 +81,35 @@ values
 ('Corda','Barracas, Lonas, Sacos de Dormir', 7, 6,'Bom para uso', 1, now(), now()),
 ('Pa','Ferramentas de Sapa', 15, 13,'Bom para uso', 1, now(), now());
 
+-- _______________________________________________
+--  pedido formal que o usuario faz para pegar o item emprestado
+--  pendente ate aprovacao ou negativa do admin operacionalmente
+-- _______________________________________________
 
--- _______________________________________________
---  Requerimento
--- _______________________________________________
 create table requerimento(
-    idRequerimento serial primary key not null,
-    -- CORRECAO: era idUsuario_fk no ScriptNican.sql original; corrigido para idUsuario
-    --           para bater com @JoinColumn(name="idUsuario") em Requerimento.java
-    idUsuario integer not null,
-    -- CORRECAO: era idItem_fk; corrigido para idItem para bater com @JoinColumn(name="idItem")
-    idItem integer not null,
-    -- CORRECAO: era qtdSolicitado; corrigido para quantidadeSolicitada para bater com @Column em Requerimento.java
-    quantidadeSolicitada integer not null,
-    status varchar(10),
-    -- CORRECAO: era idAdmin_fk; corrigido para idAdmin para bater com @JoinColumn(name="idAdmin")
-    idAdmin integer,
-    dataSolicitacao date,
-    dataAprovacao date,
-    criadoEm timestamp,
-    -- CORRECAO: atualizadoEm removido pois nao existe no mapeamento JPA de Requerimento.java
-    foreign key (idUsuario) references usuario(idUsuario),
-    foreign key (idItem) references almoxarifado(idItem),
-    foreign key (idAdmin) references admin(idAdmin)
+	idRequerimento serial primary key not null,
+	-- CORRECAO 5: era "idUsuario_fk" — renomeado para "idUsuario" para bater com @JoinColumn em Requerimento.java
+	idUsuario integer not null,
+	-- CORRECAO 5: era "idItem_fk" — renomeado para "idItem" para bater com @JoinColumn em Requerimento.java
+	idItem integer not null,
+	-- CORRECAO 5: era "qtdSolicitado" — renomeado para "quantidadeSolicitada" para bater com @Column em Requerimento.java
+	quantidadeSolicitada integer not null,
+	status varchar(10),
+	-- CORRECAO 5: era "idAdmin_fk" — renomeado para "idAdmin" para bater com @JoinColumn em Requerimento.java
+	idAdmin integer,
+	dataSolicitacao date,
+	dataAprovacao date,
+	criadoEm timestamp,
+	-- CORRECAO 5: atualizadoEm removido — nao existe no mapeamento JPA de Requerimento.java
+	foreign key (idUsuario) references usuario(idUsuario),
+	foreign key (idItem) references almoxarifado(idItem),
+	foreign key (idAdmin) references admin(idAdmin)
 );
 
+-- CORRECAO 1: removido o SELECT e o ALTER TABLE (idAdmin_fk ja nasce nullable acima)
+-- CORRECAO 2: removidos requerimentos que referenciavam idUsuario=3 (Peter nao existe mais)
+--             e idAdmin=3 (tambem nao existe)
+-- CORRECAO 5: nomes de coluna atualizados
 insert into requerimento(idUsuario, idItem, quantidadeSolicitada, status, idAdmin, dataSolicitacao, dataAprovacao, criadoEm)
 values
 (1, 4, 1, 'pendente', null, '2025-04-03', null, now()),
@@ -100,10 +118,11 @@ values
 (1, 5, 4, 'aprovado', 1, '2025-04-03', '2025-04-03', now()),
 (1, 1, 3, 'reprovado', 1, '2025-04-04', '2025-04-04', now());
 
+-- _______________________________________________
+--  so e criado quando o admin aprova um requerimento, registra a saida do item
+--  quando foi pego, prazo de devolucao e quando foi devolvido
+-- _______________________________________________
 
--- _______________________________________________
---  Emprestar
--- _______________________________________________
 create table emprestar(
     idEmprestimo serial primary key not null,
     idRequerimento_fk integer not null,
@@ -122,28 +141,33 @@ create table emprestar(
     foreign key (idItem_fk) references almoxarifado(idItem)
 );
 
+-- CORRECAO 2: idUsuario_fk trocado de 3 para 2 (Peter nao existe; Lucas = id 2)
+-- CORRECAO 1: removido o SELECT
 insert into emprestar(idRequerimento_fk, idUsuario_fk, idItem_fk, qtdPega, dataPegou, devPrevista, dataDev, estadoItem, obsEstado, criadoEm, atualizadoEm)
 values
 (3, 2, 1, 1, '2025-04-03', '2025-04-10', '2025-04-09', 'bom', 'devolvida sem danos', now(), now()),
 (4, 1, 5, 4, '2025-04-04', '2025-04-11', null, 'bom', null, now(), now()),
 (5, 1, 1, 3, '2025-04-04', '2025-04-11', null, 'danificado', 'apresentava rasgado em uma das laterais', now(), now());
 
+-- _______________________________________________
+--  registra quando admin adc ou remove itens do almoxarifado fisicamente
+--  ex: chegaram 10 martelos novos e 2 foram descartados
+-- _______________________________________________
 
--- _______________________________________________
---  MovimentoEstoque
--- _______________________________________________
 create table movimentoEstoque (
-    idMovimentacao serial primary key not null,
-    idItem_fk integer not null,
-    idAdmin_fk integer not null,
-    tipoAcao varchar(100) not null,
-    qtd integer not null,
-    observacao text,
-    criadoEm timestamp,
-    foreign key (idItem_fk) references almoxarifado(idItem),
-    foreign key (idAdmin_fk) references admin(idAdmin)
+	idMovimentacao serial primary key not null,
+	idItem_fk integer not null,
+	idAdmin_fk integer not null,
+	tipoAcao varchar(100) not null,
+	qtd integer not null,
+	observacao text,
+	criadoEm timestamp,
+	foreign key (idItem_fk) references almoxarifado(idItem),
+	foreign key (idAdmin_fk) references admin(idAdmin)
 );
 
+-- CORRECAO 1: removido o SELECT
+-- CORRECAO 2: idAdmin_fk=3 trocado para 1 (admin 3 nao existe)
 insert into movimentoEstoque(idItem_fk, idAdmin_fk, tipoAcao, qtd, observacao, criadoEm)
 values
 (4, 1, 'entrada', 10, 'compra de novas lanternas para reposicao', now()),
@@ -156,7 +180,7 @@ values
 -- TRIGGERS
 -- _______________________________________________
 
--- CORRECAO: trigger usa quantidadeDisponivel (era quantidadeDisp no ScriptNican.sql original)
+-- CORRECAO 4: era "quantidadeDisp" — corrigido para "quantidadeDisponivel"
 create or replace function diminuir_estoque_almoxarifado()
 returns trigger as $$
 begin
@@ -172,42 +196,45 @@ begin
 end;
 $$ language plpgsql;
 
--- CORRECAO: trigger usa quantidadeDisponivel (era quantidadeDisp)
+-- CORRECAO 4: era "quantidadeDisp" — corrigido para "quantidadeDisponivel"
 create or replace function retorno_estoque_almoxarifado()
 returns trigger as $$
 begin
-    if new.dataDev is not null and old.dataDev is null then
-        update almoxarifado
-        set quantidadeDisponivel = quantidadeDisponivel + new.qtdPega
-        where idItem = new.idItem_fk;
-    end if;
+	if new.dataDev is not null and old.dataDev is null then
+		update almoxarifado
+		set quantidadeDisponivel = quantidadeDisponivel + new.qtdPega
+		where idItem = new.idItem_fk;
+		end if;
 
-    return new;
+return new;
 end;
 $$ language plpgsql;
 
--- CORRECAO: trigger usa os nomes de coluna corretos (idUsuario, idItem, quantidadeSolicitada)
+-- CORRECAO 5: era idUsuario_fk, idItem_fk, qtdSolicitado — corrigidos para idUsuario, idItem, quantidadeSolicitada
 create or replace function status_requerimento()
 returns trigger as $$
 begin
-    if new.status = 'aprovado' and old.status = 'pendente' then
-        insert into emprestar(idRequerimento_fk, idUsuario_fk, idItem_fk, qtdPega, dataPegou, devPrevista, estadoItem)
-        values (new.idRequerimento, new.idUsuario, new.idItem, new.quantidadeSolicitada, now(), now() + interval '7 days', 'a verificar');
-    end if;
+	if new.status ='aprovado' and old.status ='pendente' then
+	insert into emprestar(idRequerimento_fk, idUsuario_fk, idItem_fk, qtdPega, dataPegou, devPrevista, estadoItem)
+	values (new.idRequerimento, new.idUsuario, new.idItem, new.quantidadeSolicitada, now(), now() + interval '7 days', 'a verificar');
+	end if;
 
-    return new;
+return new;
 end;
 $$ language plpgsql;
 
 
+-- RETIRADA ITEM
 create trigger trigger_retirada_item
 after insert on emprestar
 for each row execute function diminuir_estoque_almoxarifado();
 
+-- ESTORNO ITEM
 create trigger trigger_retorno_item
 after update on emprestar
 for each row execute function retorno_estoque_almoxarifado();
 
+-- STATUS REQUERIMENTO
 create trigger trigger_aprovacao_requerimento
 after update on requerimento
 for each row execute function status_requerimento();
