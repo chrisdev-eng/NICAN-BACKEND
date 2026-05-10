@@ -1,6 +1,5 @@
 package com.faculdade.nican.model;
 
-import com.faculdade.nican.model.Admin;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

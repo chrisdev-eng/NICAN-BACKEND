@@ -22,13 +22,11 @@
                 Se o seu ambiente não suportar EL no persistence.xml, use JPAUtils
                 para montar a URL dinamicamente (ver config/JPAUtils.java).
             -->
-            <property name="jakarta.persistence.jdbc.url"
-                      value="jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:nicandb}"/>
-            <property name="jakarta.persistence.jdbc.user"     value="${DB_USER:postgres}"/>
-            <property name="jakarta.persistence.jdbc.password" value="${DB_PASS:postgres}"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nicandb"/>
+            <property name="jakarta.persistence.jdbc.user"     value="postgres"/>
+            <property name="jakarta.persistence.jdbc.password" value="postgres"/>
             <property name="jakarta.persistence.jdbc.driver"   value="org.postgresql.Driver"/>
 
-            <property name="hibernate.dialect"      value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="none"/>
 
             <!-- Logs do SQL gerado pelo Hibernate — desative em produção -->
@@ -37,4 +35,4 @@
         </properties>
 
     </persistence-unit>
-</persistence>
+
