@@ -1,6 +1,6 @@
 package com.faculdade.nican.ui.menu;
 import com.faculdade.nican.repository.*;
-
+import com.faculdade.nican.model.*;
 import java.util.List;
 import java.util.InputMismatchException;
 import java.util.Scanner;

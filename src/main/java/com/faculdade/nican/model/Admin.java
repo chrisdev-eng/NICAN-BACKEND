@@ -75,7 +75,7 @@ public class Admin {
   public LocalDateTime getCriadoEm()         { return criadoEm; }
   public LocalDateTime getAtualizadoEm()     { return atualizadoEm; }
   public List<Usuario> getUsuarios()         { return usuarios; }
-  public List<com.faculdade.projeto.almoxarife.classes.Item> getItens() { return itens; }
+  public List<Item> getItens() { return itens; }
 
 
 

@@ -5,8 +5,8 @@
              https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
     <persistence-unit name="nicandb" transaction-type="RESOURCE_LOCAL">
-
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+<<<<<<< HEAD
 
 <<<<<<< HEAD
         <class>com.faculdade.projeto.login.classes.Usuario</class>
@@ -26,32 +26,28 @@
             
             <!--  Aqui e onde e tacado as logs do JPA/Hibernate -->
 =======
+=======
+>>>>>>> 865ff98 (backend finalizado 2.0)
         <class>com.faculdade.nican.model.Usuario</class>
         <class>com.faculdade.nican.model.Admin</class>
         <class>com.faculdade.nican.model.Item</class>
         <class>com.faculdade.nican.model.Requerimento</class>
         <class>com.faculdade.nican.model.Emprestimo</class>
-
         <properties>
-            <!--
-                DB_HOST é injetado pelo docker-compose.yml via environment.
-                Localmente (sem Docker), basta não definir DB_HOST e o fallback
-                "localhost" será usado graças ao ${DB_HOST:localhost} do Hibernate.
-                Se o seu ambiente não suportar EL no persistence.xml, use JPAUtils
-                para montar a URL dinamicamente (ver config/JPAUtils.java).
-            -->
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nicandb"/>
-            <property name="jakarta.persistence.jdbc.user"     value="postgres"/>
+            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
             <property name="jakarta.persistence.jdbc.password" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.driver"   value="org.postgresql.Driver"/>
-
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="hibernate.hbm2ddl.auto" value="none"/>
+<<<<<<< HEAD
 
             <!-- Logs do SQL gerado pelo Hibernate — desative em produção -->
 >>>>>>> 91d1f63 (Finalizacao da parte final do codigo base de BackEnd do projeto)
             <property name="hibernate.show_sql"   value="true"/>
+=======
+            <property name="hibernate.show_sql" value="true"/>
+>>>>>>> 865ff98 (backend finalizado 2.0)
             <property name="hibernate.format_sql" value="true"/>
         </properties>
-
     </persistence-unit>
-
+</persistence>
