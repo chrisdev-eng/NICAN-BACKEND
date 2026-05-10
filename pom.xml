@@ -4,8 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+<<<<<<< HEAD
     <groupId>org.teste.com</groupId>
     <artifactId>jpa-teste</artifactId>
+=======
+    <groupId>com.faculdade</groupId>
+    <artifactId>nican</artifactId>
+>>>>>>> 91d1f63 (Finalizacao da parte final do codigo base de BackEnd do projeto)
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -84,7 +89,11 @@
                 <configuration>
                     <archive>
                         <manifest>
+<<<<<<< HEAD
                             <mainClass>com.faculdade.projeto.App</mainClass>
+=======
+                            <mainClass>com.faculdade.nican.App</mainClass>
+>>>>>>> 91d1f63 (Finalizacao da parte final do codigo base de BackEnd do projeto)
                         </manifest>
                     </archive>
                 </configuration>

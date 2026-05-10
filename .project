@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>projeto-mensal</name>
+=======
+	<name>nican</name>
+>>>>>>> 91d1f63 (Finalizacao da parte final do codigo base de BackEnd do projeto)
 	<comment></comment>
 	<projects>
 	</projects>
@@ -22,7 +26,11 @@
 	</natures>
 	<filteredResources>
 		<filter>
+<<<<<<< HEAD
 			<id>1772204590056</id>
+=======
+			<id>1778101076195</id>
+>>>>>>> 91d1f63 (Finalizacao da parte final do codigo base de BackEnd do projeto)
 			<name></name>
 			<type>30</type>
 			<matcher>

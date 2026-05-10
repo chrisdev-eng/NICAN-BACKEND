@@ -8,24 +8,6 @@
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-<<<<<<< HEAD
-        <class>com.faculdade.projeto.login.classes.Usuario</class>
-        <class>com.faculdade.projeto.login.classes.Admin</class>
-        <class>com.faculdade.projeto.almoxarife.classes.Item</class>
-        <class>com.faculdade.projeto.almoxarife.classes.Requerimento</class>
-
-        <properties>
-            <!-- CORRECAO: senha atualizada para bater com o docker-compose.yml -->
-            <property name="jakarta.persistence.jdbc.url"      value="jdbc:postgresql://localhost:5432/nicandb"/>
-            <property name="jakarta.persistence.jdbc.user"     value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.driver"   value="org.postgresql.Driver"/>
-
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="none"/>
-            
-            <!--  Aqui e onde e tacado as logs do JPA/Hibernate -->
-=======
         <class>com.faculdade.nican.model.Usuario</class>
         <class>com.faculdade.nican.model.Admin</class>
         <class>com.faculdade.nican.model.Item</class>
@@ -50,7 +32,6 @@
             <property name="hibernate.hbm2ddl.auto" value="none"/>
 
             <!-- Logs do SQL gerado pelo Hibernate — desative em produção -->
->>>>>>> 91d1f63 (Finalizacao da parte final do codigo base de BackEnd do projeto)
             <property name="hibernate.show_sql"   value="true"/>
             <property name="hibernate.format_sql" value="true"/>
         </properties>
