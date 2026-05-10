@@ -1,6 +1,10 @@
 package com.faculdade.nican.model;
 
 
+
+
+
+
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -49,7 +53,7 @@ public class Admin {
 
   // @OneToMany — um admin é responsável por varios itens do almoxarife
   @OneToMany(mappedBy = "adminResponsavel", fetch = FetchType.LAZY)
-  private List<com.faculdade.projeto.almoxarife.classes.Item> itens;
+  private List<Item> itens;
 
 
 
