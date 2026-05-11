@@ -41,7 +41,12 @@ public class TelaLogin extends JFrame{
             if(erro != null){
                 JOptionPane.showMessageDialog(this, erro, "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "Bem-vindo, " + LoginService.getNomeLogado() + "!");
+                if (LoginService.ehAdmin()){
+                    new TelaSistemaAdmin();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Bem-vindo, " + LoginService.getNomeLogado() + "!");
+                }
+                dispose();
             }
         });
 

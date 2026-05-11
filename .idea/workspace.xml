@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9e502b4-0020-45ca-9a64-cdca3ba9e5c3" name="Changes" comment="" />
+    <list default="true" id="f9e502b4-0020-45ca-9a64-cdca3ba9e5c3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/service/AlmoxarifeService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaAlmoxarife.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaSistemaAdmin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/TesteSwing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/TesteSwing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaLogin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/TesteSwing.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/TesteSwing.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaLogin.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaLogin.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,9 +27,24 @@
       </list>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "chrisdev-eng"
+  }
 }]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/chrisdev-eng/NICAN-BACKEND.git",
+    "accountId": "d2484ed4-1af1-46a9-8ca9-99e816aa5624"
+  }
+}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="3DXu9FYKdzWA8qMUtuqRGZ1i1mg" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -27,15 +52,32 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.App.executor": "Run",
     "Application.TesteSwing.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "interface-swing-c",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/chris/OneDrive/Desktop/NICAN-BACKEND-backend-finalizacao"
+    "last_opened_file_path": "C:/Users/chris/OneDrive/Desktop/NICAN"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.TesteSwing">
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.faculdade.nican.App" />
+      <module name="nican" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.faculdade.nican.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TesteSwing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.faculdade.nican.TesteSwing" />
       <module name="nican" />
@@ -52,6 +94,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.TesteSwing" />
+        <item itemvalue="Application.App" />
       </list>
     </recent_temporary>
   </component>
