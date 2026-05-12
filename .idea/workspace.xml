@@ -4,27 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9e502b4-0020-45ca-9a64-cdca3ba9e5c3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaCadastroAdmin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaDesativarUsuario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaGerenciarItens.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarUsuarios.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaPainelAdmin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaRedefinirSenha.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/TesteSwing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/TesteSwing.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/service/LoginService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/service/LoginService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaAlmoxarife.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaAlmoxarife.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaHome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaHome.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaLogin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaSistemaAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaSistemaAdmin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/App.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/TesteSwing.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/TesteSwing.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/service/LoginService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/service/LoginService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaHome.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaHome.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaLogin.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaLogin.class" afterDir="false" />
-    </list>
+    <list default="true" id="f9e502b4-0020-45ca-9a64-cdca3ba9e5c3" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
