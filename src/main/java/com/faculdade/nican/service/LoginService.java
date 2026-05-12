@@ -40,6 +40,24 @@ public class LoginService {
         return null; // sucesso
     }
 
+    public static String cadastrarAdmin(String nome, String login, String senha, String confirmaSenha) {
+        if (nome == null || nome.isBlank())   return "Preencha o nome.";
+        if (login == null || login.isBlank()) return "Preencha o e-mail.";
+        if (senha == null || senha.isBlank()) return "Preencha a senha.";
+        if (!senha.equals(confirmaSenha))     return "As senhas não coincidem.";
+        if (senha.length() < 8)              return "Senha deve ter pelo menos 8 caracteres.";
+
+        if (AdminRepository.buscarPorLogin(login.trim()) != null) {
+            return "Este e-mail já está cadastrado como admin.";
+        }
+
+        Admin novoAdmin = new Admin(nome, login, senha);
+        if (!AdminRepository.salvar(novoAdmin)) {
+            return "Falha ao salvar. Tente novamente.";
+        }
+        return null; // sucesso
+    }
+
     public static String cadastrarUsuario(String nome, String login, String senha, String confirmaSenha) {
         if (nome == null || nome.isBlank())   return "Preencha o nome.";
         if (login == null || login.isBlank()) return "Preencha o e-mail.";
@@ -58,6 +76,24 @@ public class LoginService {
         Usuario novo = new Usuario(nome, login, senha, Perfil.USUARIO, adminResponsavel);
         if (!UsuarioRepository.salvar(novo)) {
             return "Falha ao salvar. Tente novamente.";
+        }
+        return null; // sucesso
+    }
+
+    public static String redefinirSenha(String login, String senhaAtual, String novaSenha, String confirmaNovaSenha) {
+        if (login == null || login.isBlank())       return "Preencha o e-mail.";
+        if (senhaAtual == null || senhaAtual.isBlank()) return "Preencha a senha atual.";
+        if (novaSenha == null || novaSenha.isBlank())   return "Preencha a nova senha.";
+        if (novaSenha.length() < 8)                return "Nova senha deve ter pelo menos 8 caracteres.";
+        if (!novaSenha.equals(confirmaNovaSenha))   return "As senhas não coincidem.";
+
+        Usuario usuario = UsuarioRepository.buscarPorLogin(login.trim());
+        if (usuario == null)                        return "Usuário não encontrado.";
+        if (!usuario.getSenha().equals(senhaAtual)) return "Senha atual incorreta.";
+
+        usuario.setSenha(novaSenha);
+        if (!UsuarioRepository.atualizar(usuario)) {
+            return "Falha ao atualizar. Tente novamente.";
         }
         return null; // sucesso
     }

@@ -42,7 +42,8 @@ public class TelaAlmoxarife extends JFrame {
         JButton btnVoltar = new JButton("Voltar");
 
         btnAdicionar.addActionListener(e -> {
-                JOptionPane.showMessageDialog(this, "Em breve: adc tela de ITEM");
+            new TelaGerenciarItens();
+            dispose();
         });
 
         btnRemover.addActionListener(e -> {

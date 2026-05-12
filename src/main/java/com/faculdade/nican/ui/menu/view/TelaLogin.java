@@ -43,10 +43,10 @@ public class TelaLogin extends JFrame{
             } else {
                 if (LoginService.ehAdmin()){
                     new TelaSistemaAdmin();
+                    dispose();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Bem-vindo, " + LoginService.getNomeLogado() + "!");
+                    JOptionPane.showMessageDialog(this, "Acesso restrito a administradores.", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
-                dispose();
             }
         });
 

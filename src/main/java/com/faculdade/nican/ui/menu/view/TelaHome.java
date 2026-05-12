@@ -34,7 +34,7 @@ public class TelaHome extends JFrame {
             dispose(); // fecha a TelaHome
         });
 
-        /*btnCadastro.addActionListener(e -> {
+        btnCadastro.addActionListener(e -> {
             new TelaCadastro();
             dispose();
         });
@@ -42,7 +42,7 @@ public class TelaHome extends JFrame {
         btnRedefinir.addActionListener(e -> {
             new TelaRedefinirSenha();
             dispose();
-        });*/
+        });
 
         //adicionando tudo no painel
         painel.add(Box.createVerticalStrut(40)); // espaço encima

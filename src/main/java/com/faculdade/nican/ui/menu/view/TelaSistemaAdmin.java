@@ -37,8 +37,8 @@ public class TelaSistemaAdmin extends  JFrame {
         });
 
         btnPainelAdmin.addActionListener(e -> {
-            //futuramente tela de admin, painel admin
-            JOptionPane.showMessageDialog(this, "Abrindo Painel Admin...");
+            new TelaPainelAdmin();
+            dispose();
         });
 
         btnLogout.addActionListener(e -> {

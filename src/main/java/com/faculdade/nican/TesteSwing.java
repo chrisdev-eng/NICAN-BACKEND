@@ -4,6 +4,6 @@ import com.faculdade.nican.ui.menu.view.*;
 
 public class TesteSwing {
     public static void main(String[] args) {
-        new TelaAlmoxarife();
+        new TelaHome();
     }
 }
