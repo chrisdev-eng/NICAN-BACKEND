@@ -2,6 +2,8 @@ package com.faculdade.nican.ui.menu.view;
 import javax.swing.*;
 import java.awt.*;
 import com.faculdade.nican.service.LoginService;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class TelaLogin extends JFrame{
 
@@ -28,6 +30,33 @@ public class TelaLogin extends JFrame{
         JButton btnEntrar = new JButton("Entrar");
         JButton btnVoltar = new JButton("Voltar");
 
+        campoEmail.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    campoSenha.requestFocus();
+                }
+            }
+        });
+
+        campoSenha.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    campoEmail.requestFocus();
+                }
+
+            }
+        });
+
+        campoEmail.addActionListener(e -> {
+            campoSenha.requestFocus();
+        });
+
+        campoSenha.addActionListener(e -> {
+            btnEntrar.doClick();
+        });
+
         btnEntrar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnVoltar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -41,12 +70,12 @@ public class TelaLogin extends JFrame{
             if(erro != null){
                 JOptionPane.showMessageDialog(this, erro, "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
-                if (LoginService.ehAdmin()){
+                if (LoginService.ehAdmin()) {
                     new TelaSistemaAdmin();
-                    dispose();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Acesso restrito a administradores.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    new TelaHomeUsuario();
                 }
+                dispose();
             }
         });
 

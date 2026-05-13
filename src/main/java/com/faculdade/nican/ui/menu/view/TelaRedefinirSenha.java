@@ -3,10 +3,18 @@ package com.faculdade.nican.ui.menu.view;
 import com.faculdade.nican.service.LoginService;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class TelaRedefinirSenha extends JFrame {
-
+    private boolean veioDaHomeUsuario;
     public TelaRedefinirSenha() {
+        this(false);
+    }
+
+    public TelaRedefinirSenha(boolean veioDaHomeUsuario) {
+
+        this.veioDaHomeUsuario = veioDaHomeUsuario;
         setTitle("Redefinir Senha - NICAN");
         setSize(400, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,6 +41,60 @@ public class TelaRedefinirSenha extends JFrame {
         JButton btnConfirmar = new JButton("Confirmar");
         JButton btnVoltar = new JButton("Voltar");
 
+        campoEmail.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+
+                if (e.getKeyCode() == KeyEvent.VK_DOWN ||
+                        e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+                    campoSenhaAtual.requestFocus();
+                }
+            }
+        });
+
+        campoSenhaAtual.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    campoEmail.requestFocus();
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_DOWN ||
+                        e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+                    campoNovaSenha.requestFocus();
+                }
+            }
+        });
+
+        campoNovaSenha.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    campoSenhaAtual.requestFocus();
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_DOWN ||
+                        e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+                    campoConfirma.requestFocus();
+                }
+            }
+        });
+
+        campoConfirma.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    campoNovaSenha.requestFocus();
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    btnConfirmar.doClick();
+                }
+            }
+        });
+
         btnConfirmar.addActionListener(e -> {
             String email = campoEmail.getText();
             String senhaAtual = new String(campoSenhaAtual.getPassword());
@@ -45,13 +107,20 @@ public class TelaRedefinirSenha extends JFrame {
                 JOptionPane.showMessageDialog(this, erro, "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(this, "Senha redefinida com sucesso!");
-                new TelaHome();
+                LoginService.fazerLogout();
+                new TelaLogin();
                 dispose();
             }
         });
 
         btnVoltar.addActionListener(e -> {
-            new TelaHome();
+
+            if (veioDaHomeUsuario) {
+                new TelaHomeUsuario();
+            } else {
+                new TelaHome();
+            }
+
             dispose();
         });
 

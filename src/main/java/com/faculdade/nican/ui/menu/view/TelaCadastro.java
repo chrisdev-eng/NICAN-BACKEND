@@ -3,6 +3,8 @@ package com.faculdade.nican.ui.menu.view;
 import javax.swing.*;
 import java.awt.*;
 import com.faculdade.nican.service.LoginService;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class TelaCadastro extends JFrame {
 
@@ -33,6 +35,53 @@ public class TelaCadastro extends JFrame {
             //botões
             JButton btnCadastrar = new JButton("Cadastrar");
             JButton btnVoltar = new JButton("Voltar");
+            campoNome.addKeyListener(new KeyAdapter() {
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_DOWN ||
+                            e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        campoEmail.requestFocus();
+                    }
+                }
+            });
+
+            campoEmail.addKeyListener(new KeyAdapter() {
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_UP) {
+                        campoNome.requestFocus();
+                    }
+
+                    if (e.getKeyCode() == KeyEvent.VK_DOWN ||
+                            e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        campoSenha.requestFocus();
+                    }
+                }
+            });
+
+            campoSenha.addKeyListener(new KeyAdapter() {
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_UP) {
+                        campoEmail.requestFocus();
+                    }
+
+                    if (e.getKeyCode() == KeyEvent.VK_DOWN ||
+                            e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        campoConfirma.requestFocus();
+                    }
+                }
+            });
+
+            campoConfirma.addKeyListener(new KeyAdapter() {
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_UP) {
+                        campoSenha.requestFocus();
+                    }
+
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        btnCadastrar.doClick();
+                    }
+                }
+            });
+
 
             //ação do botão cadastrar
             btnCadastrar.addActionListener(e ->{
