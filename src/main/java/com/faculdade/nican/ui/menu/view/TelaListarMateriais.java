@@ -25,7 +25,14 @@ public class TelaListarMateriais extends JFrame {
         JLabel titulo = new JLabel("Materiais Disponíveis", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 16));
 
-        String[] colunas = {"ID", "Nome", "Categoria", "Qualidade", "Disponível", "Total"};
+        String[] colunas = {
+                "Nome",
+                "Categoria",
+                "Qualidade",
+                "Total",
+                "Disponível"
+        };
+
         modeloTabela = new DefaultTableModel(colunas, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -63,12 +70,13 @@ public class TelaListarMateriais extends JFrame {
 
         for (Item item : itens) {
             modeloTabela.addRow(new Object[]{
-                    item.getIdItem(),
                     item.getNome(),
                     item.getCategoria().toString(),
                     item.getQualidade().toString(),
+                    item.getQuantidadeTotal(),
                     item.getQuantidadeDisponivel(),
-                    item.getQuantidadeTotal()
+
+
             });
         }
     }

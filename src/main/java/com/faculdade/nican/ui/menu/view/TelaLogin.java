@@ -4,6 +4,7 @@ import java.awt.*;
 import com.faculdade.nican.service.LoginService;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.prefs.Preferences;
 
 public class TelaLogin extends JFrame{
 
@@ -22,6 +23,8 @@ public class TelaLogin extends JFrame{
         //campos
         JLabel lblEmail = new JLabel("E-mail:");
         JTextField campoEmail = new JTextField();
+        Preferences prefsInicio = Preferences.userRoot();
+        campoEmail.setText(prefsInicio.get("ultimoLogin", ""));
 
         JLabel lblSenha = new JLabel("Senha:");
         JPasswordField campoSenha = new JPasswordField();
@@ -70,11 +73,16 @@ public class TelaLogin extends JFrame{
             if(erro != null){
                 JOptionPane.showMessageDialog(this, erro, "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
+
+                Preferences prefs = Preferences.userRoot();
+                prefs.put("ultimoLogin", email);
+
                 if (LoginService.ehAdmin()) {
                     new TelaSistemaAdmin();
                 } else {
                     new TelaHomeUsuario();
                 }
+
                 dispose();
             }
         });

@@ -38,12 +38,12 @@ public class TelaListarCategoria extends JFrame {
         painelTopo.add(btnFiltrar);
 
         String[] colunas = {
-                "ID",
                 "Nome",
                 "Categoria",
                 "Qualidade",
-                "Disponível",
-                "Total"
+                "Total",
+                "Disponível"
+
         };
 
         modeloTabela = new DefaultTableModel(colunas, 0) {
@@ -92,12 +92,12 @@ public class TelaListarCategoria extends JFrame {
                     .equalsIgnoreCase(categoriaSelecionada)) {
 
                 modeloTabela.addRow(new Object[]{
-                        item.getIdItem(),
                         item.getNome(),
                         item.getCategoria().toString(),
                         item.getQualidade().toString(),
+                        item.getQuantidadeTotal(),
                         item.getQuantidadeDisponivel(),
-                        item.getQuantidadeTotal()
+
                 });
             }
         }

@@ -12,8 +12,19 @@ public class TelaRequerimentos extends JFrame {
 
     private JTable tabela;
     private DefaultTableModel modeloTabela;
+    private String usuarioLogado;
 
     public TelaRequerimentos() {
+        this.usuarioLogado = null;
+        iniciarTela();
+    }
+
+    public TelaRequerimentos(String usuarioLogado) {
+        this.usuarioLogado = usuarioLogado;
+        iniciarTela();
+    }
+
+    private void iniciarTela() {
 
         setTitle("Requerimentos - NICAN");
         setSize(850, 500);
@@ -21,22 +32,22 @@ public class TelaRequerimentos extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel painel = new JPanel(new BorderLayout());
-        painel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        painel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JLabel titulo = new JLabel(
-                "Lista de Requerimentos",
+                "Meus Requerimentos",
                 SwingConstants.CENTER
         );
+
 
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
 
         String[] colunas = {
-                "ID",
                 "Usuário",
                 "Item",
                 "Quantidade",
-                "Status",
-                "Data Solicitação"
+                "Data Solicitação",
+                "Status"
         };
 
         modeloTabela = new DefaultTableModel(colunas, 0) {
@@ -87,15 +98,19 @@ public class TelaRequerimentos extends JFrame {
 
         for (Requerimento r : lista) {
 
-            modeloTabela.addRow(new Object[]{
+            if (usuarioLogado == null ||
+                    r.getUsuario().getLogin().equalsIgnoreCase(usuarioLogado)) {
 
-                    r.getIdRequerimento(),
-                    r.getUsuario().getNome(),
-                    r.getItem().getNome(),
-                    r.getQuantidadeSolicitada(),
-                    r.getStatus(),
-                    r.getDataSolicitacao()
-            });
+                modeloTabela.addRow(new Object[]{
+
+                        r.getUsuario().getNome(),
+                        r.getItem().getNome(),
+                        r.getQuantidadeSolicitada(),
+                        r.getDataSolicitacao(),
+                        r.getStatus()
+                });
+            }
         }
     }
 }
+

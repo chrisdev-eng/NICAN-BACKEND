@@ -7,8 +7,8 @@ public enum Qualidade {
   N("Novo"),
   B("Bom para uso"),
   C("Precisa de Conserto"),
-  Q("Quebrado/Ruim para uso"),
-  U("Uso Unico");
+  D("Danificado"),
+  U("Uso Único");
 
 
 

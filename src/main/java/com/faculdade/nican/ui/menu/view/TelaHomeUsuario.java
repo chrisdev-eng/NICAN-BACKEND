@@ -14,7 +14,7 @@ public class TelaHomeUsuario extends JFrame {
 
         JPanel painel = new JPanel(new BorderLayout());
 
-        JLabel titulo = new JLabel("NICAN - Home do Usuário", SwingConstants.CENTER);
+        JLabel titulo = new JLabel("NICAN - Painel do Usuário", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
         titulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
@@ -25,7 +25,6 @@ public class TelaHomeUsuario extends JFrame {
         JButton btnRequerimentos = new JButton("Meus Requerimentos");
         JButton btnListarCategoria = new JButton("Filtrar por Categoria");
         JButton btnListarEstado = new JButton("Filtrar por Estado");
-        JButton btnAlmoxarife = new JButton("Almoxarifado");
         JButton btnRedefinirSenha = new JButton("Alterar Senha");
         JButton btnLogout = new JButton("Logout");
 
@@ -33,7 +32,6 @@ public class TelaHomeUsuario extends JFrame {
         menu.add(btnRequerimentos);
         menu.add(btnListarCategoria);
         menu.add(btnListarEstado);
-        menu.add(btnAlmoxarife);
         menu.add(btnRedefinirSenha);
         menu.add(btnLogout);
 
@@ -48,10 +46,6 @@ public class TelaHomeUsuario extends JFrame {
 
         btnRedefinirSenha.addActionListener(e -> {
             new TelaRedefinirSenha(true);
-            dispose();
-        });
-        btnAlmoxarife.addActionListener(e -> {
-            new TelaListarMateriais();
             dispose();
         });
 
@@ -71,7 +65,7 @@ public class TelaHomeUsuario extends JFrame {
         });
 
         btnRequerimentos.addActionListener(e -> {
-            new TelaRequerimentos();
+            new TelaRequerimentos(LoginService.getLoginLogado());
             dispose();
         });
 
