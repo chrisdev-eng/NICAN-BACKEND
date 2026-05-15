@@ -6,21 +6,18 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.prefs.Preferences;
 
-public class TelaLogin extends JFrame{
+public class TelaLogin extends JFrame {
 
-    public TelaLogin(){
-        //configurações da janela
+    public TelaLogin() {
         setTitle("Login - NICAN");
-        setSize(400,300);
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        //painel principal
         JPanel painel = new JPanel();
         painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-        painel.setBorder(BorderFactory.createEmptyBorder(30,40,30,40));
+        painel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
-        //campos
         JLabel lblEmail = new JLabel("E-mail:");
         JTextField campoEmail = new JTextField();
         Preferences prefsInicio = Preferences.userRoot();
@@ -29,13 +26,11 @@ public class TelaLogin extends JFrame{
         JLabel lblSenha = new JLabel("Senha:");
         JPasswordField campoSenha = new JPasswordField();
 
-        //botões
         JButton btnEntrar = new JButton("Entrar");
         JButton btnVoltar = new JButton("Voltar");
 
         campoEmail.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
-
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     campoSenha.requestFocus();
                 }
@@ -44,36 +39,30 @@ public class TelaLogin extends JFrame{
 
         campoSenha.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
-
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
                     campoEmail.requestFocus();
                 }
-
             }
         });
 
-        campoEmail.addActionListener(e -> {
-            campoSenha.requestFocus();
-        });
-
-        campoSenha.addActionListener(e -> {
-            btnEntrar.doClick();
-        });
+        campoEmail.addActionListener(e -> campoSenha.requestFocus());
+        campoSenha.addActionListener(e -> btnEntrar.doClick());
 
         btnEntrar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnVoltar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        //ação do botão entrar
         btnEntrar.addActionListener(e -> {
             String email = campoEmail.getText();
             String senha = new String(campoSenha.getPassword());
 
+            // CORREÇÃO: garante que não há sessão ativa antes de tentar login
+            LoginService.fazerLogout();
+
             String erro = LoginService.fazerLogin(email, senha);
 
-            if(erro != null){
+            if (erro != null) {
                 JOptionPane.showMessageDialog(this, erro, "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
-
                 Preferences prefs = Preferences.userRoot();
                 prefs.put("ultimoLogin", email);
 
@@ -82,12 +71,10 @@ public class TelaLogin extends JFrame{
                 } else {
                     new TelaHomeUsuario();
                 }
-
                 dispose();
             }
         });
 
-        //ação do botão voltar
         btnVoltar.addActionListener(e -> {
             new TelaHome();
             dispose();
@@ -95,41 +82,29 @@ public class TelaLogin extends JFrame{
 
         JPanel painelCampos = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // espaço entre os componentes
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // label email - coluna 0, linha 0
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridx = 0; gbc.gridy = 0;
         painelCampos.add(lblEmail, gbc);
-
-        // campo email - coluna 1, linha 0
-        gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridx = 1; gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0; // ocupa o espaço restante
+        gbc.weightx = 1.0;
         painelCampos.add(campoEmail, gbc);
 
-        // label senha - coluna 0, linha 1
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridx = 0; gbc.gridy = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
         painelCampos.add(lblSenha, gbc);
-
-        // campo senha - coluna 1, linha 1
-        gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridx = 1; gbc.gridy = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
         painelCampos.add(campoSenha, gbc);
 
-        //painel dos botões um ao lado do outro
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15,0));
+        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         painelBotoes.add(btnEntrar);
         painelBotoes.add(btnVoltar);
 
-        //adicionando tudo no painel principal
         painel.add(painelCampos);
         painel.add(Box.createVerticalStrut(20));
         painel.add(painelBotoes);

@@ -5,6 +5,7 @@ import com.faculdade.nican.model.Requerimento;
 import com.faculdade.nican.model.Sessao;
 import com.faculdade.nican.repository.RequerimentoRepository;
 import com.faculdade.nican.service.AlmoxarifeService;
+import com.faculdade.nican.service.LoginService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +26,7 @@ public class TelaSolicitarMaterial extends JFrame {
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel lblItem = new JLabel("Material:");
+        JLabel lblItem     = new JLabel("Material:");
         JLabel lblQuantidade = new JLabel("Quantidade:");
 
         List<Item> itens = AlmoxarifeService.listarTodos();
@@ -35,13 +36,10 @@ public class TelaSolicitarMaterial extends JFrame {
             public Component getListCellRendererComponent(
                     JList<?> list, Object value, int index,
                     boolean isSelected, boolean cellHasFocus) {
-
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
                 if (value instanceof Item item) {
                     setText(item.getNome() + " - Disponível: " + item.getQuantidadeDisponivel());
                 }
-
                 return this;
             }
         });
@@ -49,17 +47,15 @@ public class TelaSolicitarMaterial extends JFrame {
         JTextField campoQuantidade = new JTextField();
 
         JButton btnSolicitar = new JButton("Solicitar");
-        JButton btnVoltar = new JButton("Voltar");
+        JButton btnVoltar    = new JButton("Voltar");
 
         gbc.gridx = 0; gbc.gridy = 0;
         painel.add(lblItem, gbc);
-
         gbc.gridx = 1; gbc.gridy = 0;
         painel.add(comboItens, gbc);
 
         gbc.gridx = 0; gbc.gridy = 1;
         painel.add(lblQuantidade, gbc);
-
         gbc.gridx = 1; gbc.gridy = 1;
         painel.add(campoQuantidade, gbc);
 
@@ -80,7 +76,6 @@ public class TelaSolicitarMaterial extends JFrame {
             }
 
             int quantidade;
-
             try {
                 quantidade = Integer.parseInt(campoQuantidade.getText().trim());
             } catch (NumberFormatException ex) {
@@ -108,7 +103,8 @@ public class TelaSolicitarMaterial extends JFrame {
 
             if (salvou) {
                 JOptionPane.showMessageDialog(this, "Requerimento enviado com sucesso!");
-                new TelaRequerimentos();
+                // CORREÇÃO: passa o login do usuário logado (construtor exige String)
+                new TelaRequerimentos(LoginService.getLoginLogado());
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Erro ao enviar requerimento.");
@@ -116,7 +112,8 @@ public class TelaSolicitarMaterial extends JFrame {
         });
 
         btnVoltar.addActionListener(e -> {
-            new TelaRequerimentos();
+            // CORREÇÃO: passa o login do usuário logado (construtor exige String)
+            new TelaRequerimentos(LoginService.getLoginLogado());
             dispose();
         });
 

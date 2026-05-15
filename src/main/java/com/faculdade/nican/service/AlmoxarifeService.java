@@ -15,6 +15,9 @@ public class AlmoxarifeService {
     }
 
     // remove um item pelo ID
+    // CORREÇÃO: agora verifica o retorno de ItemRepository.removerItem()
+    // Antes: removerItem() era void → service sempre retornava null (sucesso) mesmo quando falhava
+    // Agora: removerItem() retorna boolean → service propaga o erro corretamente para a View
     public static String removerItem(int idItem) {
         if (!Sessao.get().usuarioEhAdmin()) {
             return "Apenas administradores podem remover itens.";
@@ -25,8 +28,12 @@ public class AlmoxarifeService {
             return "Item não encontrado.";
         }
 
-        ItemRepository.removerItem(item);
-        return null; // sucesso
+        boolean removido = ItemRepository.removerItem(item);
+        if (!removido) {
+            return "Não é possível remover: este item possui requerimentos pendentes.";
+        }
+
+        return null; // null = sucesso
     }
 
     // adiciona um novo item

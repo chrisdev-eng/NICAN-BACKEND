@@ -109,6 +109,20 @@ public class LoginService {
     public static boolean estaLogado() { return Sessao.get().estaLogado(); }
     public static boolean ehAdmin()    { return Sessao.get().usuarioEhAdmin(); }
     public static String getNomeLogado() { return Sessao.get().getNomeLogado(); }
-    public static String getLoginLogado() {return Sessao.get().getUsuarioLogado().getLogin();}
- }
 
+    /**
+     * CORREÇÃO: antes chamava getUsuarioLogado().getLogin() diretamente,
+     * causando NullPointerException se um admin estivesse logado.
+     * Agora retorna o login de quem estiver logado (usuário ou admin).
+     */
+    public static String getLoginLogado() {
+        Sessao sessao = Sessao.get();
+        if (sessao.getUsuarioLogado() != null) {
+            return sessao.getUsuarioLogado().getLogin();
+        }
+        if (sessao.getAdminLogado() != null) {
+            return sessao.getAdminLogado().getLogin();
+        }
+        return null;
+    }
+}
