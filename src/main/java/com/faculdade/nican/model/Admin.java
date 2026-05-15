@@ -1,10 +1,5 @@
 package com.faculdade.nican.model;
 
-
-
-
-
-
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,9 +11,8 @@ import java.util.List;
  *  Classe Admin do Sistema.
  *
  *  CORREÇÕES APLICADAS:
- *    - @OneToMany(mappedBy = "adminResponsavel") — mantido pois o campo se chama
- *      "adminResponsavel" em Usuario e Item.
- *    - Sem outras alteracoes estruturais.
+ *    - Construtor agora chama trim().toLowerCase() no login (igual ao setter),
+ *      evitando inconsistência entre cadastro e login quando o e-mail tem maiúsculas.
  */
 @Entity
 @Table(name = "admin")
@@ -46,12 +40,9 @@ public class Admin {
   @Column(name = "atualizadoEm")
   private LocalDateTime atualizadoEm;
 
-  // @OneToMany — um admin é responsável por varios usuarios
-  // mappedBy aponta para o campo "adminResponsavel" da classe Usuario
   @OneToMany(mappedBy = "adminResponsavel", fetch = FetchType.LAZY)
   private List<Usuario> usuarios;
 
-  // @OneToMany — um admin é responsável por varios itens do almoxarife
   @OneToMany(mappedBy = "adminResponsavel", fetch = FetchType.LAZY)
   private List<Item> itens;
 
@@ -60,29 +51,30 @@ public class Admin {
   public Admin() {}
 
   public Admin(String nome, String login, String senha) {
-    this.nome = nome;
-    this.login = login;
+    this.nome  = nome.trim();
+    // CORREÇÃO: normaliza o login no construtor, igual ao setter
+    this.login = login.trim().toLowerCase();
     this.senha = senha;
   }
 
 
 
   // GETTERS
-  public Integer getId()                     { return id; }
-  public String  getNome()                   { return nome; }
-  public String  getLogin()                  { return login; }
-  public String  getSenha()                  { return senha; }
-  public LocalDateTime getCriadoEm()         { return criadoEm; }
-  public LocalDateTime getAtualizadoEm()     { return atualizadoEm; }
-  public List<Usuario> getUsuarios()         { return usuarios; }
-  public List<Item> getItens() { return itens; }
+  public Integer getId()                 { return id; }
+  public String  getNome()               { return nome; }
+  public String  getLogin()              { return login; }
+  public String  getSenha()              { return senha; }
+  public LocalDateTime getCriadoEm()     { return criadoEm; }
+  public LocalDateTime getAtualizadoEm() { return atualizadoEm; }
+  public List<Usuario> getUsuarios()     { return usuarios; }
+  public List<Item>    getItens()        { return itens; }
 
 
 
   // SETTERS
-  public void setId(Integer id)                          { this.id = id; }
-  public void setNome(String nome)                       { this.nome = nome.trim(); }
-  public void setLogin(String login)                     { this.login = login.trim().toLowerCase(); }
-  public void setSenha(String senha)                     { this.senha = senha; }
-  public void setAtualizadoEm(LocalDateTime dt)          { this.atualizadoEm = dt; }
+  public void setId(Integer id)                { this.id = id; }
+  public void setNome(String nome)             { this.nome = nome.trim(); }
+  public void setLogin(String login)           { this.login = login.trim().toLowerCase(); }
+  public void setSenha(String senha)           { this.senha = senha; }
+  public void setAtualizadoEm(LocalDateTime dt){ this.atualizadoEm = dt; }
 }

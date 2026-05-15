@@ -1,12 +1,8 @@
 version: '3.8'
-<<<<<<< HEAD
-services:
-=======
 
 services:
 
   # ── Banco de dados PostgreSQL ────────────────────────────────────
->>>>>>> 91d1f63 (Finalizacao da parte final do codigo base de BackEnd do projeto)
   postgres:
     image: postgres:17-alpine
     container_name: nicandb
@@ -18,8 +14,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-<<<<<<< HEAD
-=======
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d nicandb"]
       interval: 5s
@@ -42,7 +36,6 @@ services:
       DB_NAME: nicandb
       DB_USER: postgres
       DB_PASS: postgres
->>>>>>> 91d1f63 (Finalizacao da parte final do codigo base de BackEnd do projeto)
 
 volumes:
   postgres_data:

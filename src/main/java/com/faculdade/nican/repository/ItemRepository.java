@@ -9,9 +9,9 @@ import java.util.Scanner;
 /*
  *  ~ Operações de CRUD para a tabela almoxarifado (Item) ~
  *
- *  ADIÇÕES:
- *    - JOIN FETCH em getListaItems() para carregar adminResponsavel junto com o item
- *      → Critério I: join implementado em JPQL
+ *  CORREÇÃO: removerItem() agora retorna boolean em vez de void,
+ *  permitindo que o Service e a View saibam se a remoção falhou
+ *  (ex: item com requerimentos pendentes).
  */
 public class ItemRepository {
 
@@ -62,8 +62,9 @@ public class ItemRepository {
 
 
   // CRUD — Remover item
+  // CORREÇÃO: agora retorna boolean — true = removido, false = falhou
   // REGRA DE NEGÓCIO: item só pode ser removido se não houver requerimentos pendentes
-  public static void removerItem(Item item) {
+  public static boolean removerItem(Item item) {
     EntityManager em = JPAUtils.getEntityManager();
     try {
       em.getTransaction().begin();
@@ -77,15 +78,17 @@ public class ItemRepository {
       if (pendentes > 0) {
         System.out.println("\n  [ERRO] Não é possível remover: item possui " + pendentes + " requerimento(s) pendente(s).\n");
         em.getTransaction().rollback();
-        return;
+        return false; // CORREÇÃO: retorna false em vez de apenas fazer rollback silencioso
       }
 
       Item gerenciado = em.find(Item.class, item.getIdItem());
       if (gerenciado != null) em.remove(gerenciado);
       em.getTransaction().commit();
+      return true;
     } catch (Exception e) {
       em.getTransaction().rollback();
       e.printStackTrace();
+      return false;
     } finally {
       em.close();
     }
