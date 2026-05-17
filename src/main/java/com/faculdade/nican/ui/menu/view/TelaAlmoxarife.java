@@ -2,6 +2,7 @@ package com.faculdade.nican.ui.menu.view;
 
 import com.faculdade.nican.model.Item;
 import com.faculdade.nican.service.AlmoxarifeService;
+import com.faculdade.nican.service.LoginService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -30,7 +31,7 @@ public class TelaAlmoxarife extends JFrame {
         String[] colunas = {"ID", "Nome", "Categoria", "Qualidade", "Disponível", "Total"};
         modeloTabela = new DefaultTableModel(colunas, 0) {
             public boolean isCellEditable(int row, int column) {
-                return false; // tabela somente leitura
+                return false;
             }
         };
         tabela = new JTable(modeloTabela);
@@ -38,8 +39,9 @@ public class TelaAlmoxarife extends JFrame {
 
         // botões
         JButton btnAdicionar = new JButton("Adicionar Item");
-        JButton btnRemover = new JButton("Remover Item");
-        JButton btnVoltar = new JButton("Voltar");
+        JButton btnRemover   = new JButton("Remover Item");
+        JButton btnVoltar    = new JButton("Voltar");
+        JButton btnLogout    = new JButton("Logout"); // ADIÇÃO — req. 14
 
         btnAdicionar.addActionListener(e -> {
             new TelaGerenciarItens();
@@ -70,11 +72,20 @@ public class TelaAlmoxarife extends JFrame {
             dispose();
         });
 
+        // ADIÇÃO: logout direto do almoxarifado (req. 14)
+        btnLogout.addActionListener(e -> {
+            LoginService.fazerLogout();
+            JOptionPane.showMessageDialog(this, "Logout realizado com sucesso!");
+            new TelaHome();
+            dispose();
+        });
+
         // painel dos botões
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         painelBotoes.add(btnAdicionar);
         painelBotoes.add(btnRemover);
         painelBotoes.add(btnVoltar);
+        painelBotoes.add(btnLogout);
 
         painel.add(titulo, BorderLayout.NORTH);
         painel.add(scroll, BorderLayout.CENTER);
@@ -82,14 +93,13 @@ public class TelaAlmoxarife extends JFrame {
 
         add(painel);
 
-        // carrega os itens do banco
         carregarTabela();
 
         setVisible(true);
     }
 
     private void carregarTabela() {
-        modeloTabela.setRowCount(0); // limpa a tabela
+        modeloTabela.setRowCount(0);
         List<Item> itens = AlmoxarifeService.listarTodos();
         for (Item item : itens) {
             modeloTabela.addRow(new Object[]{

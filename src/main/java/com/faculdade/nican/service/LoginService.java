@@ -1,4 +1,5 @@
 package com.faculdade.nican.service;
+
 import com.faculdade.nican.model.Admin;
 import com.faculdade.nican.model.Sessao;
 import com.faculdade.nican.model.Usuario;
@@ -8,27 +9,27 @@ import com.faculdade.nican.model.Perfil;
 
 public class LoginService {
 
-    //retorna null = sucesso
-    //retorna String = mensagem de erro
+    // retorna null = sucesso
+    // retorna String = mensagem de erro
 
-    public static String fazerLogin(String login, String senha){
+    public static String fazerLogin(String login, String senha) {
 
-        //1. valida se os campos estão preenchidos
+        // 1. valida se os campos estão preenchidos
         if (login == null || login.isBlank()) return "Preencha o campo de e-mail.";
         if (!login.contains("@"))             return "Digite um e-mail válido.";
         if (senha == null || senha.isBlank()) return "Preencha o campo de senha";
 
-        //2. verifica se já tem alguém logado
+        // 2. verifica se já tem alguém logado
         if (Sessao.get().estaLogado()) return "Já existe uma sessão ativa.";
 
-        //3. tenta logar como admin
+        // 3. tenta logar como admin
         Admin admin = AdminRepository.buscarPorLogin(login.trim());
         if (admin != null && admin.getSenha().equals(senha)) {
             Sessao.get().iniciarComoAdmin(admin);
             return null; // sucesso
         }
 
-        // 4. tenta logar como Usuário
+        // 4. tenta logar como usuário
         Usuario usuario = UsuarioRepository.buscarPorLogin(login.trim());
         if (usuario == null || !usuario.getSenha().equals(senha)) {
             return "Login ou senha incorretos.";
@@ -83,6 +84,9 @@ public class LoginService {
         return null; // sucesso
     }
 
+    // CORREÇÃO: redefinirSenha agora funciona para Admin e para Usuário.
+    // Antes só buscava em UsuarioRepository — admin recebia "Usuário não encontrado".
+    // Agora tenta Usuário primeiro, depois Admin se não achar.
     public static String redefinirSenha(String login, String senhaAtual, String novaSenha, String confirmaNovaSenha) {
         if (login == null || login.isBlank())           return "Preencha o e-mail.";
         if (senhaAtual == null || senhaAtual.isBlank()) return "Preencha a senha atual.";
@@ -91,38 +95,39 @@ public class LoginService {
         if (novaSenha.length() < 8)                     return "Nova senha deve ter pelo menos 8 caracteres.";
         if (!novaSenha.equals(confirmaNovaSenha))       return "As senhas não coincidem.";
 
+        // tenta como usuário comum
         Usuario usuario = UsuarioRepository.buscarPorLogin(login.trim());
-        if (usuario == null)                        return "Usuário não encontrado.";
-        if (!usuario.getSenha().equals(senhaAtual)) return "Senha atual incorreta.";
-
-        usuario.setSenha(novaSenha);
-        if (!UsuarioRepository.atualizar(usuario)) {
-            return "Falha ao atualizar. Tente novamente.";
+        if (usuario != null) {
+            if (!usuario.getSenha().equals(senhaAtual)) return "Senha atual incorreta.";
+            usuario.setSenha(novaSenha);
+            if (!UsuarioRepository.atualizar(usuario)) return "Falha ao atualizar. Tente novamente.";
+            return null; // sucesso
         }
-        return null; // sucesso
+
+        // tenta como admin
+        Admin admin = AdminRepository.buscarPorLogin(login.trim());
+        if (admin != null) {
+            if (!admin.getSenha().equals(senhaAtual)) return "Senha atual incorreta.";
+            admin.setSenha(novaSenha);
+            if (!AdminRepository.atualizar(admin)) return "Falha ao atualizar. Tente novamente.";
+            return null; // sucesso
+        }
+
+        return "Usuário não encontrado.";
     }
 
     public static void fazerLogout() {
         Sessao.get().encerrar();
     }
 
-    public static boolean estaLogado() { return Sessao.get().estaLogado(); }
-    public static boolean ehAdmin()    { return Sessao.get().usuarioEhAdmin(); }
-    public static String getNomeLogado() { return Sessao.get().getNomeLogado(); }
+    public static boolean estaLogado()      { return Sessao.get().estaLogado(); }
+    public static boolean ehAdmin()         { return Sessao.get().usuarioEhAdmin(); }
+    public static String  getNomeLogado()   { return Sessao.get().getNomeLogado(); }
 
-    /**
-     * CORREÇÃO: antes chamava getUsuarioLogado().getLogin() diretamente,
-     * causando NullPointerException se um admin estivesse logado.
-     * Agora retorna o login de quem estiver logado (usuário ou admin).
-     */
     public static String getLoginLogado() {
         Sessao sessao = Sessao.get();
-        if (sessao.getUsuarioLogado() != null) {
-            return sessao.getUsuarioLogado().getLogin();
-        }
-        if (sessao.getAdminLogado() != null) {
-            return sessao.getAdminLogado().getLogin();
-        }
+        if (sessao.getUsuarioLogado() != null) return sessao.getUsuarioLogado().getLogin();
+        if (sessao.getAdminLogado()   != null) return sessao.getAdminLogado().getLogin();
         return null;
     }
 }

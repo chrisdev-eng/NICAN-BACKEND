@@ -36,19 +36,28 @@ public class TelaGerenciarItens extends JFrame {
         JButton btnVoltar = new JButton("Voltar");
 
         btnSalvar.addActionListener(e -> {
-            String nome = campoNome.getText();
-            String qtdTexto = campoQuantidade.getText();
+            String nome    = campoNome.getText().trim();
+            String qtdTexto = campoQuantidade.getText().trim();
+
+            // CORREÇÃO: valida nome vazio direto na View antes de chamar o service
+            if (nome.isBlank()) {
+                JOptionPane.showMessageDialog(this, "Preencha o nome do item.", "Erro", JOptionPane.ERROR_MESSAGE);
+                campoNome.requestFocus();
+                return;
+            }
 
             if (qtdTexto.isBlank()) {
                 JOptionPane.showMessageDialog(this, "Preencha a quantidade.", "Erro", JOptionPane.ERROR_MESSAGE);
+                campoQuantidade.requestFocus();
                 return;
             }
 
             int quantidade;
             try {
-                quantidade = Integer.parseInt(qtdTexto.trim());
+                quantidade = Integer.parseInt(qtdTexto);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Quantidade deve ser um número inteiro.", "Erro", JOptionPane.ERROR_MESSAGE);
+                campoQuantidade.requestFocus();
                 return;
             }
 
