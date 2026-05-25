@@ -8,10 +8,6 @@ import java.util.Scanner;
 
 /*
  *  ~ Operações de CRUD para a tabela almoxarifado (Item) ~
- *
- *  CORREÇÃO: removerItem() agora retorna boolean em vez de void,
- *  permitindo que o Service e a View saibam se a remoção falhou
- *  (ex: item com requerimentos pendentes).
  */
 public class ItemRepository {
 
@@ -22,8 +18,8 @@ public class ItemRepository {
     EntityManager em = JPAUtils.getEntityManager();
     try {
       return em.createQuery(
-          "SELECT i FROM Item i JOIN FETCH i.adminResponsavel ORDER BY i.nomeItem",
-          Item.class
+              "SELECT i FROM Item i JOIN FETCH i.adminResponsavel ORDER BY i.nomeItem",
+              Item.class
       ).getResultList();
     } finally {
       em.close();
@@ -61,24 +57,21 @@ public class ItemRepository {
 
 
 
-  // CRUD — Remover item
-  // CORREÇÃO: agora retorna boolean — true = removido, false = falhou
-  // REGRA DE NEGÓCIO: item só pode ser removido se não houver requerimentos pendentes
+  // CRUD — Excluir item completo do sistema
+  // REGRA DE NEGÓCIO: item só pode ser excluído se não houver nenhum requerimento vinculado
   public static boolean removerItem(Item item) {
     EntityManager em = JPAUtils.getEntityManager();
     try {
       em.getTransaction().begin();
 
-      // REGRA DE NEGÓCIO: verifica se há requerimentos pendentes para este item
-      Long pendentes = em.createQuery(
-          "SELECT COUNT(r) FROM Requerimento r WHERE r.item.idItem = :id AND r.status = 'pendente'",
-          Long.class
+      Long vinculados = em.createQuery(
+              "SELECT COUNT(r) FROM Requerimento r WHERE r.item.idItem = :id",
+              Long.class
       ).setParameter("id", item.getIdItem()).getSingleResult();
 
-      if (pendentes > 0) {
-        System.out.println("\n  [ERRO] Não é possível remover: item possui " + pendentes + " requerimento(s) pendente(s).\n");
+      if (vinculados > 0) {
         em.getTransaction().rollback();
-        return false; // CORREÇÃO: retorna false em vez de apenas fazer rollback silencioso
+        return false;
       }
 
       Item gerenciado = em.find(Item.class, item.getIdItem());
@@ -108,6 +101,57 @@ public class ItemRepository {
       em.getTransaction().rollback();
       e.printStackTrace();
       return false;
+    } finally {
+      em.close();
+    }
+  }
+
+
+
+  // NOVO: almoxarife baixa estoque físico (item danificado, perdido, etc)
+  public static String removerQuantidade(int idItem, int qtd) {
+    EntityManager em = JPAUtils.getEntityManager();
+    try {
+      Item item = em.find(Item.class, idItem);
+      if (item == null) return "Item não encontrado.";
+
+      em.getTransaction().begin();
+      String erro = item.diminuirTotal(qtd);
+      if (erro != null) {
+        em.getTransaction().rollback();
+        return erro;
+      }
+      em.merge(item);
+      em.getTransaction().commit();
+      return null;
+    } catch (Exception e) {
+      em.getTransaction().rollback();
+      e.printStackTrace();
+      return "Erro ao remover quantidade: " + e.getMessage();
+    } finally {
+      em.close();
+    }
+  }
+
+
+
+  // NOVO: almoxarife adiciona estoque físico
+  public static String adicionarQuantidade(int idItem, int qtd) {
+    EntityManager em = JPAUtils.getEntityManager();
+    try {
+      Item item = em.find(Item.class, idItem);
+      if (item == null) return "Item não encontrado.";
+      if (qtd <= 0) return "A quantidade deve ser maior que zero.";
+
+      em.getTransaction().begin();
+      item.aumentarTotal(qtd);
+      em.merge(item);
+      em.getTransaction().commit();
+      return null;
+    } catch (Exception e) {
+      em.getTransaction().rollback();
+      e.printStackTrace();
+      return "Erro ao adicionar quantidade: " + e.getMessage();
     } finally {
       em.close();
     }

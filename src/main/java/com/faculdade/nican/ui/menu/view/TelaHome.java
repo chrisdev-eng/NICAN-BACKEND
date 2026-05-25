@@ -1,61 +1,71 @@
 package com.faculdade.nican.ui.menu.view;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class TelaHome extends JFrame {
 
-    public TelaHome(){
-        // configuração da janela
+    public TelaHome() {
         setTitle("Sistema NICAN");
-        setSize(400, 300);
+        setSize(420, 460);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); //centralizar na tela
+        setLocationRelativeTo(null);
+        setResizable(false);
 
-        //painel principal
-        JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
+        JPanel raiz = new JPanel(new BorderLayout());
+        raiz.setBackground(NicanTheme.FUNDO);
+        raiz.add(NicanTheme.criarHeader("Início"), BorderLayout.NORTH);
+        raiz.add(criarCorpo(), BorderLayout.CENTER);
+        raiz.add(NicanTheme.criarRodape(), BorderLayout.SOUTH);
 
-        // titulo
-        JLabel titulo = new JLabel("Bem-vindo ao NICAN");
-        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        //botões
-        JButton btnLogin = new JButton("Login");
-        JButton btnCadastro = new JButton("Criar Conta");
-        JButton btnRedefinir = new JButton("Redefinir Senha");
-
-        btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnCadastro.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnRedefinir.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        //fazendo os botãozin funcionar
-        btnLogin.addActionListener(e -> {
-            new TelaLogin();
-            dispose(); // fecha a TelaHome
-        });
-
-        btnCadastro.addActionListener(e -> {
-            new TelaCadastro();
-            dispose();
-        });
-
-        btnRedefinir.addActionListener(e -> {
-            new TelaRedefinirSenha();
-            dispose();
-        });
-
-        //adicionando tudo no painel
-        painel.add(Box.createVerticalStrut(40)); // espaço encima
-        painel.add(titulo);
-        painel.add(Box.createVerticalStrut(30)); // espaço entre titulo e os botões
-        painel.add(btnLogin);
-        painel.add(Box.createVerticalStrut(10));
-        painel.add(btnCadastro);
-        painel.add(Box.createVerticalStrut(10));
-        painel.add(btnRedefinir);
-
-        add(painel);
+        add(raiz);
         setVisible(true);
     }
 
+    private JPanel criarCorpo() {
+        // ── botões originais ──────────────────────────────────────────────────
+        JButton btnLogin    = NicanTheme.criarBotaoPrimario("Login");
+        JButton btnCadastro = NicanTheme.criarBotaoSecundario("Criar Conta");
+        JButton btnRedefinir = NicanTheme.criarBotaoSecundario("Redefinir Senha");
+
+        // ── ações originais ───────────────────────────────────────────────────
+        btnLogin.addActionListener(e -> { new TelaLogin(); dispose(); });
+        btnCadastro.addActionListener(e -> { new TelaCadastro(); dispose(); });
+        btnRedefinir.addActionListener(e -> { new TelaRedefinirSenha(); dispose(); });
+
+        // ── layout visual ─────────────────────────────────────────────────────
+        JPanel corpo = new JPanel();
+        corpo.setLayout(new BoxLayout(corpo, BoxLayout.Y_AXIS));
+        corpo.setBackground(NicanTheme.FUNDO);
+        corpo.setBorder(new EmptyBorder(40, 48, 32, 48));
+
+        // Título
+        corpo.add(NicanTheme.criarCabecalhoSecao("Bem-vindo ao NICAN"));
+
+        // Subtítulo
+        JLabel sub = new JLabel("Sistema de Gestão Escoteira");
+        sub.setFont(NicanTheme.fonte(Font.PLAIN, 12));
+        sub.setForeground(NicanTheme.TEXTO_MUTED);
+        sub.setAlignmentX(Component.LEFT_ALIGNMENT);
+        corpo.add(sub);
+        corpo.add(Box.createVerticalStrut(32));
+
+        // Botões
+        btnLogin.setAlignmentX(Component.LEFT_ALIGNMENT);
+        btnLogin.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+        corpo.add(btnLogin);
+        corpo.add(Box.createVerticalStrut(10));
+
+        btnCadastro.setAlignmentX(Component.LEFT_ALIGNMENT);
+        btnCadastro.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+        corpo.add(btnCadastro);
+        corpo.add(Box.createVerticalStrut(10));
+
+        btnRedefinir.setAlignmentX(Component.LEFT_ALIGNMENT);
+        btnRedefinir.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+        corpo.add(btnRedefinir);
+
+        return corpo;
+    }
 }

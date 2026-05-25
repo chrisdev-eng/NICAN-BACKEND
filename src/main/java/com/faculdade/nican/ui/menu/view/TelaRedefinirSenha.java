@@ -2,6 +2,7 @@ package com.faculdade.nican.ui.menu.view;
 
 import com.faculdade.nican.service.LoginService;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -11,95 +12,71 @@ public class TelaRedefinirSenha extends JFrame {
     private boolean veioDaHomeUsuario;
     private boolean veioDoPainelAdmin;
 
-    public TelaRedefinirSenha() {
-        this(false, false);
-    }
-
-    public TelaRedefinirSenha(boolean veioDaHomeUsuario) {
-        this(veioDaHomeUsuario, false);
-    }
+    public TelaRedefinirSenha() { this(false, false); }
+    public TelaRedefinirSenha(boolean veioDaHomeUsuario) { this(veioDaHomeUsuario, false); }
 
     public TelaRedefinirSenha(boolean veioDaHomeUsuario, boolean veioDoPainelAdmin) {
-        this.veioDaHomeUsuario = veioDaHomeUsuario;
-        this.veioDoPainelAdmin = veioDoPainelAdmin;
+        this.veioDaHomeUsuario  = veioDaHomeUsuario;
+        this.veioDoPainelAdmin  = veioDoPainelAdmin;
 
         setTitle("Redefinir Senha - NICAN");
-        setSize(400, 350);
+        setSize(420, 510);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
 
-        JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-        painel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
+        JPanel raiz = new JPanel(new BorderLayout());
+        raiz.setBackground(NicanTheme.FUNDO);
+        raiz.add(NicanTheme.criarHeader("Segurança da conta"), BorderLayout.NORTH);
+        raiz.add(criarCorpo(), BorderLayout.CENTER);
+        raiz.add(NicanTheme.criarRodape(), BorderLayout.SOUTH);
 
-        // campos
-        JLabel lblEmail      = new JLabel("E-mail:");
-        JTextField campoEmail = new JTextField();
+        add(raiz);
+        setVisible(true);
+    }
 
-        JLabel lblSenhaAtual       = new JLabel("Senha Atual:");
-        JPasswordField campoSenhaAtual = new JPasswordField();
+    private JPanel criarCorpo() {
+        // ── campos originais ──────────────────────────────────────────────────
+        JTextField     campoEmail      = NicanTheme.criarCampo();
+        JPasswordField campoSenhaAtual = NicanTheme.criarCampoSenha();
+        JPasswordField campoNovaSenha  = NicanTheme.criarCampoSenha();
+        JPasswordField campoConfirma   = NicanTheme.criarCampoSenha();
 
-        JLabel lblNovaSenha        = new JLabel("Nova Senha:");
-        JPasswordField campoNovaSenha  = new JPasswordField();
+        JButton btnConfirmar = NicanTheme.criarBotaoPrimario("Confirmar");
+        JButton btnVoltar    = NicanTheme.criarBotaoSecundario("Voltar");
 
-        JLabel lblConfirma         = new JLabel("Confirmar Nova Senha:");
-        JPasswordField campoConfirma   = new JPasswordField();
-
-        // botões
-        JButton btnConfirmar = new JButton("Confirmar");
-        JButton btnVoltar    = new JButton("Voltar");
-
-        // navegação por teclado
+        // ── navegação por teclado (lógica original) ───────────────────────────
         campoEmail.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    campoSenhaAtual.requestFocus();
-                }
+                if (e.getKeyCode()==KeyEvent.VK_DOWN||e.getKeyCode()==KeyEvent.VK_ENTER) campoSenhaAtual.requestFocus();
             }
         });
-
         campoSenhaAtual.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    campoEmail.requestFocus();
-                }
-                if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    campoNovaSenha.requestFocus();
-                }
+                if (e.getKeyCode()==KeyEvent.VK_UP) campoEmail.requestFocus();
+                if (e.getKeyCode()==KeyEvent.VK_DOWN||e.getKeyCode()==KeyEvent.VK_ENTER) campoNovaSenha.requestFocus();
             }
         });
-
         campoNovaSenha.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    campoSenhaAtual.requestFocus();
-                }
-                if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    campoConfirma.requestFocus();
-                }
+                if (e.getKeyCode()==KeyEvent.VK_UP) campoSenhaAtual.requestFocus();
+                if (e.getKeyCode()==KeyEvent.VK_DOWN||e.getKeyCode()==KeyEvent.VK_ENTER) campoConfirma.requestFocus();
             }
         });
-
         campoConfirma.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    campoNovaSenha.requestFocus();
-                }
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    btnConfirmar.doClick();
-                }
+                if (e.getKeyCode()==KeyEvent.VK_UP) campoNovaSenha.requestFocus();
+                if (e.getKeyCode()==KeyEvent.VK_ENTER) btnConfirmar.doClick();
             }
         });
 
-        // ação confirmar
+        // ── ações originais ───────────────────────────────────────────────────
         btnConfirmar.addActionListener(e -> {
             String email      = campoEmail.getText();
             String senhaAtual = new String(campoSenhaAtual.getPassword());
             String novaSenha  = new String(campoNovaSenha.getPassword());
             String confirma   = new String(campoConfirma.getPassword());
-
             String erro = LoginService.redefinirSenha(email, senhaAtual, novaSenha, confirma);
-
             if (erro != null) {
                 JOptionPane.showMessageDialog(this, erro, "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
@@ -109,69 +86,39 @@ public class TelaRedefinirSenha extends JFrame {
                 dispose();
             }
         });
-
-        // ação voltar — retorna para a tela correta dependendo da origem
         btnVoltar.addActionListener(e -> {
-            if (veioDaHomeUsuario) {
-                new TelaHomeUsuario();
-            } else if (veioDoPainelAdmin) {
-                new TelaPainelAdmin();
-            } else {
-                new TelaHome();
-            }
+            if (veioDaHomeUsuario) { new TelaHomeUsuario(); }
+            else if (veioDoPainelAdmin) { new TelaPainelAdmin(); }
+            else { new TelaHome(); }
             dispose();
         });
 
-        // layout dos campos
-        JPanel painelCampos = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.WEST;
+        // ── layout visual ─────────────────────────────────────────────────────
+        JPanel corpo = new JPanel();
+        corpo.setLayout(new BoxLayout(corpo, BoxLayout.Y_AXIS));
+        corpo.setBackground(NicanTheme.FUNDO);
+        corpo.setBorder(new EmptyBorder(32, 48, 24, 48));
 
-        gbc.gridx = 0; gbc.gridy = 0;
-        painelCampos.add(lblEmail, gbc);
-        gbc.gridx = 1; gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        painelCampos.add(campoEmail, gbc);
+        corpo.add(NicanTheme.criarCabecalhoSecao("Redefinir Senha"));
+        corpo.add(Box.createVerticalStrut(4));
 
-        gbc.gridx = 0; gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 0;
-        painelCampos.add(lblSenhaAtual, gbc);
-        gbc.gridx = 1; gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        painelCampos.add(campoSenhaAtual, gbc);
+        String[] labels = {"E-mail", "Senha Atual", "Nova Senha", "Confirmar Nova Senha"};
+        JComponent[] campos = {campoEmail, campoSenhaAtual, campoNovaSenha, campoConfirma};
+        for (int i = 0; i < labels.length; i++) {
+            corpo.add(NicanTheme.criarLabel(labels[i]));
+            corpo.add(Box.createVerticalStrut(4));
+            campos[i].setAlignmentX(Component.LEFT_ALIGNMENT);
+            corpo.add(campos[i]);
+            corpo.add(Box.createVerticalStrut(i < labels.length-1 ? 12 : 24));
+        }
 
-        gbc.gridx = 0; gbc.gridy = 2;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 0;
-        painelCampos.add(lblNovaSenha, gbc);
-        gbc.gridx = 1; gbc.gridy = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        painelCampos.add(campoNovaSenha, gbc);
+        JPanel botoes = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        botoes.setBackground(NicanTheme.FUNDO);
+        botoes.setAlignmentX(Component.LEFT_ALIGNMENT);
+        botoes.add(btnConfirmar);
+        botoes.add(btnVoltar);
+        corpo.add(botoes);
 
-        gbc.gridx = 0; gbc.gridy = 3;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 0;
-        painelCampos.add(lblConfirma, gbc);
-        gbc.gridx = 1; gbc.gridy = 3;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        painelCampos.add(campoConfirma, gbc);
-
-        // layout dos botões
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        painelBotoes.add(btnConfirmar);
-        painelBotoes.add(btnVoltar);
-
-        painel.add(painelCampos);
-        painel.add(Box.createVerticalStrut(20));
-        painel.add(painelBotoes);
-
-        add(painel);
-        setVisible(true);
+        return corpo;
     }
 }

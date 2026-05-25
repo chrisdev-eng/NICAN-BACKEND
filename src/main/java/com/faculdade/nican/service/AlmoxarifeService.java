@@ -30,7 +30,7 @@ public class AlmoxarifeService {
 
         boolean removido = ItemRepository.removerItem(item);
         if (!removido) {
-            return "Não é possível remover: este item possui requerimentos pendentes.";
+            return "Não é possível excluir: este item possui requerimentos vinculados no histórico.";
         }
 
         return null; // null = sucesso
@@ -77,5 +77,20 @@ public class AlmoxarifeService {
             if (q.getEstado().equals(label)) return q;
         }
         return null;
+    }
+
+    // NOVO: remove apenas uma quantidade do estoque
+    public static String removerQuantidade(int idItem, int qtd) {
+        if (!Sessao.get().usuarioEhAdmin()) {
+            return "Apenas administradores podem remover quantidades.";
+        }
+        return ItemRepository.removerQuantidade(idItem, qtd);
+    }
+
+    public static String adicionarQuantidade(int idItem, int qtd) {
+        if (!Sessao.get().usuarioEhAdmin()) {
+            return "Apenas administradores podem adicionar quantidades.";
+        }
+        return ItemRepository.adicionarQuantidade(idItem, qtd);
     }
 }

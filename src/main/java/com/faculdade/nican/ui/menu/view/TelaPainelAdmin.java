@@ -2,71 +2,43 @@ package com.faculdade.nican.ui.menu.view;
 
 import com.faculdade.nican.service.LoginService;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-/**
- * Painel de administração do sistema.
- *
- * CORREÇÕES:
- *   - Botão "Redefinir Senha" com veioDoPainelAdmin=true (item 11)
- *   - Botão "Logout" adicionado (item 14 do checklist)
- */
 public class TelaPainelAdmin extends JFrame {
 
     public TelaPainelAdmin() {
         setTitle("Painel do Administrador - NICAN");
-        setSize(400, 450);
+        setSize(480, 520);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
 
-        JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-        painel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
+        JPanel raiz = new JPanel(new BorderLayout());
+        raiz.setBackground(NicanTheme.FUNDO);
+        raiz.add(NicanTheme.criarHeader("Painel Admin"), BorderLayout.NORTH);
+        raiz.add(criarCorpo(), BorderLayout.CENTER);
+        raiz.add(NicanTheme.criarRodape(), BorderLayout.SOUTH);
 
-        JLabel titulo = new JLabel("Painel do Administrador");
-        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titulo.setFont(new Font("Arial", Font.BOLD, 16));
+        add(raiz);
+        setVisible(true);
+    }
 
-        JButton btnListarUsuarios   = new JButton("Listar todos os Usuários");
-        JButton btnRedefinirSenha   = new JButton("Redefinir Senha");
-        JButton btnCadastrarAdmin   = new JButton("Cadastrar novo Administrador");
-        JButton btnDesativarUsuario = new JButton("Desativar conta de Usuário");
-        JButton btnVoltar           = new JButton("Voltar");
-        JButton btnLogout           = new JButton("Logout");  // ADIÇÃO — item 14
+    private JPanel criarCorpo() {
+        // ── botões originais ──────────────────────────────────────────────────
+        JButton btnListarUsuarios   = NicanTheme.criarBotaoPrimario("Listar todos os Usuários");
+        JButton btnRedefinirSenha   = NicanTheme.criarBotaoSecundario("Redefinir Senha");
+        JButton btnCadastrarAdmin   = NicanTheme.criarBotaoPrimario("Cadastrar novo Administrador");
+        JButton btnDesativarUsuario = NicanTheme.criarBotaoPerigo("Desativar conta de Usuário");
+        JButton btnVoltar           = NicanTheme.criarBotaoSecundario("Voltar");
+        JButton btnLogout           = NicanTheme.criarBotaoPerigo("Logout");
 
-        btnListarUsuarios.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnRedefinirSenha.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnCadastrarAdmin.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnDesativarUsuario.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnVoltar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnLogout.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        btnListarUsuarios.addActionListener(e -> {
-            new TelaListarUsuarios();
-            dispose();
-        });
-
-        btnRedefinirSenha.addActionListener(e -> {
-            new TelaRedefinirSenha(false, true);
-            dispose();
-        });
-
-        btnCadastrarAdmin.addActionListener(e -> {
-            new TelaCadastroAdmin();
-            dispose();
-        });
-
-        btnDesativarUsuario.addActionListener(e -> {
-            new TelaDesativarUsuario();
-            dispose();
-        });
-
-        btnVoltar.addActionListener(e -> {
-            new TelaSistemaAdmin();
-            dispose();
-        });
-
-        // ADIÇÃO: logout direto do painel admin (item 14)
+        // ── ações originais ───────────────────────────────────────────────────
+        btnListarUsuarios.addActionListener(e -> { new TelaListarUsuarios(); dispose(); });
+        btnRedefinirSenha.addActionListener(e -> { new TelaRedefinirSenha(false, true); dispose(); });
+        btnCadastrarAdmin.addActionListener(e -> { new TelaCadastroAdmin(); dispose(); });
+        btnDesativarUsuario.addActionListener(e -> { new TelaDesativarUsuario(); dispose(); });
+        btnVoltar.addActionListener(e -> { new TelaSistemaAdmin(); dispose(); });
         btnLogout.addActionListener(e -> {
             LoginService.fazerLogout();
             JOptionPane.showMessageDialog(this, "Logout realizado com sucesso!");
@@ -74,21 +46,61 @@ public class TelaPainelAdmin extends JFrame {
             dispose();
         });
 
-        painel.add(titulo);
-        painel.add(Box.createVerticalStrut(30));
-        painel.add(btnListarUsuarios);
-        painel.add(Box.createVerticalStrut(10));
-        painel.add(btnRedefinirSenha);
-        painel.add(Box.createVerticalStrut(10));
-        painel.add(btnCadastrarAdmin);
-        painel.add(Box.createVerticalStrut(10));
-        painel.add(btnDesativarUsuario);
-        painel.add(Box.createVerticalStrut(10));
-        painel.add(btnVoltar);
-        painel.add(Box.createVerticalStrut(10));
-        painel.add(btnLogout);
+        // ── layout visual ─────────────────────────────────────────────────────
+        JPanel corpo = new JPanel();
+        corpo.setLayout(new BoxLayout(corpo, BoxLayout.Y_AXIS));
+        corpo.setBackground(NicanTheme.FUNDO);
+        corpo.setBorder(new EmptyBorder(28, 48, 24, 48));
 
-        add(painel);
-        setVisible(true);
+        corpo.add(NicanTheme.criarCabecalhoSecao("Painel do Administrador"));
+        corpo.add(Box.createVerticalStrut(8));
+
+        JPanel grade = new JPanel(new GridLayout(3, 2, 10, 10));
+        grade.setBackground(NicanTheme.FUNDO);
+        grade.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        grade.add(criarCard("👥", "Listar Usuários", "Ver todos os usuários", btnListarUsuarios));
+        grade.add(criarCard("🔑", "Redefinir Senha", "Alterar credenciais", btnRedefinirSenha));
+        grade.add(criarCard("👤", "Novo Admin", "Cadastrar administrador", btnCadastrarAdmin));
+        grade.add(criarCard("🚫", "Desativar Usuário", "Desativar uma conta", btnDesativarUsuario));
+        grade.add(criarCard("◀", "Voltar", "Menu anterior", btnVoltar));
+        grade.add(criarCard("🚪", "Logout", "Sair do sistema", btnLogout));
+
+        corpo.add(grade);
+        return corpo;
+    }
+
+    private JPanel criarCard(String icone, String titulo, String subtitulo, JButton btn) {
+        JPanel card = new JPanel(new BorderLayout(10, 0));
+        card.setBackground(new Color(0xEEF2EE));
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(NicanTheme.BORDA_CAMPO, 1),
+                new EmptyBorder(12, 14, 12, 14)));
+        card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        JLabel ico = new JLabel(icone);
+        ico.setFont(NicanTheme.fonte(Font.PLAIN, 20));
+
+        JPanel txt = new JPanel();
+        txt.setLayout(new BoxLayout(txt, BoxLayout.Y_AXIS));
+        txt.setOpaque(false);
+        JLabel tit = new JLabel(titulo);
+        tit.setFont(NicanTheme.fonte(Font.BOLD, 12));
+        tit.setForeground(NicanTheme.TEXTO_ESCURO);
+        JLabel sub = new JLabel(subtitulo);
+        sub.setFont(NicanTheme.fonte(Font.PLAIN, 10));
+        sub.setForeground(NicanTheme.TEXTO_MUTED);
+        txt.add(tit);
+        txt.add(sub);
+
+        card.add(ico, BorderLayout.WEST);
+        card.add(txt, BorderLayout.CENTER);
+
+        card.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) { btn.doClick(); }
+            public void mouseEntered(java.awt.event.MouseEvent e) { card.setBackground(new Color(0xDDE5DD)); }
+            public void mouseExited(java.awt.event.MouseEvent e)  { card.setBackground(new Color(0xEEF2EE)); }
+        });
+        return card;
     }
 }

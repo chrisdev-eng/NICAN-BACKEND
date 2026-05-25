@@ -1,6 +1,7 @@
 package com.faculdade.nican.ui.menu.view;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import com.faculdade.nican.service.LoginService;
 import java.awt.event.KeyAdapter;
@@ -8,155 +9,101 @@ import java.awt.event.KeyEvent;
 
 public class TelaCadastro extends JFrame {
 
-        public TelaCadastro(){
-            setTitle("Criar Conta - NICAN");
-            setSize(400,300);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setLocationRelativeTo(null);
+    public TelaCadastro() {
+        setTitle("Criar Conta - NICAN");
+        setSize(420, 510);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
 
-            //painel principal
-            JPanel painel = new JPanel();
-            painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-            painel.setBorder(BorderFactory.createEmptyBorder(30,40,30,40));
+        JPanel raiz = new JPanel(new BorderLayout());
+        raiz.setBackground(NicanTheme.FUNDO);
+        raiz.add(NicanTheme.criarHeader("Nova conta"), BorderLayout.NORTH);
+        raiz.add(criarCorpo(), BorderLayout.CENTER);
+        raiz.add(NicanTheme.criarRodape(), BorderLayout.SOUTH);
 
-            //campos
-            JLabel lblNome = new JLabel("Nome:");
-            JTextField campoNome = new JTextField();
+        add(raiz);
+        setVisible(true);
+    }
 
-            JLabel lblEmail = new JLabel("Email:");
-            JTextField campoEmail = new JTextField();
+    private JPanel criarCorpo() {
+        // ── campos originais ──────────────────────────────────────────────────
+        JTextField campoNome    = NicanTheme.criarCampo();
+        JTextField campoEmail   = NicanTheme.criarCampo();
+        JPasswordField campoSenha    = NicanTheme.criarCampoSenha();
+        JPasswordField campoConfirma = NicanTheme.criarCampoSenha();
 
-            JLabel lblSenha = new JLabel("Senha:");
-            JPasswordField campoSenha = new JPasswordField();
+        JButton btnCadastrar = NicanTheme.criarBotaoPrimario("Cadastrar");
+        JButton btnVoltar    = NicanTheme.criarBotaoSecundario("Voltar");
 
-            JLabel lblConfirma = new JLabel("Confirmar Senha:");
-            JPasswordField campoConfirma = new JPasswordField();
+        // ── navegação por teclado (lógica original) ───────────────────────────
+        campoNome.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_DOWN||e.getKeyCode()==KeyEvent.VK_ENTER) campoEmail.requestFocus();
+            }
+        });
+        campoEmail.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_UP) campoNome.requestFocus();
+                if (e.getKeyCode()==KeyEvent.VK_DOWN||e.getKeyCode()==KeyEvent.VK_ENTER) campoSenha.requestFocus();
+            }
+        });
+        campoSenha.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_UP) campoEmail.requestFocus();
+                if (e.getKeyCode()==KeyEvent.VK_DOWN||e.getKeyCode()==KeyEvent.VK_ENTER) campoConfirma.requestFocus();
+            }
+        });
+        campoConfirma.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_UP) campoSenha.requestFocus();
+                if (e.getKeyCode()==KeyEvent.VK_ENTER) btnCadastrar.doClick();
+            }
+        });
 
-            //botões
-            JButton btnCadastrar = new JButton("Cadastrar");
-            JButton btnVoltar = new JButton("Voltar");
-            campoNome.addKeyListener(new KeyAdapter() {
-                public void keyPressed(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_DOWN ||
-                            e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        campoEmail.requestFocus();
-                    }
-                }
-            });
-
-            campoEmail.addKeyListener(new KeyAdapter() {
-                public void keyPressed(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_UP) {
-                        campoNome.requestFocus();
-                    }
-
-                    if (e.getKeyCode() == KeyEvent.VK_DOWN ||
-                            e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        campoSenha.requestFocus();
-                    }
-                }
-            });
-
-            campoSenha.addKeyListener(new KeyAdapter() {
-                public void keyPressed(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_UP) {
-                        campoEmail.requestFocus();
-                    }
-
-                    if (e.getKeyCode() == KeyEvent.VK_DOWN ||
-                            e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        campoConfirma.requestFocus();
-                    }
-                }
-            });
-
-            campoConfirma.addKeyListener(new KeyAdapter() {
-                public void keyPressed(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_UP) {
-                        campoSenha.requestFocus();
-                    }
-
-                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        btnCadastrar.doClick();
-                    }
-                }
-            });
-
-
-            //ação do botão cadastrar
-            btnCadastrar.addActionListener(e ->{
-                String nome = campoNome.getText();
-                String email = campoEmail.getText();
-                String senha = new String(campoSenha.getPassword());
-                String confirma = new String(campoConfirma.getPassword());
-                String erro = LoginService.cadastrarUsuario(nome, email, senha, confirma);
-
-                if(erro != null){
-                    JOptionPane.showMessageDialog(this, erro, "Erro", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Conta criada com sucesso!");
-                    new TelaLogin();
-                    dispose();
-                }
-            });
-
-            //ação do btn voltar
-            btnVoltar.addActionListener(e -> {
-                new TelaHome();
+        // ── ações originais ───────────────────────────────────────────────────
+        btnCadastrar.addActionListener(e -> {
+            String nome     = campoNome.getText();
+            String email    = campoEmail.getText();
+            String senha    = new String(campoSenha.getPassword());
+            String confirma = new String(campoConfirma.getPassword());
+            String erro = LoginService.cadastrarUsuario(nome, email, senha, confirma);
+            if (erro != null) {
+                JOptionPane.showMessageDialog(this, erro, "Erro", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Conta criada com sucesso!");
+                new TelaLogin();
                 dispose();
-            });
+            }
+        });
+        btnVoltar.addActionListener(e -> { new TelaHome(); dispose(); });
 
-            //painel dos campos
-            JPanel painelCampos = new JPanel(new GridBagLayout());
-            GridBagConstraints gbc = new GridBagConstraints();            gbc.insets = new Insets(5,5,5,5);
-            gbc.anchor = GridBagConstraints.WEST;
-            gbc.gridx = 0;
+        // ── layout visual ─────────────────────────────────────────────────────
+        JPanel corpo = new JPanel();
+        corpo.setLayout(new BoxLayout(corpo, BoxLayout.Y_AXIS));
+        corpo.setBackground(NicanTheme.FUNDO);
+        corpo.setBorder(new EmptyBorder(32, 48, 24, 48));
 
-            gbc.gridx = 0; gbc.gridy = 0;
-            painelCampos.add(lblNome, gbc);
-            gbc.gridx = 1; gbc.gridy = 0;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.weightx = 1.0;
-            painelCampos.add(campoNome, gbc);
+        corpo.add(NicanTheme.criarCabecalhoSecao("Criar Conta"));
+        corpo.add(Box.createVerticalStrut(4));
 
-            gbc.gridx = 0; gbc.gridy = 1;
-            gbc.fill = GridBagConstraints.NONE;
-            gbc.weightx = 0;
-            painelCampos.add(lblEmail, gbc);
-            gbc.gridx = 1; gbc.gridy = 1;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.weightx = 1.0;
-            painelCampos.add(campoEmail, gbc);
-
-            gbc.gridx = 0; gbc.gridy = 2;
-            gbc.fill = GridBagConstraints.NONE;
-            gbc.weightx = 0;
-            painelCampos.add(lblSenha, gbc);
-            gbc.gridx = 1; gbc.gridy = 2;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.weightx = 1.0;
-            painelCampos.add(campoSenha, gbc);
-
-            gbc.gridx = 0; gbc.gridy = 3;
-            gbc.fill = GridBagConstraints.NONE;
-            gbc.weightx = 0;
-            painelCampos.add(lblConfirma, gbc);
-            gbc.gridx = 1; gbc.gridy = 3;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.weightx = 1.0;
-            painelCampos.add(campoConfirma, gbc);
-
-            // painel dos botões
-            JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
-            painelBotoes.add(btnCadastrar);
-            painelBotoes.add(btnVoltar);
-
-            // adiciona tudo no painel principal
-            painel.add(painelCampos);
-            painel.add(Box.createVerticalStrut(20));
-            painel.add(painelBotoes);
-
-            add(painel);
-            setVisible(true);
+        String[] labels = {"Nome", "E-mail", "Senha", "Confirmar Senha"};
+        JComponent[] campos = {campoNome, campoEmail, campoSenha, campoConfirma};
+        for (int i = 0; i < labels.length; i++) {
+            corpo.add(NicanTheme.criarLabel(labels[i]));
+            corpo.add(Box.createVerticalStrut(4));
+            campos[i].setAlignmentX(Component.LEFT_ALIGNMENT);
+            corpo.add(campos[i]);
+            corpo.add(Box.createVerticalStrut(i < labels.length-1 ? 12 : 24));
         }
+
+        JPanel botoes = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        botoes.setBackground(NicanTheme.FUNDO);
+        botoes.setAlignmentX(Component.LEFT_ALIGNMENT);
+        botoes.add(btnCadastrar);
+        botoes.add(btnVoltar);
+        corpo.add(botoes);
+
+        return corpo;
+    }
 }

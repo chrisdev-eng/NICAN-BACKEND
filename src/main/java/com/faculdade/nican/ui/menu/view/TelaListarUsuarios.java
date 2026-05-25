@@ -3,70 +3,62 @@ package com.faculdade.nican.ui.menu.view;
 import com.faculdade.nican.model.Usuario;
 import com.faculdade.nican.repository.UsuarioRepository;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
 public class TelaListarUsuarios extends JFrame {
-
     private JTable tabela;
     private DefaultTableModel modeloTabela;
 
     public TelaListarUsuarios() {
         setTitle("Usuários - NICAN");
-        setSize(700, 450);
+        setSize(780, 520);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel painel = new JPanel(new BorderLayout());
-        painel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel raiz = new JPanel(new BorderLayout());
+        raiz.setBackground(NicanTheme.FUNDO);
+        raiz.add(NicanTheme.criarHeader("Gestão de usuários"), BorderLayout.NORTH);
+        raiz.add(criarCorpo(), BorderLayout.CENTER);
+        raiz.add(NicanTheme.criarRodape(), BorderLayout.SOUTH);
 
-        // título
-        JLabel titulo = new JLabel("Lista de Usuários", SwingConstants.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 16));
-
-        // tabela
-        String[] colunas = {"ID", "Nome", "E-mail", "Perfil", "Ativo"};
-        modeloTabela = new DefaultTableModel(colunas, 0) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        tabela = new JTable(modeloTabela);
-        JScrollPane scroll = new JScrollPane(tabela);
-
-        // botão voltar
-        JButton btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> {
-            new TelaPainelAdmin();
-            dispose();
-        });
-
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        painelBotoes.add(btnVoltar);
-
-        painel.add(titulo, BorderLayout.NORTH);
-        painel.add(scroll, BorderLayout.CENTER);
-        painel.add(painelBotoes, BorderLayout.SOUTH);
-
-        add(painel);
-
+        add(raiz);
         carregarTabela();
-
         setVisible(true);
+    }
+
+    private JPanel criarCorpo() {
+        String[] colunas = {"ID","Nome","E-mail","Perfil","Ativo"};
+        modeloTabela = new DefaultTableModel(colunas, 0) { public boolean isCellEditable(int r, int c) { return false; } };
+        tabela = new JTable(modeloTabela);
+        JScrollPane scroll = NicanTheme.criarScrollTabela(tabela);
+
+        JButton btnVoltar = NicanTheme.criarBotaoSecundario("Voltar");
+        btnVoltar.addActionListener(e -> { new TelaPainelAdmin(); dispose(); });
+
+        JPanel corpo = new JPanel(new BorderLayout(0, 12));
+        corpo.setBackground(NicanTheme.FUNDO);
+        corpo.setBorder(new EmptyBorder(20, 24, 16, 24));
+
+        JPanel topo = new JPanel(new BorderLayout());
+        topo.setBackground(NicanTheme.FUNDO);
+        topo.add(NicanTheme.criarCabecalhoSecao("Lista de Usuários"), BorderLayout.WEST);
+
+        JPanel sul = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        sul.setBackground(NicanTheme.FUNDO);
+        sul.add(btnVoltar);
+
+        corpo.add(topo, BorderLayout.NORTH);
+        corpo.add(scroll, BorderLayout.CENTER);
+        corpo.add(sul, BorderLayout.SOUTH);
+        return corpo;
     }
 
     private void carregarTabela() {
         modeloTabela.setRowCount(0);
-        List<Usuario> usuarios = UsuarioRepository.listarTodos();
-        for (Usuario u : usuarios) {
-            modeloTabela.addRow(new Object[]{
-                    u.getId(),
-                    u.getNome(),
-                    u.getLogin(),
-                    u.getPerfil(),
-                    u.isAtivo() ? "Sim" : "Não"
-            });
-        }
+        for (Usuario u : UsuarioRepository.listarTodos())
+            modeloTabela.addRow(new Object[]{u.getId(), u.getNome(), u.getLogin(), u.getPerfil(), u.isAtivo() ? "Sim" : "Não"});
     }
 }

@@ -5,46 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9e502b4-0020-45ca-9a64-cdca3ba9e5c3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/NICAN-BACKEND.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/NicanDialog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/NicanTheme.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/model/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/model/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/model/Item.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/repository/ItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/repository/ItemRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/service/AlmoxarifeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/service/AlmoxarifeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/service/LoginService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/service/LoginService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaAlmoxarife.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaAlmoxarife.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaCadastro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaCadastro.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaCadastroAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaCadastroAdmin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaDesativarUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaDesativarUsuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaGerenciarItens.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaGerenciarItens.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaHome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaHome.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaHomeUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaHomeUsuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarCategoria.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarCategoria.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarEstado.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarEstado.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarMateriais.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarMateriais.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarUsuarios.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarUsuarios.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaLogin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaPainelAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaPainelAdmin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaRedefinirSenha.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaRedefinirSenha.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaRedefinirSenha.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaRequerimentos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaRequerimentos.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaSistemaAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaSistemaAdmin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaSolicitarMaterial.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaSolicitarMaterial.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/App.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/TesteSwing.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/config/JPAUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Admin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Categoria.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Emprestimo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Item.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Perfil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Qualidade.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Requerimento.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Sessao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Usuario.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/repository/AdminRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/repository/EmprestimoRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/repository/ItemRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/repository/RequerimentoRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/repository/UsuarioRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/service/LoginService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/MenuAlmoxarife.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/MenuDevolucao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/MenuItens.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/MenuListas.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/MenuLogin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaCadastro.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaHome.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaLogin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/util/Validador.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaValidarRequerimento.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaValidarRequerimento.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Item.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Item.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Sessao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Sessao.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/model/Usuario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/repository/ItemRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/repository/ItemRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/MenuDevolucao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/MenuDevolucao.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/MenuLogin.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/MenuLogin.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaCadastro.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaCadastro.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaHome.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaHome.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaLogin.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaLogin.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
@@ -94,7 +87,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;interface-swing-c&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/chris/OneDrive/Desktop/NICAN&quot;
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/chris/OneDrive/Desktop/NICAN-BACKEND&quot;
   }
 }</component>
   <component name="RunManager" selected="Application.App">
@@ -153,7 +146,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaCadastro.java</url>
-          <line>45</line>
+          <line>10</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

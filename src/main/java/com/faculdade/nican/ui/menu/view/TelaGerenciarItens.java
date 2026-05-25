@@ -4,123 +4,80 @@ import com.faculdade.nican.model.Categoria;
 import com.faculdade.nican.model.Qualidade;
 import com.faculdade.nican.service.AlmoxarifeService;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class TelaGerenciarItens extends JFrame {
 
     public TelaGerenciarItens() {
         setTitle("Adicionar Item - NICAN");
-        setSize(400, 350);
+        setSize(420, 540);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
 
-        JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-        painel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
+        JPanel raiz = new JPanel(new BorderLayout());
+        raiz.setBackground(NicanTheme.FUNDO);
+        raiz.add(NicanTheme.criarHeader("Gerenciar item"), BorderLayout.NORTH);
+        raiz.add(criarCorpo(), BorderLayout.CENTER);
+        raiz.add(NicanTheme.criarRodape(), BorderLayout.SOUTH);
 
-        // campos
-        JLabel lblNome = new JLabel("Nome:");
-        JTextField campoNome = new JTextField();
+        add(raiz);
+        setVisible(true);
+    }
 
-        JLabel lblQuantidade = new JLabel("Quantidade:");
-        JTextField campoQuantidade = new JTextField();
+    private JPanel criarCorpo() {
+        // ── campos originais ──────────────────────────────────────────────────
+        JTextField campoNome      = NicanTheme.criarCampo();
+        JTextField campoQuantidade = NicanTheme.criarCampo();
+        JComboBox<String> comboCategoria = NicanTheme.criarCombo(AlmoxarifeService.getCategorias());
+        JComboBox<String> comboQualidade = NicanTheme.criarCombo(AlmoxarifeService.getQualidades());
 
-        JLabel lblCategoria = new JLabel("Categoria:");
-        JComboBox<String> comboCategoria = new JComboBox<>(AlmoxarifeService.getCategorias());
+        JButton btnSalvar = NicanTheme.criarBotaoPrimario("Salvar");
+        JButton btnVoltar = NicanTheme.criarBotaoSecundario("Voltar");
 
-        JLabel lblQualidade = new JLabel("Qualidade:");
-        JComboBox<String> comboQualidade = new JComboBox<>(AlmoxarifeService.getQualidades());
-
-        // botões
-        JButton btnSalvar = new JButton("Salvar");
-        JButton btnVoltar = new JButton("Voltar");
-
+        // ── ações originais ───────────────────────────────────────────────────
         btnSalvar.addActionListener(e -> {
-            String nome = campoNome.getText();
+            String nome     = campoNome.getText();
             String qtdTexto = campoQuantidade.getText();
-
-            if (qtdTexto.isBlank()) {
-                JOptionPane.showMessageDialog(this, "Preencha a quantidade.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
+            if (qtdTexto.isBlank()) { JOptionPane.showMessageDialog(this, "Preencha a quantidade.", "Erro", JOptionPane.ERROR_MESSAGE); return; }
             int quantidade;
-            try {
-                quantidade = Integer.parseInt(qtdTexto.trim());
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Quantidade deve ser um número inteiro.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
+            try { quantidade = Integer.parseInt(qtdTexto.trim()); }
+            catch (NumberFormatException ex) { JOptionPane.showMessageDialog(this, "Quantidade deve ser um número inteiro.", "Erro", JOptionPane.ERROR_MESSAGE); return; }
             Categoria categoria = AlmoxarifeService.getCategoriaByLabel((String) comboCategoria.getSelectedItem());
             Qualidade qualidade = AlmoxarifeService.getQualidadeByLabel((String) comboQualidade.getSelectedItem());
-
             String erro = AlmoxarifeService.adicionarItem(nome, quantidade, qualidade, categoria);
-
-            if (erro != null) {
-                JOptionPane.showMessageDialog(this, erro, "Erro", JOptionPane.ERROR_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Item adicionado com sucesso!");
-                new TelaAlmoxarife();
-                dispose();
-            }
+            if (erro != null) JOptionPane.showMessageDialog(this, erro, "Erro", JOptionPane.ERROR_MESSAGE);
+            else { JOptionPane.showMessageDialog(this, "Item adicionado com sucesso!"); new TelaAlmoxarife(); dispose(); }
         });
+        btnVoltar.addActionListener(e -> { new TelaAlmoxarife(); dispose(); });
 
-        btnVoltar.addActionListener(e -> {
-            new TelaAlmoxarife();
-            dispose();
-        });
+        // ── layout visual ─────────────────────────────────────────────────────
+        JPanel corpo = new JPanel();
+        corpo.setLayout(new BoxLayout(corpo, BoxLayout.Y_AXIS));
+        corpo.setBackground(NicanTheme.FUNDO);
+        corpo.setBorder(new EmptyBorder(32, 48, 24, 48));
 
-        // painel dos campos
-        JPanel painelCampos = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.WEST;
+        corpo.add(NicanTheme.criarCabecalhoSecao("Adicionar Item"));
+        corpo.add(Box.createVerticalStrut(4));
 
-        gbc.gridx = 0; gbc.gridy = 0;
-        painelCampos.add(lblNome, gbc);
-        gbc.gridx = 1; gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        painelCampos.add(campoNome, gbc);
+        String[] labels = {"Nome", "Quantidade", "Categoria", "Qualidade / Estado"};
+        JComponent[] campos = {campoNome, campoQuantidade, comboCategoria, comboQualidade};
+        for (int i = 0; i < labels.length; i++) {
+            corpo.add(NicanTheme.criarLabel(labels[i]));
+            corpo.add(Box.createVerticalStrut(4));
+            campos[i].setAlignmentX(Component.LEFT_ALIGNMENT);
+            corpo.add(campos[i]);
+            corpo.add(Box.createVerticalStrut(i < labels.length-1 ? 12 : 24));
+        }
 
-        gbc.gridx = 0; gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 0;
-        painelCampos.add(lblQuantidade, gbc);
-        gbc.gridx = 1; gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        painelCampos.add(campoQuantidade, gbc);
+        JPanel botoes = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        botoes.setBackground(NicanTheme.FUNDO);
+        botoes.setAlignmentX(Component.LEFT_ALIGNMENT);
+        botoes.add(btnSalvar);
+        botoes.add(btnVoltar);
+        corpo.add(botoes);
 
-        gbc.gridx = 0; gbc.gridy = 2;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 0;
-        painelCampos.add(lblCategoria, gbc);
-        gbc.gridx = 1; gbc.gridy = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        painelCampos.add(comboCategoria, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 3;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 0;
-        painelCampos.add(lblQualidade, gbc);
-        gbc.gridx = 1; gbc.gridy = 3;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        painelCampos.add(comboQualidade, gbc);
-
-        // painel dos botões
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        painelBotoes.add(btnSalvar);
-        painelBotoes.add(btnVoltar);
-
-        painel.add(painelCampos);
-        painel.add(Box.createVerticalStrut(20));
-        painel.add(painelBotoes);
-
-        add(painel);
-        setVisible(true);
+        return corpo;
     }
 }

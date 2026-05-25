@@ -99,21 +99,45 @@ public class Item {
 
 
   // MÉTODOS DE NEGÓCIO
+
+  // usado pelo sistema de empréstimo (diminui só o disponível)
   public void diminuirQuant(int quant) {
-    // REGRA DE NEGÓCIO: nao permite quantidade negativa
     if (quant <= 0) return;
     if (this.quantidadeDisponivel >= quant) {
       this.quantidadeDisponivel -= quant;
-      this.quantidadeTotal -= quant;
       this.atualizadoEm = LocalDateTime.now();
     }
   }
 
+  // usado pelo sistema de devolução (aumenta só o disponível)
   public void aumentarQuant(int quant) {
     if (quant <= 0) return;
-    this.quantidadeDisponivel += quant;
+    if (this.quantidadeDisponivel + quant <= this.quantidadeTotal) {
+      this.quantidadeDisponivel += quant;
+      this.atualizadoEm = LocalDateTime.now();
+    }
+  }
+
+  // NOVO: almoxarife adiciona estoque físico (aumenta total e disponível)
+  public void aumentarTotal(int quant) {
+    if (quant <= 0) return;
     this.quantidadeTotal += quant;
+    this.quantidadeDisponivel += quant;
     this.atualizadoEm = LocalDateTime.now();
+  }
+
+  // NOVO: almoxarife baixa estoque físico (item danificado, perdido, etc)
+  public String diminuirTotal(int quant) {
+    if (quant <= 0) return "A quantidade deve ser maior que zero.";
+    if (quant > this.quantidadeTotal)
+      return "Quantidade maior que o total em estoque (" + this.quantidadeTotal + ").";
+    this.quantidadeTotal -= quant;
+    // se o total cair abaixo do disponível, ajusta o disponível também
+    if (this.quantidadeDisponivel > this.quantidadeTotal) {
+      this.quantidadeDisponivel = this.quantidadeTotal;
+    }
+    this.atualizadoEm = LocalDateTime.now();
+    return null;
   }
 
 

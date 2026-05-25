@@ -5,10 +5,10 @@ import com.faculdade.nican.model.Usuario;
 import com.faculdade.nican.repository.RequerimentoRepository;
 import com.faculdade.nican.repository.UsuarioRepository;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
-
 /**
  * Tela que exibe os requerimentos do usuário logado.
  * Acessada pela TelaHomeUsuario via LoginService.getLoginLogado().
@@ -21,78 +21,64 @@ public class TelaRequerimentos extends JFrame {
 
     public TelaRequerimentos(String loginUsuario) {
         setTitle("Meus Requerimentos - NICAN");
-        setSize(800, 450);
+        setSize(860, 520);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel painel = new JPanel(new BorderLayout());
-        painel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel raiz = new JPanel(new BorderLayout());
+        raiz.setBackground(NicanTheme.FUNDO);
+        raiz.add(NicanTheme.criarHeader("Meus requerimentos"), BorderLayout.NORTH);
+        raiz.add(criarCorpo(loginUsuario), BorderLayout.CENTER);
+        raiz.add(NicanTheme.criarRodape(), BorderLayout.SOUTH);
 
-        JLabel titulo = new JLabel("Meus Requerimentos", SwingConstants.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 18));
+        add(raiz);
+        setVisible(true);
+    }
 
-        String[] colunas = {"ID", "Material", "Quantidade", "Data Solicitação", "Status"};
-        DefaultTableModel modeloTabela = new DefaultTableModel(colunas, 0) {
-            public boolean isCellEditable(int row, int column) { return false; }
-        };
-
+    private JPanel criarCorpo(String loginUsuario) {
+        // ── lógica original ───────────────────────────────────────────────────
+        String[] colunas = {"ID","Material","Quantidade","Data Solicitação","Status"};
+        DefaultTableModel modeloTabela = new DefaultTableModel(colunas, 0) { public boolean isCellEditable(int r, int c) { return false; } };
         JTable tabela = new JTable(modeloTabela);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane scroll = new JScrollPane(tabela);
+        JScrollPane scroll = NicanTheme.criarScrollTabela(tabela);
 
-        // CORREÇÃO: busca o usuario pelo login para obter o ID,
-        // depois chama listarPorUsuario(id) que é o método que existe no repositório
         List<Requerimento> requerimentos = List.of();
         Usuario usuario = UsuarioRepository.buscarPorLogin(loginUsuario);
-        if (usuario != null) {
-            requerimentos = RequerimentoRepository.listarPorUsuario(usuario.getId());
-        }
+        if (usuario != null) requerimentos = RequerimentoRepository.listarPorUsuario(usuario.getId());
 
-        for (Requerimento r : requerimentos) {
-            modeloTabela.addRow(new Object[]{
-                    r.getIdRequerimento(),
-                    r.getItem() != null ? r.getItem().getNome() : "N/A",
-                    r.getQuantidadeSolicitada(),
-                    r.getDataSolicitacao(),
-                    r.getStatus()
-            });
-        }
+        for (Requerimento r : requerimentos)
+            modeloTabela.addRow(new Object[]{r.getIdRequerimento(), r.getItem()!=null?r.getItem().getNome():"N/A", r.getQuantidadeSolicitada(), r.getDataSolicitacao(), r.getStatus()});
 
-        if (requerimentos.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Você ainda não possui requerimentos.",
-                    "Informação", JOptionPane.INFORMATION_MESSAGE);
-        }
+        if (requerimentos.isEmpty())
+            JOptionPane.showMessageDialog(this, "Você ainda não possui requerimentos.", "Informação", JOptionPane.INFORMATION_MESSAGE);
 
-        JButton btnSolicitar = new JButton("Solicitar Material");
-        JButton btnAtualizar = new JButton("Atualizar");
-        JButton btnVoltar    = new JButton("Voltar");
+        JButton btnSolicitar = NicanTheme.criarBotaoPrimario("Solicitar Material");
+        JButton btnAtualizar = NicanTheme.criarBotaoSecundario("Atualizar");
+        JButton btnVoltar    = NicanTheme.criarBotaoSecundario("Voltar");
 
-        btnSolicitar.addActionListener(e -> {
-            new TelaSolicitarMaterial();
-            dispose();
-        });
+        btnSolicitar.addActionListener(e -> { new TelaSolicitarMaterial(); dispose(); });
+        btnAtualizar.addActionListener(e -> { new TelaRequerimentos(loginUsuario); dispose(); });
+        btnVoltar.addActionListener(e -> { new TelaHomeUsuario(); dispose(); });
 
-        btnAtualizar.addActionListener(e -> {
-            new TelaRequerimentos(loginUsuario);
-            dispose();
-        });
+        // ── layout visual ─────────────────────────────────────────────────────
+        JPanel corpo = new JPanel(new BorderLayout(0, 12));
+        corpo.setBackground(NicanTheme.FUNDO);
+        corpo.setBorder(new EmptyBorder(20, 24, 16, 24));
 
-        btnVoltar.addActionListener(e -> {
-            new TelaHomeUsuario();
-            dispose();
-        });
+        JPanel topo = new JPanel(new BorderLayout());
+        topo.setBackground(NicanTheme.FUNDO);
+        topo.add(NicanTheme.criarCabecalhoSecao("Meus Requerimentos"), BorderLayout.WEST);
 
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        painelBotoes.add(btnSolicitar);
-        painelBotoes.add(btnAtualizar);
-        painelBotoes.add(btnVoltar);
+        JPanel sul = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        sul.setBackground(NicanTheme.FUNDO);
+        sul.add(btnSolicitar);
+        sul.add(btnAtualizar);
+        sul.add(btnVoltar);
 
-        painel.add(titulo, BorderLayout.NORTH);
-        painel.add(scroll, BorderLayout.CENTER);
-        painel.add(painelBotoes, BorderLayout.SOUTH);
-
-        add(painel);
-        setVisible(true);
+        corpo.add(topo, BorderLayout.NORTH);
+        corpo.add(scroll, BorderLayout.CENTER);
+        corpo.add(sul, BorderLayout.SOUTH);
+        return corpo;
     }
 }
