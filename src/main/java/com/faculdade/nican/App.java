@@ -1,6 +1,6 @@
 package com.faculdade.nican;
 
-import com.faculdade.nican.ui.menu.view.TelaHome;
+import com.faculdade.nican.view.TelaHome;
 import org.flywaydb.core.Flyway;
 
 /**
