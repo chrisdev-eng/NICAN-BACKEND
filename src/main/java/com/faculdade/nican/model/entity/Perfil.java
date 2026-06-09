@@ -1,4 +1,4 @@
-package com.faculdade.nican.model;
+package com.faculdade.nican.model.entity;
 
 /**
  *  ~ Define o nivel de acesso do usuario no sistema ~

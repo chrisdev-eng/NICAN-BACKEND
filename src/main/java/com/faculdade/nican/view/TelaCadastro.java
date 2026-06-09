@@ -3,12 +3,20 @@ package com.faculdade.nican.view;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+<<<<<<< Updated upstream
 import com.faculdade.nican.model.UsuarioService;
+=======
+import com.faculdade.nican.controller.UsuarioController;
+>>>>>>> Stashed changes
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class TelaCadastro extends JFrame {
+<<<<<<< Updated upstream
     
+=======
+    private final UsuarioController usuarioController = new UsuarioController();
+>>>>>>> Stashed changes
 
     public TelaCadastro() {
         NicanTheme.configurarJanela(this, "Criar Conta - NICAN", 420, 510);
@@ -64,7 +72,11 @@ public class TelaCadastro extends JFrame {
             String email    = campoEmail.getText();
             String senha    = new String(campoSenha.getPassword());
             String confirma = new String(campoConfirma.getPassword());
+<<<<<<< Updated upstream
             String erro = UsuarioService.cadastrarUsuario(nome, email, senha, confirma);
+=======
+            String erro = usuarioController.cadastrarUsuario(nome, email, senha, confirma);
+>>>>>>> Stashed changes
             if (erro != null) {
                 NicanDialog.erro(this, erro);
             } else {
@@ -104,4 +116,7 @@ public class TelaCadastro extends JFrame {
         return corpo;
     }
 }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes

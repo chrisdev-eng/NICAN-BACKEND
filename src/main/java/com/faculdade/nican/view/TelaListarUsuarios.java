@@ -1,7 +1,12 @@
 package com.faculdade.nican.view;
 
+<<<<<<< Updated upstream
 import com.faculdade.nican.model.UsuarioService;
 import com.faculdade.nican.model.Usuario;
+=======
+import com.faculdade.nican.controller.UsuarioController;
+import com.faculdade.nican.model.entity.Usuario;
+>>>>>>> Stashed changes
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -9,6 +14,10 @@ import java.awt.*;
 import java.util.List;
 
 public class TelaListarUsuarios extends JFrame {
+<<<<<<< Updated upstream
+=======
+    private final UsuarioController usuarioController = new UsuarioController();
+>>>>>>> Stashed changes
     
     private JTable tabela;
     private DefaultTableModel modeloTabela;
@@ -61,8 +70,15 @@ public class TelaListarUsuarios extends JFrame {
 
     private void carregarTabela() {
         modeloTabela.setRowCount(0);
+<<<<<<< Updated upstream
         for (Usuario u : UsuarioService.listarTodos())
             modeloTabela.addRow(new Object[]{u.getId(), u.getNome(), u.getLogin(), u.getPerfil(), u.isAtivo() ? "Sim" : "Não"});
     }
 }
 
+=======
+        for (Usuario u : usuarioController.listarTodos())
+            modeloTabela.addRow(new Object[]{u.getId(), u.getNome(), u.getLogin(), u.getPerfil(), u.isAtivo() ? "Sim" : "Não"});
+    }
+}
+>>>>>>> Stashed changes

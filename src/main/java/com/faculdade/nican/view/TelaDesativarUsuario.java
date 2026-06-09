@@ -1,7 +1,12 @@
 package com.faculdade.nican.view;
 
+<<<<<<< Updated upstream
 import com.faculdade.nican.model.UsuarioService;
 import com.faculdade.nican.model.Usuario;
+=======
+import com.faculdade.nican.controller.UsuarioController;
+import com.faculdade.nican.model.entity.Usuario;
+>>>>>>> Stashed changes
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -9,6 +14,10 @@ import java.awt.*;
 import java.util.List;
 
 public class TelaDesativarUsuario extends JFrame {
+<<<<<<< Updated upstream
+=======
+    private final UsuarioController usuarioController = new UsuarioController();
+>>>>>>> Stashed changes
     
     private JTable tabela;
     private DefaultTableModel modeloTabela;
@@ -48,7 +57,11 @@ public class TelaDesativarUsuario extends JFrame {
             String ativo = (String) modeloTabela.getValueAt(linha, 3);
             if (ativo.equals("Não")) { NicanDialog.aviso(this, "Este usuário já está desativado."); return; }
             if (NicanDialog.confirmar(this, "Confirmar", "Tem certeza que deseja desativar este usuário?")) {
+<<<<<<< Updated upstream
                 if (UsuarioService.desativar(id)) { NicanDialog.info(this, "Usuário desativado com sucesso!"); carregarTabela(); }
+=======
+                if (usuarioController.desativar(id)) { NicanDialog.info(this, "Usuário desativado com sucesso!"); carregarTabela(); }
+>>>>>>> Stashed changes
                 else NicanDialog.erro(this, "Falha ao desativar.");
             }
         });
@@ -75,8 +88,15 @@ public class TelaDesativarUsuario extends JFrame {
 
     private void carregarTabela() {
         modeloTabela.setRowCount(0);
+<<<<<<< Updated upstream
         for (Usuario u : UsuarioService.listarTodos())
             modeloTabela.addRow(new Object[]{u.getId(), u.getNome(), u.getLogin(), u.isAtivo() ? "Sim" : "Não"});
     }
 }
 
+=======
+        for (Usuario u : usuarioController.listarTodos())
+            modeloTabela.addRow(new Object[]{u.getId(), u.getNome(), u.getLogin(), u.isAtivo() ? "Sim" : "Não"});
+    }
+}
+>>>>>>> Stashed changes

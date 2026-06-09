@@ -1,9 +1,16 @@
 package com.faculdade.nican.view;
 
+<<<<<<< Updated upstream
 import com.faculdade.nican.model.RequerimentoService;
 import com.faculdade.nican.model.Requerimento;
 import com.faculdade.nican.model.Usuario;
 import com.faculdade.nican.model.UsuarioService;
+=======
+import com.faculdade.nican.controller.RequerimentoController;
+import com.faculdade.nican.model.entity.Requerimento;
+import com.faculdade.nican.model.entity.Usuario;
+import com.faculdade.nican.controller.UsuarioController;
+>>>>>>> Stashed changes
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -18,6 +25,11 @@ import java.util.List;
  * Buscamos o usuário pelo login primeiro, depois listamos pelo ID.
  */
 public class TelaRequerimentos extends JFrame {
+<<<<<<< Updated upstream
+=======
+    private final RequerimentoController requerimentoController = new RequerimentoController();
+    private final UsuarioController usuarioController = new UsuarioController();
+>>>>>>> Stashed changes
     
 
     public TelaRequerimentos(String loginUsuario) {
@@ -46,10 +58,17 @@ public class TelaRequerimentos extends JFrame {
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scroll = NicanTheme.criarScrollTabela(tabela);
 
+<<<<<<< Updated upstream
         Usuario usuario = UsuarioService.buscarPorLogin(loginUsuario);
         List<Requerimento> requerimentos = usuario == null
                 ? List.of()
                 : RequerimentoService.listarPorUsuario(usuario.getId());
+=======
+        Usuario usuario = usuarioController.buscarPorLogin(loginUsuario);
+        List<Requerimento> requerimentos = usuario == null
+                ? List.of()
+                : requerimentoController.listarPorUsuario(usuario.getId());
+>>>>>>> Stashed changes
 
         for (Requerimento r : requerimentos)
             modeloTabela.addRow(new Object[]{r.getIdRequerimento(), r.getItem()!=null?r.getItem().getNome():"N/A", r.getQuantidadeSolicitada(), r.getDataSolicitacao(), r.getStatus()});
@@ -86,4 +105,7 @@ public class TelaRequerimentos extends JFrame {
         return corpo;
     }
 }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes

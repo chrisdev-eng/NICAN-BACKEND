@@ -1,144 +1,112 @@
-# NICAN — Sistema de Gestão Escoteira
+# NICAN - Sistema de Gestao Escoteira
 
-Sistema desktop em Java Swing para gestão interna de grupos escoteiros.  
-Desenvolvido como Projeto Integrador/Mensal da Faculdade.
+Aplicacao desktop em Java Swing para gestao de usuarios, materiais, requerimentos, emprestimos e devolucoes.
 
----
+## Tecnologias
 
-## Sobre o Sistema
+- Java 17
+- Maven
+- Java Swing
+- Hibernate / JPA
+- PostgreSQL
+- Flyway
+- Docker Compose para subir o banco local
 
-O NICAN centraliza a gestão de materiais e usuários do grupo, com controle de acesso por perfil (Administrador). Permite cadastro de usuários, gerenciamento do almoxarifado de itens, redefinição de senha e controle de contas — tudo através de uma interface gráfica desenvolvida com Java Swing.
+## Como Rodar
 
----
-
-## Tecnologias Utilizadas
-
-- **Java 17**
-- **Maven** — gerenciamento de dependências e build
-- **Java Swing** — interface gráfica desktop
-- **Hibernate / JPA** — persistência de dados
-- **PostgreSQL 17** — banco de dados
-- **Flyway** — migrations automáticas do banco
-- **Docker / Docker Compose** — ambiente do banco de dados
-
----
-
-## Pré-requisitos
-
-Antes de rodar o projeto, certifique-se de ter instalado:
-
-| Ferramenta | Versão mínima | Download |
-|---|---|---|
-| Java JDK | 17 | https://adoptium.net |
-| Maven | 3.8+ | https://maven.apache.org |
-| Docker Desktop | qualquer | https://www.docker.com/products/docker-desktop |
-
----
-
-## Como Rodar o Projeto
-
-### Passo 1 — Subir o banco de dados com Docker
-
-Abra o terminal na pasta raiz do projeto (onde está o `docker-compose.yml`) e execute:
+1. Suba o PostgreSQL:
 
 ```bash
 docker compose up -d postgres
 ```
 
-Isso vai iniciar o PostgreSQL na porta **5432** com as configurações:
-
-| Parâmetro | Valor |
-|---|---|
-| Host | localhost |
-| Porta | 5432 |
-| Banco | nicandb |
-| Usuário | postgres |
-| Senha | postgres |
-
-Para verificar se o banco subiu corretamente:
-
-```bash
-docker compose ps
-```
-
-O status do container `nicandb` deve aparecer como `healthy`.
-
----
-
-### Passo 2 — Compilar o projeto
-
-Na pasta raiz do projeto, execute:
+2. Compile o projeto:
 
 ```bash
 mvn clean package -DskipTests
 ```
 
-Isso vai compilar o código e gerar o arquivo `.jar` na pasta `target/`.
-
----
-
-### Passo 3 — Executar a aplicação
+3. Execute a aplicacao desktop:
 
 ```bash
 java -jar target/nican-1.0-SNAPSHOT.jar
 ```
 
-A interface gráfica do NICAN será aberta automaticamente.  
-O Flyway já cria todas as tabelas no banco na primeira execução.
+O banco padrao usado pela aplicacao e:
 
----
+| Campo | Valor |
+|---|---|
+| Host | localhost |
+| Porta | 5432 |
+| Database | nicandb |
+| Usuario | postgres |
+| Senha | postgres |
 
-## Estrutura do Projeto
+Tambem e possivel sobrescrever a conexao com variaveis de ambiente:
 
+- `DB_HOST`
+- `DB_PORT`
+- `DB_NAME`
+- `DB_USER`
+- `DB_PASS`
+
+Se `DB_PASS` estiver vazio ou ausente, a aplicacao usa `postgres`.
+
+## Estrutura MVC
+
+```text
+src/main/java/com/faculdade/nican/
+  App.java
+  config/
+    DbConfig.java
+    JPAUtils.java
+  controller/
+    AdminController.java
+    LoginController.java
+    UsuarioController.java
+    ItemController.java
+    RequerimentoController.java
+    EmprestimoController.java
+    DevolucaoController.java
+  model/
+    Admin.java
+    Usuario.java
+    Item.java
+    Requerimento.java
+    Emprestimo.java
+    Sessao.java
+    Categoria.java
+    Qualidade.java
+    Perfil.java
+  repository/
+    AdminRepository.java
+    UsuarioRepository.java
+    ItemRepository.java
+    RequerimentoRepository.java
+    EmprestimoRepository.java
+  service/
+    AdminService.java
+    LoginService.java
+    UsuarioService.java
+    ItemService.java
+    RequerimentoService.java
+    EmprestimoService.java
+  util/
+    Validador.java
+  view/
+    Telas Swing do sistema
 ```
-NICAN/
-├── src/
-│   └── main/
-│       ├── java/com/faculdade/nican/
-│       │   ├── App.java                  ← Ponto de entrada
-│       │   ├── model/                    ← Entidades (Usuario, Item, etc.)
-│       │   ├── repository/               ← Acesso ao banco de dados
-│       │   ├── service/                  ← Regras de negócio
-│       │   ├── ui/menu/view/             ← Telas Swing (uma classe por tela)
-│       │   ├── config/                   ← Configuração JPA
-│       │   └── util/                     ← Utilitários (validações)
-│       └── resources/
-│           └── db/migration/             ← Scripts SQL do Flyway
-├── docker-compose.yml
-├── pom.xml
-└── README.md
+
+Fluxo de dependencia esperado:
+
+```text
+view -> controller -> service -> repository -> database
+model = entidades e enums
 ```
 
----
+## Observacoes
 
-## Funcionalidades
-
-- **Tela Inicial** — Login, Criar Conta, Redefinir Senha
-- **Login** — Autenticação com e-mail e senha (somente admins acessam o sistema)
-- **Painel Admin** — Gerenciar usuários e acessar o almoxarifado
-- **Almoxarifado** — Listar, adicionar e remover itens com categoria e qualidade
-- **Painel Administrador** — Listar usuários, cadastrar novos admins, desativar contas
-
----
-
-## Encerrando o Banco
-
-Quando terminar, para parar o container do banco:
-
-```bash
-docker compose down
-```
-
-Para parar **e apagar os dados**:
-
-```bash
-docker compose down -v
-```
-
----
-
-## Alunos
-
-- Henrique F. Pantaleão
-- Christian Ferreira
-- Daniel Nunez
+- Os menus antigos de console foram removidos para evitar chamadas diretas de View para Repository.
+- A aplicacao principal e Swing, aberta por `App.java`.
+- O Docker Compose sobe apenas o PostgreSQL. Rodar a interface Swing dentro de container nao e o fluxo recomendado.
+- A aprovacao de requerimento valida estoque no Java, mas a baixa efetiva fica com os triggers do banco para evitar desconto duplicado.

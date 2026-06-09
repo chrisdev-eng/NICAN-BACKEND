@@ -1,7 +1,12 @@
 package com.faculdade.nican.view;
 
+<<<<<<< Updated upstream
 import com.faculdade.nican.model.Item;
 import com.faculdade.nican.model.AlmoxarifeService;
+=======
+import com.faculdade.nican.model.entity.Item;
+import com.faculdade.nican.controller.ItemController;
+>>>>>>> Stashed changes
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -9,6 +14,10 @@ import java.awt.*;
 import java.util.List;
 
 public class TelaListarMateriais extends JFrame {
+<<<<<<< Updated upstream
+=======
+    private final ItemController itemController = new ItemController();
+>>>>>>> Stashed changes
     
 
     private JTable tabela;
@@ -62,8 +71,15 @@ public class TelaListarMateriais extends JFrame {
 
     private void carregarTabela() {
         modeloTabela.setRowCount(0);
+<<<<<<< Updated upstream
         for (Item item : AlmoxarifeService.listarTodos())
             modeloTabela.addRow(new Object[]{item.getNome(), item.getCategoria().toString(), item.getQualidade().toString(), item.getQuantidadeTotal(), item.getQuantidadeDisponivel()});
     }
 }
 
+=======
+        for (Item item : itemController.listarTodos())
+            modeloTabela.addRow(new Object[]{item.getNome(), item.getCategoria().toString(), item.getQualidade().toString(), item.getQuantidadeTotal(), item.getQuantidadeDisponivel()});
+    }
+}
+>>>>>>> Stashed changes

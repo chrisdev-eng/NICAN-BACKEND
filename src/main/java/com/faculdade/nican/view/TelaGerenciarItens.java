@@ -1,13 +1,23 @@
 package com.faculdade.nican.view;
 
+<<<<<<< Updated upstream
 import com.faculdade.nican.model.Categoria;
 import com.faculdade.nican.model.Qualidade;
 import com.faculdade.nican.model.AlmoxarifeService;
+=======
+import com.faculdade.nican.model.entity.Categoria;
+import com.faculdade.nican.model.entity.Qualidade;
+import com.faculdade.nican.controller.ItemController;
+>>>>>>> Stashed changes
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class TelaGerenciarItens extends JFrame {
+<<<<<<< Updated upstream
+=======
+    private final ItemController itemController = new ItemController();
+>>>>>>> Stashed changes
     
 
     public TelaGerenciarItens() {
@@ -27,8 +37,13 @@ public class TelaGerenciarItens extends JFrame {
         // ── campos originais ──────────────────────────────────────────────────
         JTextField campoNome      = NicanTheme.criarCampo();
         JTextField campoQuantidade = NicanTheme.criarCampo();
+<<<<<<< Updated upstream
         JComboBox<String> comboCategoria = NicanTheme.criarCombo(AlmoxarifeService.getCategorias());
         JComboBox<String> comboQualidade = NicanTheme.criarCombo(AlmoxarifeService.getQualidades());
+=======
+        JComboBox<String> comboCategoria = NicanTheme.criarCombo(itemController.getCategorias());
+        JComboBox<String> comboQualidade = NicanTheme.criarCombo(itemController.getQualidades());
+>>>>>>> Stashed changes
 
         JButton btnSalvar = NicanTheme.criarBotaoPrimario("Salvar");
         JButton btnVoltar = NicanTheme.criarBotaoSecundario("Voltar");
@@ -41,9 +56,15 @@ public class TelaGerenciarItens extends JFrame {
             int quantidade;
             try { quantidade = Integer.parseInt(qtdTexto.trim()); }
             catch (NumberFormatException ex) { NicanDialog.erro(this, "Quantidade deve ser um número inteiro."); return; }
+<<<<<<< Updated upstream
             Categoria categoria = AlmoxarifeService.getCategoriaByLabel((String) comboCategoria.getSelectedItem());
             Qualidade qualidade = AlmoxarifeService.getQualidadeByLabel((String) comboQualidade.getSelectedItem());
             String erro = AlmoxarifeService.adicionarItem(nome, quantidade, qualidade, categoria);
+=======
+            Categoria categoria = itemController.getCategoriaByLabel((String) comboCategoria.getSelectedItem());
+            Qualidade qualidade = itemController.getQualidadeByLabel((String) comboQualidade.getSelectedItem());
+            String erro = itemController.adicionarItem(nome, quantidade, qualidade, categoria);
+>>>>>>> Stashed changes
             if (erro != null) NicanDialog.erro(this, erro);
             else { NicanDialog.info(this, "Item adicionado com sucesso!"); new TelaAlmoxarife(); dispose(); }
         });
@@ -78,4 +99,7 @@ public class TelaGerenciarItens extends JFrame {
         return corpo;
     }
 }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes

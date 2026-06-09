@@ -1,7 +1,12 @@
 package com.faculdade.nican.view;
 
+<<<<<<< Updated upstream
 import com.faculdade.nican.model.Item;
 import com.faculdade.nican.model.AlmoxarifeService;
+=======
+import com.faculdade.nican.model.entity.Item;
+import com.faculdade.nican.controller.ItemController;
+>>>>>>> Stashed changes
 import com.faculdade.nican.controller.LoginController;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -11,6 +16,10 @@ import java.util.List;
 
 public class TelaAlmoxarife extends JFrame {
     private final LoginController loginController = new LoginController();
+<<<<<<< Updated upstream
+=======
+    private final ItemController itemController = new ItemController();
+>>>>>>> Stashed changes
     
 
     private JTable tabela;
@@ -94,7 +103,11 @@ public class TelaAlmoxarife extends JFrame {
             if (entrada == null) return;
             try {
                 int qtd = Integer.parseInt(entrada.trim());
+<<<<<<< Updated upstream
                 String erro = AlmoxarifeService.adicionarQuantidade(id, qtd);
+=======
+                String erro = itemController.adicionarQuantidade(id, qtd);
+>>>>>>> Stashed changes
                 if (erro != null) mostrarErro(erro);
                 else { mostrarInfo("Quantidade adicionada com sucesso!"); carregarTabela(); }
             } catch (NumberFormatException ex) { mostrarErro("Digite um número válido."); }
@@ -112,7 +125,11 @@ public class TelaAlmoxarife extends JFrame {
             if (entrada == null) return;
             try {
                 int qtd = Integer.parseInt(entrada.trim());
+<<<<<<< Updated upstream
                 String erro = AlmoxarifeService.removerQuantidade(id, qtd);
+=======
+                String erro = itemController.removerQuantidade(id, qtd);
+>>>>>>> Stashed changes
                 if (erro != null) mostrarErro(erro);
                 else { mostrarInfo("Quantidade removida com sucesso!"); carregarTabela(); }
             } catch (NumberFormatException ex) { mostrarErro("Digite um número válido."); }
@@ -128,7 +145,11 @@ public class TelaAlmoxarife extends JFrame {
                     "Tem certeza que deseja EXCLUIR o item\n\"" + nome + "\" do sistema?\n\nEsta ação não pode ser desfeita."
             );
             if (ok) {
+<<<<<<< Updated upstream
                 String erro = AlmoxarifeService.removerItem(id);
+=======
+                String erro = itemController.removerItem(id);
+>>>>>>> Stashed changes
                 if (erro != null) mostrarErro(erro);
                 else { mostrarInfo("Item excluído com sucesso!"); carregarTabela(); }
             }
@@ -169,7 +190,11 @@ public class TelaAlmoxarife extends JFrame {
 
     private void carregarTabela() {
         modeloTabela.setRowCount(0);
+<<<<<<< Updated upstream
         List<Item> itens = AlmoxarifeService.listarTodos();
+=======
+        List<Item> itens = itemController.listarTodos();
+>>>>>>> Stashed changes
         for (Item item : itens) {
             modeloTabela.addRow(new Object[]{
                     item.getIdItem(), item.getNome(),
@@ -179,4 +204,7 @@ public class TelaAlmoxarife extends JFrame {
         }
     }
 }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes

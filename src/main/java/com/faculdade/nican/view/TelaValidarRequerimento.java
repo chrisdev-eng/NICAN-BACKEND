@@ -1,14 +1,22 @@
 package com.faculdade.nican.view;
 
+<<<<<<< Updated upstream
 import com.faculdade.nican.model.RequerimentoService;
 import com.faculdade.nican.model.Admin;
 import com.faculdade.nican.model.Requerimento;
 import com.faculdade.nican.model.Sessao;
+=======
+import com.faculdade.nican.controller.LoginController;
+import com.faculdade.nican.controller.RequerimentoController;
+import com.faculdade.nican.model.entity.Admin;
+import com.faculdade.nican.model.entity.Requerimento;
+>>>>>>> Stashed changes
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
+<<<<<<< Updated upstream
 /**
  * Tela para o Admin visualizar e validar (aprovar/recusar)
  * os requerimentos de materiais pendentes.
@@ -21,6 +29,13 @@ import java.util.List;
  */
 public class TelaValidarRequerimento extends JFrame {
     
+=======
+
+public class TelaValidarRequerimento extends JFrame {
+    private final LoginController        loginController        = new LoginController();
+    private final RequerimentoController requerimentoController = new RequerimentoController();
+
+>>>>>>> Stashed changes
     private JTable tabela;
     private DefaultTableModel modeloTabela;
     private List<Requerimento> requerimentosPendentes;
@@ -45,8 +60,15 @@ public class TelaValidarRequerimento extends JFrame {
     }
 
     private JPanel criarCorpo() {
+<<<<<<< Updated upstream
         String[] colunas = {"ID","Usuário","Material","Quantidade","Data Solicitação","Status"};
         modeloTabela = new DefaultTableModel(colunas, 0) { public boolean isCellEditable(int r, int c) { return false; } };
+=======
+        String[] colunas = {"ID", "Usuário", "Material", "Quantidade", "Data Solicitação", "Status"};
+        modeloTabela = new DefaultTableModel(colunas, 0) {
+            public boolean isCellEditable(int r, int c) { return false; }
+        };
+>>>>>>> Stashed changes
         tabela = new JTable(modeloTabela);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scroll = NicanTheme.criarScrollTabela(tabela);
@@ -56,10 +78,17 @@ public class TelaValidarRequerimento extends JFrame {
         JButton btnAtualizar = NicanTheme.criarBotaoSecundario("Atualizar Lista");
         JButton btnVoltar    = NicanTheme.criarBotaoSecundario("Voltar");
 
+<<<<<<< Updated upstream
         btnAprovar.addActionListener(e -> processarDecisao(true));
         btnRecusar.addActionListener(e -> processarDecisao(false));
         btnAtualizar.addActionListener(e -> carregarTabela());
         btnVoltar.addActionListener(e -> { new TelaSistemaAdmin(); dispose(); });
+=======
+        btnAprovar.addActionListener(e   -> processarDecisao(true));
+        btnRecusar.addActionListener(e   -> processarDecisao(false));
+        btnAtualizar.addActionListener(e -> carregarTabela());
+        btnVoltar.addActionListener(e    -> { new TelaSistemaAdmin(); dispose(); });
+>>>>>>> Stashed changes
 
         JPanel corpo = new JPanel(new BorderLayout(0, 12));
         corpo.setBackground(NicanTheme.FUNDO);
@@ -71,6 +100,7 @@ public class TelaValidarRequerimento extends JFrame {
 
         JPanel sul = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         sul.setBackground(NicanTheme.FUNDO);
+<<<<<<< Updated upstream
         sul.add(btnAprovar);
         sul.add(btnRecusar);
         sul.add(btnAtualizar);
@@ -79,14 +109,34 @@ public class TelaValidarRequerimento extends JFrame {
         corpo.add(topo, BorderLayout.NORTH);
         corpo.add(scroll, BorderLayout.CENTER);
         corpo.add(sul, BorderLayout.SOUTH);
+=======
+        sul.add(btnAprovar); sul.add(btnRecusar); sul.add(btnAtualizar); sul.add(btnVoltar);
+
+        corpo.add(topo,   BorderLayout.NORTH);
+        corpo.add(scroll, BorderLayout.CENTER);
+        corpo.add(sul,    BorderLayout.SOUTH);
+>>>>>>> Stashed changes
         return corpo;
     }
 
     private void carregarTabela() {
         modeloTabela.setRowCount(0);
+<<<<<<< Updated upstream
         requerimentosPendentes = RequerimentoService.buscarPendentes();
         for (Requerimento r : requerimentosPendentes)
             modeloTabela.addRow(new Object[]{r.getIdRequerimento(), r.getUsuario()!=null?r.getUsuario().getNome():"N/A", r.getItem()!=null?r.getItem().getNome():"N/A", r.getQuantidadeSolicitada(), r.getDataSolicitacao(), r.getStatus()});
+=======
+        requerimentosPendentes = requerimentoController.buscarPendentes();
+        for (Requerimento r : requerimentosPendentes)
+            modeloTabela.addRow(new Object[]{
+                    r.getIdRequerimento(),
+                    r.getUsuario() != null ? r.getUsuario().getNome() : "N/A",
+                    r.getItem()    != null ? r.getItem().getNome()    : "N/A",
+                    r.getQuantidadeSolicitada(),
+                    r.getDataSolicitacao(),
+                    r.getStatus()
+            });
+>>>>>>> Stashed changes
         if (requerimentosPendentes.isEmpty())
             NicanDialog.info(this, "Nenhum requerimento pendente no momento.");
     }
@@ -95,6 +145,7 @@ public class TelaValidarRequerimento extends JFrame {
         int linha = tabela.getSelectedRow();
         if (linha == -1) { NicanDialog.aviso(this, "Selecione um requerimento na tabela."); return; }
         Requerimento alvo = requerimentosPendentes.get(linha);
+<<<<<<< Updated upstream
         Admin adminLogado = Sessao.get().getAdminLogado();
         if (adminLogado == null) { NicanDialog.erro(this, "Sessão de administrador inválida. Faça login novamente."); return; }
         String acao = aprovar ? "aprovar" : "recusar";
@@ -108,9 +159,31 @@ public class TelaValidarRequerimento extends JFrame {
             sucesso = RequerimentoService.recusar(alvo, adminLogado);
             if (sucesso) NicanDialog.info(this, "Requerimento recusado.");
             else NicanDialog.erro(this, "Falha ao recusar o requerimento.");
+=======
+        // View obtém o admin via controller — sem acessar Sessao diretamente
+        Admin adminLogado = loginController.getAdminLogado();
+        if (adminLogado == null) {
+            NicanDialog.erro(this, "Sessão de administrador inválida. Faça login novamente."); return;
+        }
+        if (!NicanDialog.confirmar(this, "Confirmar",
+                "Tem certeza que deseja " + (aprovar ? "aprovar" : "recusar") + " este requerimento?")) return;
+
+        boolean sucesso;
+        if (aprovar) {
+            sucesso = requerimentoController.aprovar(alvo, adminLogado);
+            if (sucesso) NicanDialog.info(this, "Requerimento aprovado! Estoque atualizado.");
+            else         NicanDialog.erro(this, "Falha ao aprovar. Verifique se há estoque suficiente.");
+        } else {
+            sucesso = requerimentoController.recusar(alvo, adminLogado);
+            if (sucesso) NicanDialog.info(this, "Requerimento recusado.");
+            else         NicanDialog.erro(this, "Falha ao recusar o requerimento.");
+>>>>>>> Stashed changes
         }
         if (sucesso) carregarTabela();
     }
 }
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes

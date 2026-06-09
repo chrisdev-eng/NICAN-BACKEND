@@ -1,20 +1,33 @@
 package com.faculdade.nican.view;
 
 import com.faculdade.nican.controller.LoginController;
+<<<<<<< Updated upstream
 import com.faculdade.nican.model.AlmoxarifeService;
 import com.faculdade.nican.model.RequerimentoService;
 import com.faculdade.nican.model.Item;
 import com.faculdade.nican.model.Sessao;
 import com.faculdade.nican.model.Usuario;
+=======
+import com.faculdade.nican.controller.ItemController;
+import com.faculdade.nican.controller.RequerimentoController;
+import com.faculdade.nican.model.entity.Item;
+import com.faculdade.nican.model.entity.Usuario;
+>>>>>>> Stashed changes
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
 public class TelaSolicitarMaterial extends JFrame {
+<<<<<<< Updated upstream
     private final LoginController loginController = new LoginController();
     
     
+=======
+    private final LoginController        loginController        = new LoginController();
+    private final ItemController         itemController         = new ItemController();
+    private final RequerimentoController requerimentoController = new RequerimentoController();
+>>>>>>> Stashed changes
 
     public TelaSolicitarMaterial() {
         setTitle("Solicitar Material - NICAN");
@@ -35,21 +48,36 @@ public class TelaSolicitarMaterial extends JFrame {
     }
 
     private JPanel criarCorpo() {
+<<<<<<< Updated upstream
         // ── lógica original ───────────────────────────────────────────────────
         List<Item> itens = AlmoxarifeService.listarTodos();
+=======
+        List<Item> itens = itemController.listarTodos();
+>>>>>>> Stashed changes
         JComboBox<Item> comboItens = new JComboBox<>(itens.toArray(new Item[0]));
         comboItens.setFont(NicanTheme.fonte(Font.PLAIN, 13));
         comboItens.setBackground(NicanTheme.FUNDO_CAMPO);
         comboItens.setRenderer(new DefaultListCellRenderer() {
+<<<<<<< Updated upstream
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if (value instanceof Item item) setText(item.getNome() + " — Disponível: " + item.getQuantidadeDisponivel());
+=======
+            public Component getListCellRendererComponent(JList<?> list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Item item)
+                    setText(item.getNome() + " — Disponível: " + item.getQuantidadeDisponivel());
+>>>>>>> Stashed changes
                 return this;
             }
         });
 
         JTextField campoQuantidade = NicanTheme.criarCampo();
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         JButton btnSolicitar = NicanTheme.criarBotaoPrimario("Solicitar");
         JButton btnVoltar    = NicanTheme.criarBotaoSecundario("Voltar");
 
@@ -60,6 +88,7 @@ public class TelaSolicitarMaterial extends JFrame {
             try { quantidade = Integer.parseInt(campoQuantidade.getText().trim()); }
             catch (NumberFormatException ex) { NicanDialog.aviso(this, "Digite uma quantidade válida."); return; }
             if (quantidade <= 0) { NicanDialog.aviso(this, "A quantidade deve ser maior que zero."); return; }
+<<<<<<< Updated upstream
             if (quantidade > itemSelecionado.getQuantidadeDisponivel()) { NicanDialog.aviso(this, "Quantidade maior que o estoque disponível."); return; }
             Usuario usuarioLogado = Sessao.get().getUsuarioLogado();
             boolean salvou = usuarioLogado != null
@@ -70,6 +99,25 @@ public class TelaSolicitarMaterial extends JFrame {
         btnVoltar.addActionListener(e -> { new TelaRequerimentos(loginController.getLoginLogado()); dispose(); });
 
         // ── layout visual ─────────────────────────────────────────────────────
+=======
+            if (quantidade > itemSelecionado.getQuantidadeDisponivel()) {
+                NicanDialog.aviso(this, "Quantidade maior que o estoque disponível."); return;
+            }
+            // View acessa o usuário logado via controller — sem tocar Sessao diretamente
+            Usuario usuarioLogado = loginController.getUsuarioLogado();
+            boolean salvou = usuarioLogado != null
+                    && requerimentoController.criarRequerimento(usuarioLogado, itemSelecionado, quantidade);
+            if (salvou) {
+                NicanDialog.info(this, "Requerimento enviado com sucesso!");
+                new TelaRequerimentos(loginController.getLoginLogado());
+                dispose();
+            } else {
+                NicanDialog.erro(this, "Erro ao enviar requerimento.");
+            }
+        });
+        btnVoltar.addActionListener(e -> { new TelaRequerimentos(loginController.getLoginLogado()); dispose(); });
+
+>>>>>>> Stashed changes
         JPanel corpo = new JPanel();
         corpo.setLayout(new BoxLayout(corpo, BoxLayout.Y_AXIS));
         corpo.setBackground(NicanTheme.FUNDO);
@@ -96,8 +144,14 @@ public class TelaSolicitarMaterial extends JFrame {
         botoes.add(btnSolicitar);
         botoes.add(btnVoltar);
         corpo.add(botoes);
+<<<<<<< Updated upstream
 
         return corpo;
     }
 }
 
+=======
+        return corpo;
+    }
+}
+>>>>>>> Stashed changes

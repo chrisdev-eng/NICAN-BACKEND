@@ -1,4 +1,4 @@
-package com.faculdade.nican.model;
+package com.faculdade.nican.model.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
