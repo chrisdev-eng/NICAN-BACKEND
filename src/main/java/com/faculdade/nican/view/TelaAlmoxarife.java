@@ -1,7 +1,7 @@
 package com.faculdade.nican.view;
 
-import com.faculdade.nican.model.Item;
-import com.faculdade.nican.model.AlmoxarifeService;
+import com.faculdade.nican.model.entity.Item;
+import com.faculdade.nican.controller.ItemController;
 import com.faculdade.nican.controller.LoginController;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -11,6 +11,7 @@ import java.util.List;
 
 public class TelaAlmoxarife extends JFrame {
     private final LoginController loginController = new LoginController();
+    private final ItemController itemController = new ItemController();
     
 
     private JTable tabela;
@@ -94,7 +95,7 @@ public class TelaAlmoxarife extends JFrame {
             if (entrada == null) return;
             try {
                 int qtd = Integer.parseInt(entrada.trim());
-                String erro = AlmoxarifeService.adicionarQuantidade(id, qtd);
+                String erro = itemController.adicionarQuantidade(id, qtd);
                 if (erro != null) mostrarErro(erro);
                 else { mostrarInfo("Quantidade adicionada com sucesso!"); carregarTabela(); }
             } catch (NumberFormatException ex) { mostrarErro("Digite um número válido."); }
@@ -112,7 +113,7 @@ public class TelaAlmoxarife extends JFrame {
             if (entrada == null) return;
             try {
                 int qtd = Integer.parseInt(entrada.trim());
-                String erro = AlmoxarifeService.removerQuantidade(id, qtd);
+                String erro = itemController.removerQuantidade(id, qtd);
                 if (erro != null) mostrarErro(erro);
                 else { mostrarInfo("Quantidade removida com sucesso!"); carregarTabela(); }
             } catch (NumberFormatException ex) { mostrarErro("Digite um número válido."); }
@@ -128,7 +129,7 @@ public class TelaAlmoxarife extends JFrame {
                     "Tem certeza que deseja EXCLUIR o item\n\"" + nome + "\" do sistema?\n\nEsta ação não pode ser desfeita."
             );
             if (ok) {
-                String erro = AlmoxarifeService.removerItem(id);
+                String erro = itemController.removerItem(id);
                 if (erro != null) mostrarErro(erro);
                 else { mostrarInfo("Item excluído com sucesso!"); carregarTabela(); }
             }
@@ -169,7 +170,7 @@ public class TelaAlmoxarife extends JFrame {
 
     private void carregarTabela() {
         modeloTabela.setRowCount(0);
-        List<Item> itens = AlmoxarifeService.listarTodos();
+        List<Item> itens = itemController.listarTodos();
         for (Item item : itens) {
             modeloTabela.addRow(new Object[]{
                     item.getIdItem(), item.getNome(),
@@ -179,4 +180,3 @@ public class TelaAlmoxarife extends JFrame {
         }
     }
 }
-

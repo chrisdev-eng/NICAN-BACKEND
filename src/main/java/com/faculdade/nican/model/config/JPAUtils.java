@@ -1,5 +1,6 @@
-package com.faculdade.nican.model;
+package com.faculdade.nican.model.config;
 
+import com.faculdade.nican.model.config.DbConfig;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -18,7 +19,7 @@ public class JPAUtils {
     if (emf == null) {
       //  ~ Inicializa o EntityManagerFactory, que interpreta e cria uma conexao com o banco
       //  ~ pelas infos do persistence.xml
-      emf = Persistence.createEntityManagerFactory("nicandb");
+      emf = Persistence.createEntityManagerFactory("nicandb", DbConfig.jpaProperties());
     }
 
     return emf.createEntityManager();

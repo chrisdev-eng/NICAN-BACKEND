@@ -1,8 +1,6 @@
 version: '3.8'
 
 services:
-
-  # ── Banco de dados PostgreSQL ────────────────────────────────────
   postgres:
     image: postgres:17-alpine
     container_name: nicandb
@@ -19,23 +17,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-
-  # ── Aplicação Java (CLI interativa) ─────────────────────────────
-  app:
-    build: .
-    container_name: nican-app
-    depends_on:
-      postgres:
-        condition: service_healthy   # só sobe após o banco estar pronto
-    stdin_open: true   # mantém o STDIN aberto (necessário para Scanner funcionar)
-    tty: true          # aloca um terminal (necessário para input interativo)
-    environment:
-      # Variáveis usadas pelo JPAUtils / Flyway para conectar ao banco
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: nicandb
-      DB_USER: postgres
-      DB_PASS: postgres
 
 volumes:
   postgres_data:

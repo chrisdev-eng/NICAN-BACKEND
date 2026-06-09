@@ -1,5 +1,7 @@
-package com.faculdade.nican.model;
+package com.faculdade.nican.model.repository;
 
+import com.faculdade.nican.model.config.JPAUtils;
+import com.faculdade.nican.model.entity.*; import com.faculdade.nican.model.service.*; import com.faculdade.nican.model.repository.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;

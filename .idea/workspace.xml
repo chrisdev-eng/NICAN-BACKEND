@@ -4,46 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9e502b4-0020-45ca-9a64-cdca3ba9e5c3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/TesteSwing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/TesteSwing.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/config/JPAUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/repository/AdminRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/repository/EmprestimoRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/repository/ItemRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/repository/RequerimentoRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/repository/UsuarioRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/service/AlmoxarifeService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/service/LoginService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/MenuAlmoxarife.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/MenuDevolucao.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/MenuItens.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/MenuListas.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/MenuLogin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/NicanDialog.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/NicanTheme.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaAlmoxarife.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaCadastro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaCadastroAdmin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaDesativarUsuario.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaGerenciarItens.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaHome.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaHomeUsuario.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarCategoria.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarEstado.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarMateriais.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaListarUsuarios.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaLogin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaPainelAdmin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaRedefinirSenha.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaRequerimentos.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaSistemaAdmin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaSolicitarMaterial.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/ui/menu/view/TelaValidarRequerimento.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/faculdade/nican/util/Validador.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaHome.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faculdade/nican/ui/menu/view/TelaHome.class" afterDir="false" />
-    </list>
+    <list default="true" id="f9e502b4-0020-45ca-9a64-cdca3ba9e5c3" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -71,6 +32,10 @@
     &quot;accountId&quot;: &quot;d2484ed4-1af1-46a9-8ca9-99e816aa5624&quot;
   }
 }</component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -79,20 +44,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.App.executor&quot;: &quot;Run&quot;,
-    &quot;Application.TesteSwing.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;interface-swing-c&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/chris/OneDrive/Desktop/NICAN-BACKEND&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.App.executor": "Run",
+    "Application.TesteSwing.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "interface-swing-c",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/cscgr/Downloads/project",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.App">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.faculdade.nican.App" />
@@ -130,7 +98,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+        <option value="bundled-jdk-30f59d01ecdd-37e91769500f-intellij.indexing.shared.core-IU-261.25134.95" />
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-IU-261.25134.95" />
       </set>
     </attachedChunks>
   </component>
@@ -141,7 +110,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1778440583102</updated>
+      <workItem from="1780968474103" duration="1134000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

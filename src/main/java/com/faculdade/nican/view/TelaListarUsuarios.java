@@ -1,7 +1,7 @@
 package com.faculdade.nican.view;
 
-import com.faculdade.nican.model.UsuarioService;
-import com.faculdade.nican.model.Usuario;
+import com.faculdade.nican.controller.UsuarioController;
+import com.faculdade.nican.model.entity.Usuario;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.List;
 
 public class TelaListarUsuarios extends JFrame {
+    private final UsuarioController usuarioController = new UsuarioController();
     
     private JTable tabela;
     private DefaultTableModel modeloTabela;
@@ -61,8 +62,7 @@ public class TelaListarUsuarios extends JFrame {
 
     private void carregarTabela() {
         modeloTabela.setRowCount(0);
-        for (Usuario u : UsuarioService.listarTodos())
+        for (Usuario u : usuarioController.listarTodos())
             modeloTabela.addRow(new Object[]{u.getId(), u.getNome(), u.getLogin(), u.getPerfil(), u.isAtivo() ? "Sim" : "Não"});
     }
 }
-

@@ -1,5 +1,6 @@
 package com.faculdade.nican;
 
+import com.faculdade.nican.model.config.DbConfig;
 import com.faculdade.nican.view.TelaHome;
 import org.flywaydb.core.Flyway;
 
@@ -22,9 +23,8 @@ public class App {
 
     // Inicializa o banco via Flyway (garante tabelas em ordem antes de qualquer operação)
     try {
-      String jdbcUrl = "jdbc:postgresql://localhost:5432/nicandb";
       Flyway flyway = Flyway.configure()
-              .dataSource(jdbcUrl, "postgres", "postgres")
+              .dataSource(DbConfig.jdbcUrl(), DbConfig.user(), DbConfig.password())
               .locations("classpath:db/migration")
               .baselineOnMigrate(true)
               .load();

@@ -1,5 +1,7 @@
-package com.faculdade.nican.model;
+package com.faculdade.nican.model.service;
 
+import com.faculdade.nican.model.entity.*; import com.faculdade.nican.model.service.*; import com.faculdade.nican.model.repository.*;
+import com.faculdade.nican.model.repository.*;
 import java.util.List;
 
 /**

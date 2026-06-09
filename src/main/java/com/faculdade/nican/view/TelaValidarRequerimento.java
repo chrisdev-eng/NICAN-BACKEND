@@ -1,26 +1,19 @@
 package com.faculdade.nican.view;
 
-import com.faculdade.nican.model.RequerimentoService;
-import com.faculdade.nican.model.Admin;
-import com.faculdade.nican.model.Requerimento;
-import com.faculdade.nican.model.Sessao;
+import com.faculdade.nican.controller.LoginController;
+import com.faculdade.nican.controller.RequerimentoController;
+import com.faculdade.nican.model.entity.Admin;
+import com.faculdade.nican.model.entity.Requerimento;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
-/**
- * Tela para o Admin visualizar e validar (aprovar/recusar)
- * os requerimentos de materiais pendentes.
- *
- * Corresponde ao item 9 do checklist:
- * "Interface Almoxarifado - Validação de Requerimento de Materiais"
- *
- * CORREÇÃO: botão Voltar agora retorna para TelaSistemaAdmin
- * (antes ia para TelaAlmoxarife, que não é a tela de origem).
- */
+
 public class TelaValidarRequerimento extends JFrame {
-    
+    private final LoginController        loginController        = new LoginController();
+    private final RequerimentoController requerimentoController = new RequerimentoController();
+
     private JTable tabela;
     private DefaultTableModel modeloTabela;
     private List<Requerimento> requerimentosPendentes;
@@ -45,8 +38,10 @@ public class TelaValidarRequerimento extends JFrame {
     }
 
     private JPanel criarCorpo() {
-        String[] colunas = {"ID","Usuário","Material","Quantidade","Data Solicitação","Status"};
-        modeloTabela = new DefaultTableModel(colunas, 0) { public boolean isCellEditable(int r, int c) { return false; } };
+        String[] colunas = {"ID", "Usuário", "Material", "Quantidade", "Data Solicitação", "Status"};
+        modeloTabela = new DefaultTableModel(colunas, 0) {
+            public boolean isCellEditable(int r, int c) { return false; }
+        };
         tabela = new JTable(modeloTabela);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scroll = NicanTheme.criarScrollTabela(tabela);
@@ -56,10 +51,10 @@ public class TelaValidarRequerimento extends JFrame {
         JButton btnAtualizar = NicanTheme.criarBotaoSecundario("Atualizar Lista");
         JButton btnVoltar    = NicanTheme.criarBotaoSecundario("Voltar");
 
-        btnAprovar.addActionListener(e -> processarDecisao(true));
-        btnRecusar.addActionListener(e -> processarDecisao(false));
+        btnAprovar.addActionListener(e   -> processarDecisao(true));
+        btnRecusar.addActionListener(e   -> processarDecisao(false));
         btnAtualizar.addActionListener(e -> carregarTabela());
-        btnVoltar.addActionListener(e -> { new TelaSistemaAdmin(); dispose(); });
+        btnVoltar.addActionListener(e    -> { new TelaSistemaAdmin(); dispose(); });
 
         JPanel corpo = new JPanel(new BorderLayout(0, 12));
         corpo.setBackground(NicanTheme.FUNDO);
@@ -71,22 +66,26 @@ public class TelaValidarRequerimento extends JFrame {
 
         JPanel sul = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         sul.setBackground(NicanTheme.FUNDO);
-        sul.add(btnAprovar);
-        sul.add(btnRecusar);
-        sul.add(btnAtualizar);
-        sul.add(btnVoltar);
+        sul.add(btnAprovar); sul.add(btnRecusar); sul.add(btnAtualizar); sul.add(btnVoltar);
 
-        corpo.add(topo, BorderLayout.NORTH);
+        corpo.add(topo,   BorderLayout.NORTH);
         corpo.add(scroll, BorderLayout.CENTER);
-        corpo.add(sul, BorderLayout.SOUTH);
+        corpo.add(sul,    BorderLayout.SOUTH);
         return corpo;
     }
 
     private void carregarTabela() {
         modeloTabela.setRowCount(0);
-        requerimentosPendentes = RequerimentoService.buscarPendentes();
+        requerimentosPendentes = requerimentoController.buscarPendentes();
         for (Requerimento r : requerimentosPendentes)
-            modeloTabela.addRow(new Object[]{r.getIdRequerimento(), r.getUsuario()!=null?r.getUsuario().getNome():"N/A", r.getItem()!=null?r.getItem().getNome():"N/A", r.getQuantidadeSolicitada(), r.getDataSolicitacao(), r.getStatus()});
+            modeloTabela.addRow(new Object[]{
+                    r.getIdRequerimento(),
+                    r.getUsuario() != null ? r.getUsuario().getNome() : "N/A",
+                    r.getItem()    != null ? r.getItem().getNome()    : "N/A",
+                    r.getQuantidadeSolicitada(),
+                    r.getDataSolicitacao(),
+                    r.getStatus()
+            });
         if (requerimentosPendentes.isEmpty())
             NicanDialog.info(this, "Nenhum requerimento pendente no momento.");
     }
@@ -95,22 +94,24 @@ public class TelaValidarRequerimento extends JFrame {
         int linha = tabela.getSelectedRow();
         if (linha == -1) { NicanDialog.aviso(this, "Selecione um requerimento na tabela."); return; }
         Requerimento alvo = requerimentosPendentes.get(linha);
-        Admin adminLogado = Sessao.get().getAdminLogado();
-        if (adminLogado == null) { NicanDialog.erro(this, "Sessão de administrador inválida. Faça login novamente."); return; }
-        String acao = aprovar ? "aprovar" : "recusar";
-        if (!NicanDialog.confirmar(this, "Confirmar", "Tem certeza que deseja " + acao + " este requerimento?")) return;
+        // View obtém o admin via controller — sem acessar Sessao diretamente
+        Admin adminLogado = loginController.getAdminLogado();
+        if (adminLogado == null) {
+            NicanDialog.erro(this, "Sessão de administrador inválida. Faça login novamente."); return;
+        }
+        if (!NicanDialog.confirmar(this, "Confirmar",
+                "Tem certeza que deseja " + (aprovar ? "aprovar" : "recusar") + " este requerimento?")) return;
+
         boolean sucesso;
         if (aprovar) {
-            sucesso = RequerimentoService.aprovar(alvo, adminLogado);
+            sucesso = requerimentoController.aprovar(alvo, adminLogado);
             if (sucesso) NicanDialog.info(this, "Requerimento aprovado! Estoque atualizado.");
-            else NicanDialog.erro(this, "Falha ao aprovar. Verifique se há estoque suficiente.");
+            else         NicanDialog.erro(this, "Falha ao aprovar. Verifique se há estoque suficiente.");
         } else {
-            sucesso = RequerimentoService.recusar(alvo, adminLogado);
+            sucesso = requerimentoController.recusar(alvo, adminLogado);
             if (sucesso) NicanDialog.info(this, "Requerimento recusado.");
-            else NicanDialog.erro(this, "Falha ao recusar o requerimento.");
+            else         NicanDialog.erro(this, "Falha ao recusar o requerimento.");
         }
         if (sucesso) carregarTabela();
     }
 }
-
-

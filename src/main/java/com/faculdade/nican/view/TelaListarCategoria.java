@@ -1,7 +1,7 @@
 package com.faculdade.nican.view;
 
-import com.faculdade.nican.model.Item;
-import com.faculdade.nican.model.AlmoxarifeService;
+import com.faculdade.nican.model.entity.Item;
+import com.faculdade.nican.controller.ItemController;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.List;
 
 public class TelaListarCategoria extends JFrame {
+    private final ItemController itemController = new ItemController();
     
 
     private JTable tabela;
@@ -35,7 +36,7 @@ public class TelaListarCategoria extends JFrame {
     }
 
     private JPanel criarCorpo() {
-        comboCategoria = NicanTheme.criarCombo(AlmoxarifeService.getCategorias());
+        comboCategoria = NicanTheme.criarCombo(itemController.getCategorias());
         JButton btnFiltrar = NicanTheme.criarBotaoPrimario("Filtrar");
         JButton btnVoltar  = NicanTheme.criarBotaoSecundario("Voltar");
         btnFiltrar.addActionListener(e -> carregarTabela());
@@ -75,9 +76,8 @@ public class TelaListarCategoria extends JFrame {
     private void carregarTabela() {
         modeloTabela.setRowCount(0);
         String cat = (String) comboCategoria.getSelectedItem();
-        for (Item item : AlmoxarifeService.listarTodos())
+        for (Item item : itemController.listarTodos())
             if (item.getCategoria().toString().equalsIgnoreCase(cat))
                 modeloTabela.addRow(new Object[]{item.getNome(), item.getCategoria().toString(), item.getQualidade().toString(), item.getQuantidadeTotal(), item.getQuantidadeDisponivel()});
     }
 }
-

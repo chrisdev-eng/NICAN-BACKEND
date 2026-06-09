@@ -1,4 +1,4 @@
-package com.faculdade.nican.model;
+package com.faculdade.nican.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;

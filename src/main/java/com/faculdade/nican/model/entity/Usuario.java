@@ -1,4 +1,4 @@
-package com.faculdade.nican.model;
+package com.faculdade.nican.model.entity;
 
 
 

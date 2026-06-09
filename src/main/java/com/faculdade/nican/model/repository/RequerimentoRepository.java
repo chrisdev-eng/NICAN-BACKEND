@@ -1,22 +1,12 @@
-package com.faculdade.nican.model;
+package com.faculdade.nican.model.repository;
 
+import com.faculdade.nican.model.config.JPAUtils;
+import com.faculdade.nican.model.entity.*; import com.faculdade.nican.model.service.*; import com.faculdade.nican.model.repository.*;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 
-/*
- *  ~ Operações de CRUD para a tabela de Requerimentos ~
- *
- *  CORREÇÕES:
- *    - aprovarRequerimento agora recebe Admin (estava recebendo Usuario)
- *  ADIÇÕES:
- *    - listarPorUsuario() com JOIN FETCH — mais um join para o Critério I
- *    - recusarRequerimento() — complementa as regras de negócio
- */
 public class RequerimentoRepository {
 
-
-
-  // CRUD — Salvar novo requerimento
   public static boolean salvar(Requerimento req) {
     EntityManager em = JPAUtils.getEntityManager();
     try {
@@ -33,10 +23,6 @@ public class RequerimentoRepository {
     }
   }
 
-
-
-  // CRUD — Buscar requerimentos pendentes (com JOIN FETCH de item e usuário)
-  // JOIN FETCH = Critério I
   public static List<Requerimento> buscarPendentes() {
     EntityManager em = JPAUtils.getEntityManager();
     try {
@@ -52,9 +38,6 @@ public class RequerimentoRepository {
     }
   }
 
-
-
-  // CRUD — Listar todos os requerimentos de um usuário específico
   public static List<Requerimento> listarPorUsuario(Integer idUsuario) {
     EntityManager em = JPAUtils.getEntityManager();
     try {
@@ -69,9 +52,6 @@ public class RequerimentoRepository {
     }
   }
 
-
-
-  // CRUD — Atualizar status do requerimento
   public static boolean atualizarStatus(Requerimento req) {
     EntityManager em = JPAUtils.getEntityManager();
     try {
@@ -88,28 +68,30 @@ public class RequerimentoRepository {
     }
   }
 
-
-
-  // REGRA DE NEGÓCIO: aprovar requerimento e baixar estoque automaticamente
-  // REGRA DE NEGÓCIO: somente Admin pode aprovar
   public static boolean aprovar(Requerimento req, Admin admin) {
     EntityManager em = JPAUtils.getEntityManager();
     try {
       em.getTransaction().begin();
 
-      // REGRA DE NEGÓCIO: valida estoque antes de aprovar
-      Item item = req.getItem();
-      if (item == null || item.getQuantidadeDisponivel() < req.getQuantidadeSolicitada()) {
-        System.out.println("\n  [ERRO] Estoque insuficiente para aprovação.\n");
+      Requerimento gerenciado = em.find(Requerimento.class, req.getIdRequerimento());
+      Admin adminGerenciado = admin != null ? em.find(Admin.class, admin.getId()) : null;
+
+      if (gerenciado == null || adminGerenciado == null || !"pendente".equalsIgnoreCase(gerenciado.getStatus())) {
         em.getTransaction().rollback();
         return false;
       }
 
-      req.aprovar(admin);
-      item.diminuirQuant(req.getQuantidadeSolicitada());
+      Item item = gerenciado.getItem();
+      if (item == null || item.getQuantidadeDisponivel() < gerenciado.getQuantidadeSolicitada()) {
+        System.out.println("\n  [ERRO] Estoque insuficiente para aprovacao.\n");
+        em.getTransaction().rollback();
+        return false;
+      }
 
-      em.merge(req);
-      em.merge(item);
+      // O trigger trigger_aprovacao_requerimento cria o emprestimo, e
+      // trigger_retirada_item baixa o estoque. Nao baixamos no Java para evitar duplicidade.
+      gerenciado.aprovar(adminGerenciado);
+      em.merge(gerenciado);
       em.getTransaction().commit();
       return true;
     } catch (Exception e) {
@@ -121,15 +103,21 @@ public class RequerimentoRepository {
     }
   }
 
-
-
-  // REGRA DE NEGÓCIO: recusar requerimento (sem alterar estoque)
   public static boolean recusar(Requerimento req, Admin admin) {
     EntityManager em = JPAUtils.getEntityManager();
     try {
       em.getTransaction().begin();
-      req.recusar(admin);
-      em.merge(req);
+
+      Requerimento gerenciado = em.find(Requerimento.class, req.getIdRequerimento());
+      Admin adminGerenciado = admin != null ? em.find(Admin.class, admin.getId()) : null;
+
+      if (gerenciado == null || adminGerenciado == null || !"pendente".equalsIgnoreCase(gerenciado.getStatus())) {
+        em.getTransaction().rollback();
+        return false;
+      }
+
+      gerenciado.recusar(adminGerenciado);
+      em.merge(gerenciado);
       em.getTransaction().commit();
       return true;
     } catch (Exception e) {
